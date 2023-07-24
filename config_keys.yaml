@@ -1,0 +1,46 @@
+VirusTotal:
+
+  api_key: #your api key
+
+Chaos:
+  
+  api_key: #your api key
+
+Dnsdumpter:
+
+  csrf_cookie: #your csrf cookie
+
+  csrf_token: #your csrf toke
+
+Whoisxml:
+
+  api_key: #your api key
+
+SecurityTrails:
+
+  api_key: #your api key
+
+Bevigil:
+
+  api_key: #your api key
+
+Binaryedge:
+
+  api_key: #your api key
+
+Fullhunt:
+
+  api_key: #your api key
+
+Rapidapi:
+
+  api_key: #your api key
+
+Bufferover:
+
+  api_key: #your api key
+
+Certspotter:
+
+  api_key: #your api key
+
