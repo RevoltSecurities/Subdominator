@@ -76,6 +76,18 @@ Subdominator integrates with various APIs to gather valuable subdomain informati
 - **Certspotter**: [Certspotter Website](https://sslmate.com/certspotter)
 
 
+### Dnsdumpter:
+
+Dnsdumpster requires csrf token and cookie to obtain it visit **Dnsdumpter**: [Dnsdumpster](https://dnsdumpster.com)
+
+Search any domain and Intercept the requests your burp that contains token and cookie. Copy that and paste in your yaml file
+
+Example Image:
+  
+![Screenshot from 2023-07-24 21-47-10](https://github.com/sanjai-AK47/Subdominator/assets/119435129/d0aa5316-7698-4942-9512-2b3c3dc0a007)
+
+After this all things you can run the Subdominator efficiently for subdomain enumeration
+
 
 ### Config Mode
 
@@ -84,9 +96,24 @@ Subdominator offers a convenient config mode that allows you to use your configu
 ```bash
 python3 subdominator.py -d target.com --config
 ```
+## Config example image:
+
+![Screenshot from 2023-07-24 22-18-53](https://github.com/sanjai-AK47/Subdominator/assets/119435129/01939ba0-b7fe-4153-98a4-a189234caf4c)
+
+
+![Screenshot from 2023-07-24 22-18-35](https://github.com/sanjai-AK47/Subdominator/assets/119435129/4f394f9a-ff32-429b-9781-5a41a112e36f)
+
 
 ### Non-Config Mode
 
 If you choose not to use the config mode, Subdominator will automatically switch to non-config mode. In this mode, Subdominator will make use of available public resources to collect a sufficient number of subdomains for your bug hunting needs.
+
+## Non-Config example image
+![Screenshot from 2023-07-24 22-22-37](https://github.com/sanjai-AK47/Subdominator/assets/119435129/1eda42cd-8547-4b39-b548-18687479122f)
+
+
+![Screenshot from 2023-07-24 22-22-17](https://github.com/sanjai-AK47/Subdominator/assets/119435129/f28462ce-dac8-47d6-a7a0-66d0bde1f373)
+
+
 
 Happy bug hunting with Subdominator! If you have any suggestions or feedback, feel free to contribute or open an issue on our GitHub repository: [Subdominator GitHub Repository](https://github.com/sanjai-AK47/Subdominator)
