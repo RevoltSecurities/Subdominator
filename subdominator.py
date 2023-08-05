@@ -72,7 +72,7 @@ def version_check():
                 
                 message = "latest"
                 
-                print(f"[{blue}Version{reset}]: Subprober current version {version} ({green}{message}{reset})")
+                print(f"[{blue}Version{reset}]: Subdominator current version {version} ({green}{message}{reset})")
                 
                 t.sleep(1)
                 
@@ -80,7 +80,7 @@ def version_check():
                 
                 message ="outdated"
                 
-                print(f"[{blue}Version{reset}]: Subprober current version {version} ({red}{message}{reset})")
+                print(f"[{blue}Version{reset}]: Subdominator current version {version} ({red}{message}{reset})")
                 
                 t.sleep(1)
                 
