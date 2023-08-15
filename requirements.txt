@@ -1,4 +1,0 @@
-colorama==0.4.4
-PyYAML==6.0
-PyYAML==6.0.1
-Requests==2.31.0
