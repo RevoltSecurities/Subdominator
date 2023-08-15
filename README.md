@@ -133,6 +133,12 @@ Zoomeye:
 
 Please make sure to replace `#your_api_key_here` with the respective API keys you obtain from the corresponding websites.
 
+
+### Information for Previous Users:
+
+Save your old keys in some file then update the keys to the new config_keys.yaml file After updating your new version of  configuraton yaml file with respective api keys , id and email and passowords
+Then you can delete the old version of yaml file.
+
 ### API Integrations and Credits
 
 Subdominator integrates with various APIs to gather valuable subdomain information. We would like to give credit to the following websites for providing free-to-obtain API keys for subdomain enumeration.
