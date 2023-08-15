@@ -1,46 +1,67 @@
 VirusTotal:
 
-  api_key: #your api key
+  api_key: #YOUR_VIRUS_TOTAL_API_KEY
 
 Chaos:
-  
-  api_key: #your api key
+
+  api_key: #YOUR_CHAOS_API_KEY
 
 Dnsdumpter:
 
-  csrf_cookie: #your csrf cookie
+  csrf_cookie: #YOUR_DNSDUMPTER_CSRF_COOKIE
 
-  csrf_token: #your csrf toke
+  csrf_token: #YOUR_DNSDUMPTER_CSRF_TOKEN
 
 Whoisxml:
 
-  api_key: #your api key
+  api_key: #YOUR_WHOISXML_API_KEY
 
 SecurityTrails:
 
-  api_key: #your api key
+  api_key: #YOUR_SECURITY_TRAILS_API_KEY
 
 Bevigil:
 
-  api_key: #your api key
+  api_key: #YOUR_BEVIGIL_API_KEY
 
 Binaryedge:
 
-  api_key: #your api key
+  api_key: #YOUR_BINARYEDGE_API_KEY
 
 Fullhunt:
 
-  api_key: #your api key
+  api_key: #YOUR_FULLHUNT_API_KEY
 
 Rapidapi:
 
-  api_key: #your api key
+  api_key: #YOUR_RAPIDAPI_API_KEY
 
 Bufferover:
 
-  api_key: #your api key
+  api_key: #YOUR_BUFFEROVER_API_KEY
 
 Certspotter:
 
-  api_key: #your api key
+  api_key: #YOUR_CERTSPOTTER_API_KEY
 
+Censys:
+
+  api_secret_id: #YOUR_CENSYS_API_SECRET_ID
+
+  api_secret_key: #YOUR_CENSYS_API_SECRET_KEY
+
+Leakix:
+
+  api_key: #YOUR_LEAKIX_API_KEY
+
+Netlas:
+
+  api_key: #YOUR_NETLAS_API_KEY
+
+Zoomeye:
+
+  api_key: #YOUR_ZOOMEYE_API_KEY
+
+  email: #YOUR_ZOOMEYE_EMAIL
+  
+  password: #YOUR_ZOOMEYE_PASSWORD
