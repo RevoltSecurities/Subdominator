@@ -1,16 +1,41 @@
-## Subdominator - Passive Subdomain Enumeration Tool
+## Subdominator - Unleash the Power of Subdomain Enumeration
 
-Subdominator is an open-source and powerful tool for passive subdomain enumeration during bug hunting and reconnaissance processes. It is designed to help researchers and cybersecurity professionals discover potential security vulnerabilities by efficiently enumerating subdomains.
+Subdominator is a powerful tool for passive subdomain enumeration during bug hunting and reconnaissance processes. It is designed to help researchers and cybersecurity professionals discover potential security vulnerabilities by efficiently enumerating subdomains.
 
-### Features
+### Latest release Installation:
+1. **Download the Release**: Visit the [Releases](https://github.com/sanjai-AK47/Subdominator/releases) page and download the latest release (`SubdominatorV1.0.1.zip`).
 
-- Passive subdomain enumeration using multiple APIs
-- Fast and comprehensive results for efficient bug hunting
+2. **Extract Files**: Extract the downloaded ZIP file to your desired location.
+
+3. **Run Subdominator**:
+
+   - **Python Script**: If you prefer to run the Python script, navigate to the extracted directory and execute the following command:
+     
+     ```bash
+     python subdominator.py
+     ```
+
+   - **Linux Executable**: If you prefer to use the Linux executable, navigate to the extracted directory and execute the following command:
+     
+     ```bash
+     ./subdominator
+     ```
+
+
+### Features Of Version1.0.1
+
+- Provided Linux executable file to execute anywhere in your Linux machiene
+- Passive subdomain enumeration using multiple APIs and Open source interations
+- Fast and comprehensive results for efficient bug hunting and for Information Gathering
 - Easy-to-use with simple command-line options
 - Config mode for loading API keys and custom configurations
 - Automatic non-config mode if no custom configuration is provided
+- Saving the results of Subdominator can be user defined or Subdominator will automatically saved the output
+- Run The Subdominator excutable file anywhere and The configuration file be automatically detected in your machiene
+- Linux Users can also run the executable of subdominator or directly run the Subominator python script directly
+- Dont worry if your not a Linux users because Other users can also run the Subdominator python script
 
-### Insatllation:
+### Other Users Insatllation:
 
 ```bash
 cd $HOME
@@ -19,49 +44,99 @@ cd SubDominator
 pip install -r requirements.txt
 python3 subdominator.py --help
 ```
+
+### Linux Users Installation for Executable file:
+```bash
+cd $HOME
+git clone https://github.com/sanjai-AK47/Subdominator.git
+cd SubDominator
+pip install -r requirements.txt
+mv subdominator /usr/local/bin/
+subdominator -h
+```
+
+## Dont forget to configure your yaml file with api keys:
+
+
 ### Configure the config_keys.yaml file:
 
 ```yaml
 VirusTotal:
-  api_key: #your_virustotal_api_key_here
+
+  api_key: #YOUR_VIRUS_TOTAL_API_KEY
 
 Chaos:
-  api_key: #your_chaos_api_key_here
+
+  api_key: #YOUR_CHAOS_API_KEY
 
 Dnsdumpter:
-  csrf_cookie: #your_dnsdumpter_csrf_cookie_here
-  csrf_token: #your_dnsdumpter_csrf_token_here
+
+  csrf_cookie: #YOUR_DNSDUMPTER_CSRF_COOKIE
+
+  csrf_token: #YOUR_DNSDUMPTER_CSRF_TOKEN
 
 Whoisxml:
-  api_key: #your_whoisxml_api_key_here
+
+  api_key: #YOUR_WHOISXML_API_KEY
 
 SecurityTrails:
-  api_key: #your_securitytrails_api_key_here
+
+  api_key: #YOUR_SECURITY_TRAILS_API_KEY
 
 Bevigil:
-  api_key: #your_bevigil_api_key_here
+
+  api_key: #YOUR_BEVIGIL_API_KEY
 
 Binaryedge:
-  api_key: #your_binaryedge_api_key_here
+
+  api_key: #YOUR_BINARYEDGE_API_KEY
 
 Fullhunt:
-  api_key: #your_fullhunt_api_key_here
+
+  api_key: #YOUR_FULLHUNT_API_KEY
 
 Rapidapi:
-  api_key: #your_rapidapi_api_key_here
+
+  api_key: #YOUR_RAPIDAPI_API_KEY
 
 Bufferover:
-  api_key: #your_bufferover_api_key_here
+
+  api_key: #YOUR_BUFFEROVER_API_KEY
 
 Certspotter:
-  api_key: #your_certspotter_api_key_here
+
+  api_key: #YOUR_CERTSPOTTER_API_KEY
+
+Censys:
+
+  api_secret_id: #YOUR_CENSYS_API_SECRET_ID
+
+  api_secret_key: #YOUR_CENSYS_API_SECRET_KEY
+
+Leakix:
+
+  api_key: #YOUR_LEAKIX_API_KEY
+
+Netlas:
+
+  api_key: #YOUR_NETLAS_API_KEY
+
+Zoomeye:
+
+  api_key: #YOUR_ZOOMEYE_API_KEY
+
+  email: #YOUR_ZOOMEYE_EMAIL
+  
+  password: #YOUR_ZOOMEYE_PASSWORD
+
 ```
 
 Please make sure to replace `#your_api_key_here` with the respective API keys you obtain from the corresponding websites.
 
 ### API Integrations and Credits
 
-Subdominator integrates with various APIs to gather valuable subdomain information. We would like to give credit to the following websites for providing free-to-obtain API keys for subdomain enumeration
+Subdominator integrates with various APIs to gather valuable subdomain information. We would like to give credit to the following websites for providing free-to-obtain API keys for subdomain enumeration.
+Claim your free API keys here:
 
 - **VirusTotal**: [VirusTotal](https://www.virustotal.com)
 - **Chaos**: [Chaos](https://chaos.projectdiscovery.io)
@@ -73,7 +148,12 @@ Subdominator integrates with various APIs to gather valuable subdomain informati
 - **Fullhunt**: [Fullhunt](https://fullhunt.io)
 - **Rapidapi**: [RapidAPI](https://rapidapi.com)
 - **Bufferover**: [Bufferover](https://tls.bufferover.run/)
-- **Certspotter**: [Certspotter Website](https://sslmate.com/certspotter)
+- **Certspotter**: [Certspotter](https://sslmate.com/certspotter)
+- **Censys**: [Censys](https://search.censys.io/)
+- **Fullhunt**: [Fullhunt](https://fullhunt.io/)
+- **Zoomeye**: [Zoomeye](https://www.zoomeye.org/)
+- **Netlas**: [Netlas](https://netlas.io/)
+- **Leakix**: [Leakix](https://leakix.net/)
 
 
 ### Dnsdumpter:
