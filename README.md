@@ -122,11 +122,13 @@ Options:
 
    ```
 
+## [INFO]: Enabling the notification mode can help you When Subdominator do enumeration for list of domains or in recursive mode
+
 
 ## Dont forget to configure your yaml file with api keys:
 
 
-## Setup for Notification:
+## Setup for Notification !:
 
 Set up a Pushbullet account on your PC and Phone
     
