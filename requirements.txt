@@ -1,5 +1,0 @@
-censys==2.2.4
-colorama==0.4.4
-httpx==0.24.1
-PyYAML==6.0.1
-Requests==2.31.0
