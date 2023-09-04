@@ -3,7 +3,7 @@
 Subdominator is a powerful tool for passive subdomain enumeration during bug hunting and reconnaissance processes. It is designed to help researchers and cybersecurity professionals discover potential security vulnerabilities by efficiently enumerating subdomains.
 
 ### Latest release Installation:
-1. **Download the Release**: Visit the [Releases](https://github.com/sanjai-AK47/Subdominator/releases) page and download the latest release (`SubdominatorV1.0.1.zip`).
+1. **Download the Release**: Visit the [Releases](https://github.com/sanjai-AK47/Subdominator/releases) page and download the latest release (`SubdominatorV1.0.2.zip`).
 
 2. **Extract Files**: Extract the downloaded ZIP file to your desired location.
 
@@ -12,126 +12,253 @@ Subdominator is a powerful tool for passive subdomain enumeration during bug hun
    - **Python Script**: If you prefer to run the Python script, navigate to the extracted directory and execute the following command:
      
      ```bash
-     python subdominator.py
+     python3 subdominator.py -h
      ```
 
    - **Linux Executable**: If you prefer to use the Linux executable, navigate to the extracted directory and execute the following command:
      
      ```bash
-     ./subdominator
+     ./subdominator -h
      ```
+# Note for old version Linux Users:
+
+### Delete old version of Subdominator for Linux Executable file
+
+```bash
+
+sudo rm /usr/local/bin/subdominator
+
+```
+
+## After deleting the old version of Subdominator you can install the Linux binary of latest version of Subdominator
 
 
-### Features Of Version1.0.1
+### Abilities Of Subdominator Version1.0.2
+
+- Now The Subdominator configuration yaml file  can store unlimited api keys for some services
+
+- It have recursive mode when user enables the mode it enumerate recursively for wild cards
+
+- Now Subdominator can enumerate Subdomains for domains in a text file
+
+- New Mode Introduced for User, That Subdominator can now send notification to your pc or mobile
 
 - Provided Linux executable file to execute anywhere in your Linux machiene
+ 
 - Passive subdomain enumeration using multiple APIs and Open source interations
+
 - Fast and comprehensive results for efficient bug hunting and for Information Gathering
+ 
 - Easy-to-use with simple command-line options
+ 
 - Config mode for loading API keys and custom configurations
+ 
 - Automatic non-config mode if no custom configuration is provided
+
 - Saving the results of Subdominator can be user defined or Subdominator will automatically saved the output
+ 
 - Run The Subdominator excutable file anywhere and The configuration file be automatically detected in your machiene
+ 
 - Linux Users can also run the executable of subdominator or directly run the Subominator python script directly
+ 
 - Dont worry if your not a Linux users because Other users can also run the Subdominator python script
 
 ### Other Users Insatllation:
 
 ```bash
 cd $HOME
+
 git clone https://github.com/sanjai-AK47/Subdominator.git
+
 cd SubDominator
+
 pip install -r requirements.txt
+
 python3 subdominator.py --help
 ```
 
 ### Linux Users Installation for Executable file:
 ```bash
 cd $HOME
+
 git clone https://github.com/sanjai-AK47/Subdominator.git
-cd SubDominator
+
+cd Subdominator
+
 pip install -r requirements.txt
-mv subdominator /usr/local/bin/
+
+sudo mv subdominator /usr/local/bin/
+
 subdominator -h
 ```
+
+## Subdominator Usage:
+
+   ``` bash
+
+      Subdominator is a powerful tool for subdomain enumeration. You can use it with various options to customize your subdomain discovery process.
+
+     usage: subdominator.py [-h] [-d DOMAIN] [-dL DOMAINS_LIST] [-nt] [-r] [-vrs] [-cf] [-o OUTPUT]
+
+    Subdominator Unleash the Power of Subdomain Enumeration
+
+Options:
+
+  -h, --help                   Show this help message and exit
+
+  -d DOMAIN, --domain DOMAIN                     Specify the target domain to find subdomains
+
+  -dL DOMAINS_LIST, --domains-list DOMAINS_LIST  Provide a filename containing a list of domains to find subdomains
+
+  -nt, --notify     Notification                 Send push notifications to your Android Phone or Desktop when Subdominator has finished its process
+
+  -r, --recursive   Recursive Enumeration        Enable recursive enumeration for wildcards in found subdomains
+
+  -vrs, --version   Version                      Check for the latest version of Subdominator
+
+  -cf, --config     Configuration Mode          Find subdomains with the configured API keys
+
+  -o OUTPUT, --output OUTPUT                    Specify the filename to save the output
+
+   ```
+
 
 ## Dont forget to configure your yaml file with api keys:
 
 
-### Configure the config_keys.yaml file:
+## Setup for Notification:
+
+Set up a Pushbullet account on your PC and Phone
+    
+For PC
+        
+   Go to [Pushbullet.com](https://www.pushbullet.com/)
+            
+   Create an account
+
+   Get a api key and paste in Pushbullet-Notify in configuration yaml file
+
+   Add the extension to your PC with the Pushbullet Extension regarding to your browser
+            
+For Phone
+      
+   Install the Pushbullet app on your phone.
+        
+   Log in using the same email address that you used to log in to your PC !.
+        
+
+### New updated yaml file:
 
 ```yaml
-VirusTotal:
+Virustotal: # Unlimited keys
+  - # Your Virustotal API Key here
 
-  api_key: #YOUR_VIRUS_TOTAL_API_KEY
+  - # Your Virustotal API Key here
 
-Chaos:
+  - # Your Virustotal API Key here
 
-  api_key: #YOUR_CHAOS_API_KEY
+Chaos: # Unlimited or Limited keys - Your choice
 
-Dnsdumpter:
+  - # Your Chaos API Key here
 
-  csrf_cookie: #YOUR_DNSDUMPTER_CSRF_COOKIE
+  - # Another Chaos API Key here
 
-  csrf_token: #YOUR_DNSDUMPTER_CSRF_TOKEN
+Dnsdumpter: # Limited token and cookie
 
-Whoisxml:
+  csrf_cookie: # Your Dnsdumpter CSRF Cookie here
 
-  api_key: #YOUR_WHOISXML_API_KEY
+  csrf_token: # Your Dnsdumpter CSRF Token here
 
-SecurityTrails:
+Whoisxml: # Unlimited keys
 
-  api_key: #YOUR_SECURITY_TRAILS_API_KEY
+  - # Your Whoisxml API Key here
 
-Bevigil:
+  - # Another Whoisxml API Key here
 
-  api_key: #YOUR_BEVIGIL_API_KEY
+SecurityTrails: # Unlimited keys
 
-Binaryedge:
+  - # Your SecurityTrails API Key here
 
-  api_key: #YOUR_BINARYEDGE_API_KEY
+  - # Another SecurityTrails API Key here
 
-Fullhunt:
+Bevigil: # Unlimited keys
 
-  api_key: #YOUR_FULLHUNT_API_KEY
+  - # Your Bevigil API Key here
 
-Rapidapi:
+  - # Another Bevigil API Key here
 
-  api_key: #YOUR_RAPIDAPI_API_KEY
+  - # Yet another Bevigil API Key here
 
-Bufferover:
+Binaryedge: # Unlimited keys
 
-  api_key: #YOUR_BUFFEROVER_API_KEY
+  - # Your Binaryedge API Key here
 
-Certspotter:
+  - # Another Binaryedge API Key here
 
-  api_key: #YOUR_CERTSPOTTER_API_KEY
+  - # Yet another Binaryedge API Key here
 
-Censys:
+Rapidapi: # Unlimited keys
 
-  api_secret_id: #YOUR_CENSYS_API_SECRET_ID
+  - # Your Rapidapi Key here
 
-  api_secret_key: #YOUR_CENSYS_API_SECRET_KEY
+  - # Another Rapidapi Key here
 
-Leakix:
+Bufferover: # Unlimited keys
 
-  api_key: #YOUR_LEAKIX_API_KEY
+  - # Your Bufferover API Key here
 
-Netlas:
+  - # Another Bufferover API Key here
 
-  api_key: #YOUR_NETLAS_API_KEY
+Certspotter: # Unlimited keys
 
-Zoomeye:
+  - # Your Certspotter API Key here
 
-  api_key: #YOUR_ZOOMEYE_API_KEY
+  - # Another Certspotter API Key here
 
-  email: #YOUR_ZOOMEYE_EMAIL
-  
-  password: #YOUR_ZOOMEYE_PASSWORD
+Censys: # Limited Keys and ids
 
+  api_secret_id: # Your Censys API Secret ID here
+
+  api_secret_key: # Your Censys API Secret Key here
+
+Fullhunt: # Unlimited keys
+
+  - # Your Fullhunt API Key here
+
+  - # Another Fullhunt API Key here
+
+  - # Yet another Fullhunt API Key here
+
+Leakix: # Unlimited keys
+
+  - # Your Leakix API Key here
+
+  - # Another Leakix API Key here
+
+Netlas: # Unlimited keys
+
+  - # Your Netlas API Key here
+
+  - # Another Netlas API Key here
+
+Zoomeye-API: # Unlimited keys
+
+  - # Your Zoomeye-API Key here
+
+Zoomeye-Auth: # Limited
+
+  email: # Your Zoomeye Authentication Email here
+
+  password: # Your Zoomeye Authentication Password here
+
+
+Pushbullet-Notify: # Limited
+  - # Your Pushbullet API Key here
 ```
 
-Please make sure to replace `#your_api_key_here` with the respective API keys you obtain from the corresponding websites.
+#### Please make sure to replace `#your_api_key_here` with the respective API keys and replace the `email` with your api email and `password` api passoword you obtain from the corresponding websites.
+
+### Set the Unlimited api keys Where its commented can holds Unlimited api keys
 
 
 ### Information for Previous Users:
@@ -190,11 +317,11 @@ python3 subdominator.py -d target.com --config
 ![Screenshot from 2023-07-24 22-18-35](https://github.com/sanjai-AK47/Subdominator/assets/119435129/4f394f9a-ff32-429b-9781-5a41a112e36f)
 
 
-### Non-Config Mode
+### OSINT Mode
 
 If you choose not to use the config mode, Subdominator will automatically switch to non-config mode. In this mode, Subdominator will make use of available public resources to collect a sufficient number of subdomains for your bug hunting needs.
 
-## Non-Config example image
+## OSINT example image
 ![Screenshot from 2023-07-24 22-22-37](https://github.com/sanjai-AK47/Subdominator/assets/119435129/1eda42cd-8547-4b39-b548-18687479122f)
 
 
