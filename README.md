@@ -3,7 +3,7 @@
 Subdominator is a powerful tool for passive subdomain enumeration during bug hunting and reconnaissance processes. It is designed to help researchers and cybersecurity professionals discover potential security vulnerabilities by efficiently enumerating subdomains.
 
 ### Latest release Installation:
-1. **Download the Release**: Visit the [Releases](https://github.com/sanjai-AK47/Subdominator/releases) page and download the latest release (`SubdominatorV1.0.2.zip`).
+1. **Download the Release**: Visit the [Releases](https://github.com/sanjai-AK47/Subdominator/releases) page and download the latest release (`SubdominatorV1.0.3.zip`).
 
 2. **Extract Files**: Extract the downloaded ZIP file to your desired location.
 
