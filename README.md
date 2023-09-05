@@ -33,9 +33,11 @@ sudo rm /usr/local/bin/subdominator
 ## After deleting the old version of Subdominator you can install the Linux binary of latest version of Subdominator
 
 
-### Abilities Of Subdominator Version1.0.2
+### Abilities Of Subdominator Version1.0.3
 
 - Now The Subdominator configuration yaml file  can store unlimited api keys for some services
+
+- OSINT mode bug fixed
 
 - It have recursive mode when user enables the mode it enumerate recursively for wild cards
 
