@@ -3,23 +3,31 @@
 Subdominator is a powerful tool for passive subdomain enumeration during bug hunting and reconnaissance processes. It is designed to help researchers and cybersecurity professionals discover potential security vulnerabilities by efficiently enumerating subdomains.
 
 ### Latest release Installation:
-1. **Download the Release**: Visit the [Releases](https://github.com/sanjai-AK47/Subdominator/releases) page and download the latest release (`SubdominatorV1.0.3.zip`).
 
-2. **Extract Files**: Extract the downloaded ZIP file to your desired location.
+#### Method 1:
 
-3. **Run Subdominator**:
+```bash
+git clone https://github.com/sanjai-AK47/Subdominator.git
 
-   - **Python Script**: If you prefer to run the Python script, navigate to the extracted directory and execute the following command:
-     
-     ```bash
-     python3 subdominator.py -h
-     ```
+cd Subdominator
 
-   - **Linux Executable**: If you prefer to use the Linux executable, navigate to the extracted directory and execute the following command:
-     
-     ```bash
-     ./subdominator -h
-     ```
+pip install subdominator
+
+subdominator -h
+
+```
+## Dont Worry if the above installation failed there another method also there for you
+
+#### Method2:
+
+```bash
+git clone https://github.com/sanjai-AK47/Subdominator.git
+cd Subdominator
+pip install .
+subdominator -h
+
+```
+
 # Note for old version Linux Users:
 
 ### Delete old version of Subdominator for Linux Executable file
@@ -30,22 +38,23 @@ sudo rm /usr/local/bin/subdominator
 
 ```
 
-## After deleting the old version of Subdominator you can install the Linux binary of latest version of Subdominator
+## After deleting the old version of Subdominator you can install the  latest version of Subdominator with new Instructions mentioned above
 
 
-### Abilities Of Subdominator Version1.0.3
+### Abilities Of Subdominator Version1.0.4
 
-- Now The Subdominator configuration yaml file  can store unlimited api keys for some services
+- Subdominator have upgraded with concurrency which better more faster now than before
 
-- OSINT mode bug fixed
+- Now The Subdominator configuration yaml file  can store unlimited api keys for all services
 
-- It have recursive mode when user enables the mode it enumerate recursively for wild cards
+- OSINT domains file mode bug fixed
 
-- Now Subdominator can enumerate Subdomains for domains in a text file
+- Recursive mode logical errors have been fixed with concurrency
 
-- New Mode Introduced for User, That Subdominator can now send notification to your pc or mobile
+- Now Subdominator can enumerate Subdomains for domains in a text file with more concurrency
 
-- Provided Linux executable file to execute anywhere in your Linux machiene
+
+- Any OS users of subdominator can run the subdominator anywhere in their system
  
 - Passive subdomain enumeration using multiple APIs and Open source interations
 
@@ -60,39 +69,20 @@ sudo rm /usr/local/bin/subdominator
 - Saving the results of Subdominator can be user defined or Subdominator will automatically saved the output
  
 - Run The Subdominator excutable file anywhere and The configuration file be automatically detected in your machiene
- 
-- Linux Users can also run the executable of subdominator or directly run the Subominator python script directly
- 
-- Dont worry if your not a Linux users because Other users can also run the Subdominator python script
 
-### Other Users Insatllation:
+### ALL Users Insatllation:
 
 ```bash
-cd $HOME
 
 git clone https://github.com/sanjai-AK47/Subdominator.git
 
 cd SubDominator
 
-pip install -r requirements.txt
-
-python3 subdominator.py --help
-```
-
-### Linux Users Installation for Executable file:
-```bash
-cd $HOME
-
-git clone https://github.com/sanjai-AK47/Subdominator.git
-
-cd Subdominator
-
-pip install -r requirements.txt
-
-sudo mv subdominator /usr/local/bin/
+pip install subdominator or pip install .
 
 subdominator -h
 ```
+
 
 ## Subdominator Usage:
 
@@ -154,115 +144,110 @@ For Phone
 ### New updated yaml file:
 
 ```yaml
-Virustotal: # Unlimited keys
-  - # Your Virustotal API Key here
+Virustotal: #Unlimited keys                   [Note]: Users follow my instruction and syntax as same if u want add 1 or more keys for particular api services for this configuration file and Thankyou!
+  
+Chaos: #Unlimited keys
 
-  - # Your Virustotal API Key here
-
-  - # Your Virustotal API Key here
-
-Chaos: # Unlimited or Limited keys - Your choice
-
-  - # Your Chaos API Key here
-
-  - # Another Chaos API Key here
-
-Dnsdumpter: # Limited token and cookie
-
-  csrf_cookie: # Your Dnsdumpter CSRF Cookie here
-
-  csrf_token: # Your Dnsdumpter CSRF Token here
-
-Whoisxml: # Unlimited keys
-
-  - # Your Whoisxml API Key here
-
-  - # Another Whoisxml API Key here
-
-SecurityTrails: # Unlimited keys
-
-  - # Your SecurityTrails API Key here
-
-  - # Another SecurityTrails API Key here
-
-Bevigil: # Unlimited keys
-
-  - # Your Bevigil API Key here
-
-  - # Another Bevigil API Key here
-
-  - # Yet another Bevigil API Key here
-
-Binaryedge: # Unlimited keys
-
-  - # Your Binaryedge API Key here
-
-  - # Another Binaryedge API Key here
-
-  - # Yet another Binaryedge API Key here
-
-Rapidapi: # Unlimited keys
-
-  - # Your Rapidapi Key here
-
-  - # Another Rapidapi Key here
-
-Bufferover: # Unlimited keys
-
-  - # Your Bufferover API Key here
-
-  - # Another Bufferover API Key here
-
-Certspotter: # Unlimited keys
-
-  - # Your Certspotter API Key here
-
-  - # Another Certspotter API Key here
-
-Censys: # Limited Keys and ids
-
-  api_secret_id: # Your Censys API Secret ID here
-
-  api_secret_key: # Your Censys API Secret Key here
-
-Fullhunt: # Unlimited keys
-
-  - # Your Fullhunt API Key here
-
-  - # Another Fullhunt API Key here
-
-  - # Yet another Fullhunt API Key here
-
-Leakix: # Unlimited keys
-
-  - # Your Leakix API Key here
-
-  - # Another Leakix API Key here
-
-Netlas: # Unlimited keys
-
-  - # Your Netlas API Key here
-
-  - # Another Netlas API Key here
-
-Zoomeye-API: # Unlimited keys
-
-  - # Your Zoomeye-API Key here
-
-Zoomeye-Auth: # Limited
-
-  email: # Your Zoomeye Authentication Email here
-
-  password: # Your Zoomeye Authentication Password here
+  - # Insert your Chaos API key here
+  
+Dnsdumpter:  #Unlimited keys and tokens
 
 
-Pushbullet-Notify: # Limited
-  - # Your Pushbullet API Key here
+  - # Csrf_Cookie:Csrf_Token
+
+Whoisxml: #Unlimited keys
+
+  - # Insert your Whoisxml API key here
+  
+SecurityTrails: #Unlimited keys
+
+  - # Insert your SecurityTrails API key here
+  
+Bevigil: #Unlimited keys 
+
+  - # Insert your Bevigil API keys
+  
+Binaryedge: #Unlimited keys
+
+  - # Insert your Binaryedge API key here
+  
+Rapidapi: #Unlimited keys
+
+  - # Insert your Rapidapi API key here
+  
+Redhunt: #Unlimited keys 
+
+  - # Insert your Redhunt API key here
+  
+Bufferover: #Unlimited keys 
+
+  - # Insert your Bufferover API key here
+  
+Certspotter: #Unlimited keys 
+
+  - # Insert your Certspotter API key here
+  
+Censys: #Unlimited censys-id and key as you want
+
+  - # Censys_API_ID:Censys_Secret_Token 
+  
+Fullhunt: #Unlimited keys
+
+  - # Insert your Fullhunt API key here
+  
+Leakix: #Unlimited keys
+
+  - # Insert your Leakix API key here
+  
+Netlas: #Unlimited keys
+
+  - # Insert your Netlas API key here
+  
+Zoomeye-API: #Unlimited keys
+
+  - # Insert your Zoomeye API key here
+  
+Zoomeye-Auth: #Unlimited as u want
+
+  - # your_zoomeye_email:your_zoomeye_password
+  
+Pushbullet-Notify: #limited keys is enough for pushbullet
+
+  - # Insert your Pushbullet Notify key here
 ```
 
 #### Please make sure to replace `#your_api_key_here` with the respective API keys and replace the `email` with your api email and `password` api passoword you obtain from the corresponding websites.
 
 ### Set the Unlimited api keys Where its commented can holds Unlimited api keys
+
+
+## New Changes in yaml file
+
+```bash
+[Note]: Users follow my instruction and syntax as same if u want add 1 or more keys for particular api services for this configuration file and Thankyou!
+  
+Dnsdumpter:  #Unlimited keys and tokens
+
+
+  - # Csrf_Cookie:Csrf_Token
+
+Redhunt: #Unlimited keys 
+
+  - # Insert your Redhunt API key here
+  
+Censys: #Unlimited censys-id and key as you want
+
+  - # Censys_API_ID:Censys_Secret_Token 
+
+  
+Zoomeye-Auth: #Unlimited as u want
+
+  - # your_zoomeye_email:your_zoomeye_password
+
+```
+
+## [INFO]: Observe the change that for token, cookie, censys id and api, zoomeye auths are now changed so we can store unlimited keys and configuration and it will make easy and no more configuration after that . Which means spending time with configuration of api keys helps you in future
+
 
 
 ### Information for Previous Users:
@@ -291,6 +276,7 @@ Claim your free API keys here:
 - **Zoomeye**: [Zoomeye](https://www.zoomeye.org/)
 - **Netlas**: [Netlas](https://netlas.io/)
 - **Leakix**: [Leakix](https://leakix.net/)
+- **Redhunt**: [Redhunt](https://https://devportal.redhuntlabs.com/)
 
 
 ### Dnsdumpter:
@@ -311,7 +297,7 @@ After this all things you can run the Subdominator efficiently for subdomain enu
 Subdominator offers a convenient config mode that allows you to use your configured API keys and custom settings. You can enable the config mode by using the `--config` flag with the Subdominator command.
 
 ```bash
-python3 subdominator.py -d target.com --config
+subdominator -d target.com --config
 ```
 ## Config example image:
 
