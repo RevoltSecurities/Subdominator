@@ -1,0 +1,8 @@
+censys==2.2.6
+colorama==0.4.4
+httpx==0.25.0
+plyer==2.1.0
+pywebio==1.8.2
+PyYAML==6.0.1
+Requests==2.31.0
+setuptools==68.1.2
