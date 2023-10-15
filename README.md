@@ -145,6 +145,8 @@ For Phone
 
 ```yaml
 Virustotal: #Unlimited keys                   [Note]: Users follow my instruction and syntax as same if u want add 1 or more keys for particular api services for this configuration file and Thankyou!
+
+  - #Insert your Virustotal API key here
   
 Chaos: #Unlimited keys
 
