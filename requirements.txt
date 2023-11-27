@@ -1,0 +1,7 @@
+censys==2.2.9
+colorama==0.4.4
+fake_useragent==1.2.1
+httpx==0.25.2
+plyer==2.1.0
+pywebio==1.8.2
+Requests==2.31.0
