@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='subdominator',
-    version='1.0.4',
+    version='1.0.5',
     author='D. Sanjai Kumar',
     author_email='bughunterz0047@gmail.com',
     description='Subdominator - An ultimate subdomain enumeration tool',
