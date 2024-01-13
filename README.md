@@ -8,7 +8,9 @@ Subdominator is a powerful tool for passive subdomain enumeration during bug hun
 
 ```bash
 
-pip install subdominator
+git clone https://github.com/sanjai-AK47/Subdominator.git
+
+pip install git+https://github.com/sanjai-AK47/Subdominator.git
 
 subdominator -h
 
@@ -27,23 +29,24 @@ subdominator -h
 
 ```
 
-### Features Of Subdominator Version1.0.5
+### Update to latest version:
+```bash
+pip install git+https://github.com/sanjai-AK47/Subdominator.git
+```
 
-- Subdominator resultings logic are improved
+### Features Of Subdominator Version1.0.6
 
-- Subdominator supports Output redirection to other tool that means supports oneliners for your Bug Bounty Reconnaissance
-
-- Any OS users of subdominator can run the subdominator anywhere in their system
-
-- Easy Installation Through pip and also for easy Tools management
+- Subdominator OSINT mode has been enhanced and improved which will give more results than previous versions
+- Subdominator Supports stdout
+- Subdominator notification results are improved
 
 
 ### Oneliners with Subdominator:
 
-Subdominator new features is it supports the onliners with other tools of [projectdiscovery](https://github.com/projectdiscovery) and My other tools [Subprober](https://github.com/sanjai-AK47/Subprober) and [httprober](https://github.com/sanjai-AK47/Httprober) to improver your reconnassaince with efficiently
+Subdominator new features is it supports the onliners with other tools of [projectdiscovery](https://github.com/projectdiscovery) and My tools [Subprober](https://github.com/sanjai-AK47) to improver your reconnassaince with efficiently
 
 ```bash
-subdominator -d apple.com -o subdominator_subdomains.txt -cf | httprober -c 50 | subprober --verbose --title --server --application-type --word-count  -c 20 -o subprober.txt --silent
+subdominator -d apple.com -o subdominator_subdomains.txt -cf | httprober -c 50 | subprober --verbose --title --server --application-type --word-count  -c 20 -o subprober.txt --silent -sp
 ```
 
 Result Images:
@@ -67,35 +70,55 @@ subdominator -h
 
 ## Subdominator Usage:
 
-   ``` bash
+   ``` yaml
 
-     [DESCRIPTION]: Subdominator is a powerful tool for subdomain enumeration. You can use it with various options to customize your subdomain discovery process.
+          
+[DESCRIPTION]: Subdominator is a subdomain enumeration tool that discovers subdomains by Free ! open source and API resources
 
-     usage: subdominator.py [-h] [-d DOMAIN] [-dL DOMAINS_LIST] [-nt] [-r] [-vrs] [-cf] [-o OUTPUT]
+[USAGE]: 
 
-    Subdominator Unleash the Power of Subdomain Enumeration
+    subdominator [flags]
+    
+[FLAGS]: 
 
-Options:
+    
+    -h,   --help            :  This flag will show this help message and exits.
+    
+    -d,   --domain          :  Specify a domain name for Subdominator to collect subdomains.
+    
+    -dL,  --domains-list    :  Specify a file name for Subdominator to collect subdomains.
+    
+    -o,   --output          :  Specify a filename to save the subdomain enumeration results.
+    
+    -cf,  --config          :  Switching config flag will initiate Subdominator's Config mode (default mode: OSINT).
+    
+    -nt,  --notify          :  Swtiching notify flag will enable the subdominator to send the results via notification.
+    
+    -vrs, --version         :  Switching version flag will show the subdominator current vesion and exits.
+    
+    -r,   --recursive       :  Switching recursive flag will enumerate the subdomains which has wild cards. 
+    
+    -ske, --show-key-error  :  Switching this flag will show the api key errors if user didn't give keys or keys usage exhausts.
+    
+    -sre, --show-req-error  :  Switching this flag will show the sources which are unable to reach for subdomain enumeraion.
+    
+[NOTE]: 
 
-  -h, --help                   Show this help message and exit
-
-  -d DOMAIN, --domain DOMAIN                     Specify the target domain to find subdomains
-
-  -dL DOMAINS_LIST, --domains-list DOMAINS_LIST  Provide a filename containing a list of domains to find subdomains
-
-  -nt, --notify     Notification                 Send push notifications to your Android Phone or Desktop when Subdominator has finished its process
-
-  -r, --recursive   Recursive Enumeration        Enable recursive enumeration for wildcards in found subdomains
-
-  -vrs, --version   Version                      Check for the latest version of Subdominator
-
-  -cf, --config     Configuration Mode          Find subdomains with the configured API keys
-
-  -o OUTPUT, --output OUTPUT                    Specify the filename to save the output
+    - Subdominator resultings will be Excellent! when your's api key configuration are well
+    
+    - If you didn't want to run in config mode then don't give -cf or --config flag without API key configurations
+    
+    - To see the resources for API keys configuration please see here --> https://github.com/sanjai-AK47/Subdominator
+    
+    - If you have any errors in installation or facing errors in subdominator please report here -->  https://github.com/sanjai-AK47/Subdominator
+    
+    - Hope you like the Subdominator, if you like this open source project 🔥, Then a give a ⭐ here -->  https://github.com/sanjai-AK47/Subdominator
+    
+    - Want to contribute some sources or connect with me? then ping me here --> https://www.linkedin.com/in/d-sanjai-kumar-109a7227b
 
    ```
 
-[INFO]: Enabling the notification mode can help you When Subdominator do enumeration for list of domains or in recursive mode
+[INFO]: Enabling the notification flag will send the subdominator results via notification
 
 
 ## Dont forget to configure your yaml file with api keys:
@@ -115,14 +138,14 @@ For PC
 
    Add the extension to your PC with the Pushbullet Extension regarding to your browser
             
-For Phone
+For Android | IOS
       
    Install the Pushbullet app on your phone.
         
    Log in using the same email address that you used to log in to your PC !.
         
 
-### New updated yaml file:
+### V1.0.5 yaml file:
 
 ```yaml
 Virustotal: #Unlimited keys                   [Note]: Users follow my instruction and syntax as same if u want add 1 or more keys for particular api services for this configuration file and Thankyou!
@@ -223,7 +246,7 @@ Hunter: #Unlimited keys
 ```
 
 
-## New Changes in yaml file
+## Example API keys setup:
 
 ```yaml
 [Note]: Users follow my instruction and syntax as same if u want add 1 or more keys for particular api services for this configuration file and Thankyou!
@@ -276,10 +299,6 @@ Claim your free API keys here:
 - **Netlas**: [Netlas](https://netlas.io/)
 - **Leakix**: [Leakix](https://leakix.net/)
 - **Redhunt**: [Redhunt](https://https://devportal.redhuntlabs.com/)
-
-  
-### New Api Integrations and Credits:
-
 - **Shodan** : [Shodan](https://shodan.io)
 - **HunterHow** : [Hunter](https://hunter.how/)
 
