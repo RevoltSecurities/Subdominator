@@ -287,7 +287,7 @@ Claim your free API keys here:
 - **Dnsdumpter**: [Dnsdumpster](https://dnsdumpster.com)
 - **Whoisxml**: [WhoisXML](https://whois.whoisxmlapi.com)
 - **SecurityTrails**: [SecurityTrails](https://securitytrails.com)
-- **Bevigil**: [Bevigil](https://www.bevigil.com)
+- **Bevigil**: [Bevigil](https://bevigil.com/)
 - **Binaryedge**: [BinaryEdge](https://binaryedge.io)
 - **Fullhunt**: [Fullhunt](https://fullhunt.io)
 - **Rapidapi**: [RapidAPI](https://rapidapi.com)
