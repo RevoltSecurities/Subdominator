@@ -5,3 +5,4 @@ httpx>=0.26.0
 plyer>=2.1.0
 pywebio>=1.8.2
 Requests>=2.31.0
+PyYAML>=6.0.1
