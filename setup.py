@@ -15,7 +15,8 @@ setup(
         'fake_useragent>=1.2.1',
         'pywebio>=1.8.2',
         'requests>=2.31.0',
-        'argparse>=1.4.0'
+        'argparse>=1.4.0',
+        'PyYAML>=6.0.1'
     ],
     entry_points={
         'console_scripts': [
