@@ -1,79 +1,33 @@
 ## Subdominator - Unleash the Power of Subdomain Enumeration
 
-Subdominator is a powerful tool for passive subdomain enumeration during bug hunting and reconnaissance processes. It is designed to help researchers and cybersecurity professionals discover potential security vulnerabilities by efficiently enumerating subdomains.
+Subdominator is a powerful tool for passive subdomain enumeration during bug hunting and reconnaissance processes. It is designed to help researchers and cybersecurity professionals discover potential security vulnerabilities by efficiently enumerating subdomains some various free passive resources.
 
-### Latest release Installation:
+![GitHub last commit](https://img.shields.io/github/last-commit/RevoltSecurities/Subdominator) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/RevoltSecurities/Subdominator) [![GitHub license](https://img.shields.io/github/license/sanjai-AK47/Subprober)](https://github.com/RevoltSecurities/Subdominator/blob/main/LICENSE) [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/d-sanjai-kumar-109a7227b/)
 
-#### Method 1:
+### Features:
 
-```bash
+   - fast and powerfull to enumerate subdomains.
+   - 35+ passive results to enumerate subdomains.
+   - configurable API keys setup
+   - Integrated notification system
 
-git clone https://github.com/sanjai-AK47/Subdominator.git
-
-pip install git+https://github.com/sanjai-AK47/Subdominator.git
-
-subdominator -h
-
-```
-copy the config_keys.yaml configuration file from Subdominator github repository if you dont have in your machiene
-
-## Dont Worry if the above installation failed there another method also there for you
-
-#### Method2:
-
-```bash
-git clone https://github.com/sanjai-AK47/Subdominator.git
-cd Subdominator
-pip install .
-subdominator -h
-
-```
-
-### Update to latest version:
-```bash
-pip install git+https://github.com/sanjai-AK47/Subdominator.git
-```
-
-### Features Of Subdominator Version1.0.6
-
-- Subdominator OSINT mode has been enhanced and improved which will give more results than previous versions
-- Subdominator Supports stdout
-- Subdominator notification results are improved
-
-
-### Oneliners with Subdominator:
-
-Subdominator new features is it supports the onliners with other tools of [projectdiscovery](https://github.com/projectdiscovery) and My tools [Subprober](https://github.com/sanjai-AK47) to improver your reconnassaince with efficiently
-
-```bash
-subdominator -d apple.com -o subdominator_subdomains.txt -cf | httprober -c 50 | subprober --verbose --title --server --application-type --word-count  -c 20 -o subprober.txt --silent -sp
-```
-
-Result Images:
-
-![Screenshot from 2023-11-27 10-53-10](https://github.com/sanjai-AK47/Subdominator/assets/119435129/ba37eaf8-3baa-45a5-869e-6a497a270931)
-
-
-### ALL Users Insatllation:
-
-```bash
-
-git clone https://github.com/sanjai-AK47/Subdominator.git
-
-cd SubDominator
-
-pip install subdominator or pip install .
-
+### Usage:
+```code
 subdominator -h
 ```
+```yaml
+                    __         __                       _                    __                
+   _____  __  __   / /_   ____/ /  ____    ____ ___    (_)   ____   ____ _  / /_  ____    _____
+  / ___/ / / / /  / __ \ / __  /  / __ \  / __ `__ \  / /   / __ \ / __ `/ / __/ / __ \  / ___/
+ (__  ) / /_/ /  / /_/ // /_/ /  / /_/ / / / / / / / / /   / / / // /_/ / / /_  / /_/ / / /    
+/____/  \__,_/  /_.___/ \__,_/   \____/ /_/ /_/ /_/ /_/   /_/ /_/ \__,_/  \__/  \____/ /_/     
+                                                                                               
 
+                     @RevoltSecurities
 
-## Subdominator Usage:
-
-   ``` yaml
 
           
-[DESCRIPTION]: Subdominator is a subdomain enumeration tool that discovers subdomains by Free ! open source and API resources
+[DESCRIPTION]: Subdominator a passive subdomain enumeration that discovers subdomains for your targets using with passive and open source resources
 
 [USAGE]: 
 
@@ -81,207 +35,49 @@ subdominator -h
     
 [FLAGS]: 
 
+    [INPUT]: 
     
-    -h,   --help            :  This flag will show this help message and exits.
-    
-    -d,   --domain          :  Specify a domain name for Subdominator to collect subdomains.
-    
-    -dL,  --domains-list    :  Specify a file name for Subdominator to collect subdomains.
-    
-    -o,   --output          :  Specify a filename to save the subdomain enumeration results.
-    
-    -cf,  --config          :  Switching config flag will initiate Subdominator's Config mode (default mode: OSINT).
-    
-    -nt,  --notify          :  Swtiching notify flag will enable the subdominator to send the results via notification.
-    
-    -vrs, --version         :  Switching version flag will show the subdominator current vesion and exits.
-    
-    -r,   --recursive       :  Switching recursive flag will enumerate the subdomains which has wild cards. 
-    
-    -ske, --show-key-error  :  Switching this flag will show the api key errors if user didn't give keys or keys usage exhausts.
-    
-    -sre, --show-req-error  :  Switching this flag will show the sources which are unable to reach for subdomain enumeraion.
-    
-[NOTE]: 
-
-    - Subdominator resultings will be Excellent! when your's api key configuration are well
-    
-    - If you didn't want to run in config mode then don't give -cf or --config flag without API key configurations
-    
-    - To see the resources for API keys configuration please see here --> https://github.com/sanjai-AK47/Subdominator
-    
-    - If you have any errors in installation or facing errors in subdominator please report here -->  https://github.com/sanjai-AK47/Subdominator
-    
-    - Hope you like the Subdominator, if you like this open source project 🔥, Then a give a ⭐ here -->  https://github.com/sanjai-AK47/Subdominator
-    
-    - Want to contribute some sources or connect with me? then ping me here --> https://www.linkedin.com/in/d-sanjai-kumar-109a7227b
-
-   ```
-
-[INFO]: Enabling the notification flag will send the subdominator results via notification
-
-
-## Dont forget to configure your yaml file with api keys:
-
-
-## Setup for Notification !:
-
-Set up a Pushbullet account on your PC and Phone
-    
-For PC
+        -d,   --domain                  :  domain name to enumerate subdomains.
+        -dL,  --domain-list             :  filename that contains domains for subdomain enumeration.
+        stdout                          :  subdominator supports stdout to pipe its output
         
-   Go to [Pushbullet.com](https://www.pushbullet.com/)
-            
-   Create an account
-
-   Get a api key and paste in Pushbullet-Notify in configuration yaml file
-
-   Add the extension to your PC with the Pushbullet Extension regarding to your browser
-            
-For Android | IOS
-      
-   Install the Pushbullet app on your phone.
+    [OUTPUT]: 
+    
+        -o,   --output                  :  filename to save the outputs.
+        -oD,  --output-directory        :  directory name to save the outputs (use it when -dL is flag used).
         
-   Log in using the same email address that you used to log in to your PC !.
+    [OPTIMIZATION]: 
+    
+        -t,   --timeout                 : timeout value for every sources requests. 
+    
+    [Update]: 
+    
+        -up,   --update                 :  update subdominator for latest version but yaml source update required manual to not affect your api keys configurations.
+        -duc, --disable-update-check    :  disable automatic update check for subdominator
+        -sup, --show-updates            :  shows latest version updates of subdominator 
         
-
-### V1.0.5 yaml file:
-
-```yaml
-Virustotal: #Unlimited keys                   [Note]: Users follow my instruction and syntax as same if u want add 1 or more keys for particular api services for this configuration file and Thankyou!
-
-  - #Insert your Virustotal API key here
-  
-Chaos: #Unlimited keys
-
-  - # Insert your Chaos API key here
-  
-Dnsdumpter:  #Unlimited keys and tokens
-
-
-  - # Csrf_Cookie:Csrf_Token
-
-Whoisxml: #Unlimited keys
-
-  - # Insert your Whoisxml API key here
-  
-SecurityTrails: #Unlimited keys
-
-  - # Insert your SecurityTrails API key here
-  
-Bevigil: #Unlimited keys 
-
-  - # Insert your Bevigil API keys
-  
-Binaryedge: #Unlimited keys
-
-  - # Insert your Binaryedge API key here
-  
-Rapidapi: #Unlimited keys
-
-  - # Insert your Rapidapi API key here
-  
-Redhunt: #Unlimited keys 
-
-  - # Insert your Redhunt API key here
-  
-Bufferover: #Unlimited keys 
-
-  - # Insert your Bufferover API key here
-  
-Certspotter: #Unlimited keys 
-
-  - # Insert your Certspotter API key here
-  
-Censys: #Unlimited censys-id and key as you want
-
-  - # Censys_API_ID:Censys_Secret_Token 
-  
-Fullhunt: #Unlimited keys
-
-  - # Insert your Fullhunt API key here
-  
-Leakix: #Unlimited keys
-
-  - # Insert your Leakix API key here
-  
-Netlas: #Unlimited keys
-
-  - # Insert your Netlas API key here
-
-Shodan: #Unlimited keys
-  - Insert your Shodan API key here
-
-Hunter: #Unlimited keys
-  - Insert your Hunterhow API key here
-  
-Zoomeye-API: #Unlimited keys
-
-  - # Insert your Zoomeye API key here
-  
-Zoomeye-Auth: #Unlimited as u want
-
-  - # your_zoomeye_email:your_zoomeye_password
-  
-Pushbullet-Notify: #limited keys is enough for pushbullet
-
-  - # Insert your Pushbullet Notify key here
-```
-
-#### Please make sure to replace `#your_api_key_here` with the respective API keys and replace the `email` with your api email and `password` api passoword you obtain from the corresponding websites.
-
-### Set the Unlimited api keys Where its commented can holds Unlimited api keys
-
-## Update your  yaml file if you are existing user:
-
-```yaml
-
-Shodan: #Unlimited keys
-  - Insert your Shodan API key here
-
-
-Hunter: #Unlimited keys
-  - Insert your Hunterhow API key here
+    [CONFIG]: 
+    
+        -nt,  --notify              :  send notification of found subdomain using source Slack, Pushbullet, Telegram, Discord
+        -p,   --proxy               :  http proxy to use with subdominator (intended for debugging the performance of subdominator).
+        -cp,  --config-path         :  custom path of config file for subdominator to read api keys ( default path: /home/sanjai/.config/Subdominator/provider-config.yaml)
+        
+    [DEBUG]: 
+    
+        -h,   --help                :  displays this help message and exits 
+        -v,   --version             :  show current version of subdominator and latest version if available and exits
+        -ske, --show-key-error      :  show keys error for out of credits and key not provided for particular sources
+        -sre, --show-timeout-error  :  show timeout error for sources that are timeout to connect
+        -nc,  --no-color            :  disable the colorised output of subdominator
+        -ls,  --list-source         :  display the sources of subdominator uses for subdomain enumerations and exits (included for upcoming updates on sources).
 
 ```
 
+### Subdominator Integrations:
 
-## Example API keys setup:
-
-```yaml
-[Note]: Users follow my instruction and syntax as same if u want add 1 or more keys for particular api services for this configuration file and Thankyou!
-  
-Dnsdumpter:  #Unlimited keys and tokens
-
-  - zsdqYb0rvIVYh2uPHo5Yk4EljV9GEK3579fdg70s9dflW37Q5pZl8pvQHUHWav:Z488dfiasugf89692356bRfLyBxuTytPjA17aa2yA5ULO8HySZoG6ptOKoY
-
-
-Redhunt: #Unlimited keys 
-
-  - VRp7HK3jWiRSnpPHo2rDWp09078074tv
-  
-Censys: #Unlimited censys-id and key as you want
-
-  - d573246-2343e-4072344-8773249-174cd6a0:Rdf2rII6cqkQ93425934KfZzzJ2q 
-
-  
-Zoomeye-Auth: #Unlimited as u want
-
-  - yourZoomeyeMail@gmail.com:ZoomeyePassword
-
-
-```
-
-[INFO]: To check your configuration file syntax is right check [here](https://onlineyamltools.com/validate-yaml) by pasting your config_keys.yaml file to avoid yaml keys arrangements and syntax errors
-
-[INFO]: Observe the change that for token, cookie, censys id and api, zoomeye auths are now changed so we can store unlimited keys and configuration and it will make easy and no more configuration after that . Which means spending time with configuration of api keys helps you in future
-
-
-### API Integrations and Credits
-
-Subdominator integrates with various APIs to gather valuable subdomain information. We would like to give credit to the following websites for providing free-to-obtain API keys for subdomain enumeration.
+Subdominator integrates with various free API passive sources to gather valuable subdomain information. We would like to give credit to the following websites for providing free-to-obtain API keys for subdomain enumeration.
 Claim your free API keys here:
-
+**Subdomains Resources**:
 - **VirusTotal**: [VirusTotal](https://www.virustotal.com)
 - **Chaos**: [Chaos](https://chaos.projectdiscovery.io)
 - **Dnsdumpter**: [Dnsdumpster](https://dnsdumpster.com)
@@ -300,21 +96,174 @@ Claim your free API keys here:
 - **Leakix**: [Leakix](https://leakix.net/)
 - **Redhunt**: [Redhunt](https://https://devportal.redhuntlabs.com/)
 - **Shodan** : [Shodan](https://shodan.io)
-- **HunterHow** : [Hunter](https://hunter.how/)
+- **Huntermap** : [Hunter](https://hunter.how/)
+- **Google**: [Google](https://developers.facebook.com/)
+- **Facebook**: [Facebook](https://programmablesearchengine.google.com/controlpanel/create)
+- **Quake**: [Quake](https://quake.360.cn/)
+- **RapidFinder**: [RapidFinder](https://rapidapi.com/Glavier/api/subdomain-finder3/pricing)
+- **RapidScan**: [RapidScan](https://rapidapi.com/sedrakpc/api/subdomain-scan1/pricing)
+
+**Notification Resources**:
+- **Slack**: [Slack](https://slack.com)
+- **Pushbullet**: [Pushbullet](pushbullet.com/)
 
 
-### Dnsdumpter:
+### Installation:
 
-Dnsdumpster requires csrf token and cookie to obtain it visit **Dnsdumpter**: [Dnsdumpster](https://dnsdumpster.com)
+**Subdominator requires python latest version to be installed and with latest version `pip` commandline tool 
+```code
+pip install git+https://github.com/RevoltSecurities/Subdominator
+```
 
-Search any domain and Intercept the requests your burp that contains token and cookie. Copy that and paste in your yaml file
+### Post Installation setup:
 
-  
-![Screenshot from 2023-07-24 21-47-10](https://github.com/sanjai-AK47/Subdominator/assets/119435129/d0aa5316-7698-4942-9512-2b3c3dc0a007)
+`subdominator` can be used after installing successfully but if you want to use subdominator efficiently with its maximum level then some source requires API keys to setup and users can use this command:
+```code
+subdominator -ls`
+``
+```yaml
+                    __         __                       _                    __                
+   _____  __  __   / /_   ____/ /  ____    ____ ___    (_)   ____   ____ _  / /_  ____    _____
+  / ___/ / / / /  / __ \ / __  /  / __ \  / __ `__ \  / /   / __ \ / __ `/ / __/ / __ \  / ___/
+ (__  ) / /_/ /  / /_/ // /_/ /  / /_/ / / / / / / / / /   / / / // /_/ / / /_  / /_/ / / /    
+/____/  \__,_/  /_.___/ \__,_/   \____/ /_/ /_/ /_/ /_/   /_/ /_/ \__,_/  \__/  \____/ /_/     
+                                                                                               
 
-## Information:
+                     @RevoltSecurities
 
-Subdominator a Subdomain enumeration tool builded for bug hunters and pentesters and other Cybersecurity people, it mainly builded for information gathering purpose
-so [I'm](https://www.linkedin.com/in/d-sanjai-kumar-109a7227b/) not responsible for any illegal works  and also support the Subdominator project with 
-a ⭐ and show your ❤️ and support guys!
-Happy Hacking with Subdominator! If you have any suggestions or feedback, feel free to contribute or open an issue on our GitHub repository: [Subdominator GitHub Repository](https://github.com/sanjai-AK47/Subdominator) or can contact me through [LinkedIN](https://www.linkedin.com/in/d-sanjai-kumar-109a7227b/) for any issues or upgrades
+[Version]: Subdominator current version v1.0.7 (latest)
+[INFO]: Current Available free passive resources: [39]
+[INFO]: Sources marked with an * needs API key(s) or token(s) configuration to works
+[INFO]: Hey sanjai you can config your api keys or token here /home/sanjai/.config/Subdominator/provider-config.yaml to work
+abuseipDB                                                                                                                                                                                                                                     
+alienvault                                                                                                                                                                                                                                    
+anubis                                                                                                                                                                                                                                        
+bevigil*                                                                                                                                                                                                                                      
+binaryedge*                                                                                                                                                                                                                                   
+bufferover*                                                                                                                                                                                                                                   
+censys*                                                                                                                                                                                                                                       
+certspotter*                                                                                                                                                                                                                                  
+chaos*                                                                                                                                                                                                                                        
+columbusapi                                                                                                                                                                                                                                   
+crtsh                                                                                                                                                                                                                                         
+digitorus                                                                                                                                                                                                                                     
+dnsdumpster*                                                                                                                                                                                                                                  
+dnsrepo                                                                                                                                                                                                                                       
+facebook*                                                                                                                                                                                                                                     
+fullhunt*                                                                                                                                                                                                                                     
+google*                                                                                                                                                                                                                                       
+hackertarget                                                                                                                                                                                                                                  
+huntermap*                                                                                                                                                                                                                                    
+intelx*                                                                                                                                                                                                                                       
+leakix*                                                                                                                                                                                                                                       
+netlas*                                                                                                                                                                                                                                       
+quake*                                                                                                                                                                                                                                        
+rapidapi*                                                                                                                                                                                                                                     
+rapiddns                                                                                                                                                                                                                                      
+redhuntlabs*                                                                                                                                                                                                                                  
+securitytrails*                                                                                                                                                                                                                               
+shodan*                                                                                                                                                                                                                                       
+shodanx                                                                                                                                                                                                                                       
+shrewdeye                                                                                                                                                                                                                                     
+sitedossier                                                                                                                                                                                                                                   
+subdomaincenter                                                                                                                                                                                                                               
+urlscan                                                                                                                                                                                                                                       
+virustotal*                                                                                                                                                                                                                                   
+waybackarchive                                                                                                                                                                                                                                
+whoisxml*                                                                                                                                                                                                                                     
+zoomeyeapi*                                                                                                                                                                                                                                   
+rapidfinder*: Rapidfinder requires rapidapi api key but before it required to subscribe for free and please see here: https://rapidapi.com/Glavier/api/subdomain-finder3/pricing                                                              
+rapidscan*  : Rapidscan requires rapidapi api key but before it required to subscribe for free and please see here: https://rapidapi.com/sedrakpc/api/subdomain-scan1/pricing       
+```
+
+here above we can see subdominator resources it uses and resource marked with an (*) need API keys to work and users can collect API keys from those websites and hyperlink will provided
+for sources when using command `subdominator -ls` every source link provided as a hyperlink so place your cursor on sources will show the hyperlink on your terminal
+
+### Keys configurations:
+
+so we saw what are the resources are available for subdominator so now where to paste keys? it easy just see in your `~/$HOME/.config/Subdominator/provider-config.yaml` and all sourcess are available 
+there, now paste your API keys and One more thing **Subdominator follow same keys setup syntax of subfinder and you refer** https://docs.projectdiscovery.io/tools/subfinder/install#post-install-configuration  **but before refering there is only one difference is for** `zoomeyeapi` in `subdominator` which in `subfinder` you need to give both host and key ex:
+<br>
+```yaml
+zoomeyeapi:
+   - zoomeye.hk:AudbAfjHslif_sudf
+```
+but in `subdominator` you should give only api keys not host for ex:
+```yaml
+zooeyeapi:
+   - AudbAfjHslif_sudf
+```
+***Now lets come to other resources setup that varies from subfinder***:
+
+   - Dnsdumpter Setup:
+     
+      ***Dnsdumpster requires csrf token and cookie to obtain it visit **Dnsdumpter**: [Dnsdumpster](https://dnsdumpster.com)
+      Search any domain and Intercept the requests your burp that contains token and cookie. Copy that and paste in your yaml file**
+
+      <h1 align="center">
+        <img src="https://github.com/sanjai-AK47/Subdominator/assets/119435129/d0aa5316-7698-4942-9512-2b3c3dc0a007" width="700px">
+        <br>
+      </h1>
+
+   - Google Setup:
+     - Step 1: First login a google account in your browser
+     - Step 2: Visit [here](https://programmablesearchengine.google.com/controlpanel/create) and create a search engine and choose all web option like below mentioned in images
+        <h1 align="center">
+        <img src="https://private-user-images.githubusercontent.com/119435129/273359357-7b871906-a08b-4473-bc47-31f797ae88f6.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTQ4MDg5NTMsIm5iZiI6MTcxNDgwODY1MywicGF0aCI6Ii8xMTk0MzUxMjkvMjczMzU5MzU3LTdiODcxOTA2LWEwOGItNDQ3My1iYzQ3LTMxZjc5N2FlODhmNi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTA0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUwNFQwNzQ0MTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04ODI0MzNhNzUwZWI0YzQ2ZDUyYTRmOWU1MDEzMjExNGQxYjAxNDNkZWY1NGVjNjA1YTYyMDRkZDQwZTgyNTQ3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.-4oyXpQwjgLoRfdgnRQgbrnz45j6rRVABSQ6jcGKCoo" width="700px">
+        <br>
+      </h1>
+     - Step 3: After Creating your successfull search engine it time to copy your cx id 
+     - Step 4: After completing these all process now its time to grab your api keys of google [here](https://developers.google.com/custom-search/v1/introduction)
+     - Step 5: Press the get key button and create a new project with any name you want and click next
+     - Step 6: After creating and completing your api key is generated and press show key then copy it
+     - Step 7: Now its time to paste your google cx id and API key in yaml file
+       ```yaml
+       google
+          #cxID:Apikey
+          - 23892479:AIdjhakbkdiudgiao
+       ```
+
+**So you configured this different resources of subdominator, now follow the other steps to setting up API keys which I mentioned before here** https://github.com/RevoltSecurities/Subdominator/edit/main/README.md#keys-configurations
+**Now After setting up your api keys your provider yaml file looks like**
+```yaml
+censys: 
+  - 9f5a-be11-4b9e-9564-9596e78:Va92kyMYPS7ANKpI8CjV
+
+facebook:
+  - 1550699734936481:3b2eff7304659559380ad88d8c4b82f
+
+google:
+   - 34992b4aee9494e7b:AIzaSyCcEqqOERofbkudEY_iVC2_Wfv0A
+
+intelx:
+  - 2.intelx.io:1995e804-3c71-4938042-8042802-efa29ae2964d
+
+zoomeyeapi:
+   - 3833802-b9FF-6E1A5-7d2d-9792d64082adf
+   - 6F28942CC-ACA5-573E8-d769-99b4c728042d
+
+redhuntlabs: 
+  - https://reconapi.redhuntlabs.com/community/v1/domains/subdomains:VRp7HK3jWiRSnpPfois7979spn4tvDVi0vM
+
+dnsdumpster:
+  - zsdqYb0rvIVYh2uPHo5Yk4EljV9GEKn44hDL9V2DFXznflW37Q5pZl8pvQHUHWav:Z488EzyPXVwDAhDGlm8gTBvkubRfLyBxuTytPjA17aa2yA5ULO8HySZoG6ptOKoY
+
+```
+Booyah ⚡ completed , now you can run `subdominator` with its maxiumum and wait for 2-4 minutes then you will have your results.
+
+### Security:
+
+Subdominator is a promising tool that will never cause any threats to users or security researcher and its safe to use. Even without
+Users permissions subdominator will not update itself and I welcome everyone who are intrested  contribute for Subdominator can create
+their issues and report it.
+
+### License:
+Subdominator is built by [RevoltSecurities](https://github.com/RevoltSecurities) Team with ❤️ and your support will encourage us to improve the `subdominator` more and Community contributors are
+Welcome  to contribute for subdominator and If you love the `subdominator` support it by giving a ⭐ .
+
+
+
+    
+
+
+
