@@ -223,11 +223,11 @@ zooeyeapi:
      - Step 5: Press the get key button and create a new project with any name you want and click next
      - Step 6: After creating and completing your api key is generated and press show key then copy it
      - Step 7: Now its time to paste your google cx id and API key in yaml file
-       ```yaml
-       google
-          #cxID:Apikey
-          - 23892479:AIdjhakbkdiudgiao
-       ```
+```yaml
+google
+  #cxID:Apikey
+  - 23892479:AIdjhakbkdiudgiao
+```
 
 **So you configured this different resources of subdominator, now follow the other steps to setting up API keys which I mentioned before here** https://github.com/RevoltSecurities/Subdominator/edit/main/README.md#keys-configurations
 **Now After setting up your api keys your provider yaml file looks like**
