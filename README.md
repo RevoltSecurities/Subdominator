@@ -125,8 +125,8 @@ pip install git+https://github.com/RevoltSecurities/Subdominator
 
 `subdominator` can be used after installing successfully but if you want to use subdominator efficiently with its maximum level then some source requires API keys to setup and users can use this command:
 ```code
-subdominator -ls`
-``
+subdominator -ls
+```
 ```yaml
                     __         __                       _                    __                
    _____  __  __   / /_   ____/ /  ____    ____ ___    (_)   ____   ____ _  / /_  ____    _____
