@@ -1,3 +1,8 @@
+<h1 align="center">
+  <img src="img/subdominator.png" alt="Subdominator" width="450px">
+  <br>
+</h1>
+
 ## Subdominator - Unleash the Power of Subdomain Enumeration
 
 Subdominator is a powerful tool for passive subdomain enumeration during bug hunting and reconnaissance processes. It is designed to help researchers and cybersecurity professionals discover potential security vulnerabilities by efficiently enumerating subdomains some various free passive resources.
@@ -11,9 +16,8 @@ Subdominator is a powerful tool for passive subdomain enumeration during bug hun
         <br>
       </h1>
 
-
    - fast and powerfull to enumerate subdomains.
-   - 35+ passive results to enumerate subdomains.
+   - 45+ passive results to enumerate subdomains.
    - configurable API keys setup
    - Integrated notification system
 
@@ -81,8 +85,9 @@ subdominator -h
 
 ### Subdominator Integrations:
 
-Subdominator integrates with various free API passive sources to gather valuable subdomain information. We would like to give credit to the following websites for providing free-to-obtain API keys for subdomain enumeration.
-Claim your free API keys here:
+Subdominator integrates with various free and Paid API passive sources to gather valuable subdomain information. We would like to give credit to the following websites for providing free-to-obtain API keys for subdomain enumeration.
+Claim your free API and Paid keys here:
+
 **Subdomains Resources**:
 - **VirusTotal**: [VirusTotal](https://www.virustotal.com)
 - **Chaos**: [Chaos](https://chaos.projectdiscovery.io)
@@ -108,6 +113,12 @@ Claim your free API keys here:
 - **Quake**: [Quake](https://quake.360.cn/)
 - **RapidFinder**: [RapidFinder](https://rapidapi.com/Glavier/api/subdomain-finder3/pricing)
 - **RapidScan**: [RapidScan](https://rapidapi.com/sedrakpc/api/subdomain-scan1/pricing)
+- **Fofa**: [Fofa](https://en.fofa.info/)
+- **CodeRog**: [CodeRog](https://rapidapi.com/coderog-coderog-default/api/subdomain-finder5/pricing)
+- **C99**: [C99](https://subdomainfinder.c99.nl/)
+- **RSECloud**: [RSECloud](https://rsecloud.com/search)
+- **Myssl**: [Myssl](https://myssl.com)
+- **Racent**: [Racent](https://face.racent.com)
 
 **Notification Resources**:
 - **Slack**: [Slack](https://slack.com)
@@ -137,16 +148,18 @@ subdominator -ls
 
                      @RevoltSecurities
 
-[Version]: Subdominator current version v1.0.7 (latest)
-[INFO]: Current Available free passive resources: [39]
+[Version]: Subdominator current version v1.0.8 (latest)
+[INFO]: Current Available free passive resources: [45]
 [INFO]: Sources marked with an * needs API key(s) or token(s) configuration to works
 [INFO]: Hey sanjai you can config your api keys or token here /home/sanjai/.config/Subdominator/provider-config.yaml to work
+
 abuseipDB                                                                                                                                                                                                                                     
 alienvault                                                                                                                                                                                                                                    
 anubis                                                                                                                                                                                                                                        
 bevigil*                                                                                                                                                                                                                                      
 binaryedge*                                                                                                                                                                                                                                   
 bufferover*                                                                                                                                                                                                                                   
+c99*                                                                                                                                                                                                                                          
 censys*                                                                                                                                                                                                                                       
 certspotter*                                                                                                                                                                                                                                  
 chaos*                                                                                                                                                                                                                                        
@@ -155,6 +168,7 @@ crtsh
 digitorus                                                                                                                                                                                                                                     
 dnsdumpster*                                                                                                                                                                                                                                  
 dnsrepo                                                                                                                                                                                                                                       
+fofa*                                                                                                                                                                                                                                         
 facebook*                                                                                                                                                                                                                                     
 fullhunt*                                                                                                                                                                                                                                     
 google*                                                                                                                                                                                                                                       
@@ -162,11 +176,14 @@ hackertarget
 huntermap*                                                                                                                                                                                                                                    
 intelx*                                                                                                                                                                                                                                       
 leakix*                                                                                                                                                                                                                                       
+myssl                                                                                                                                                                                                                                         
 netlas*                                                                                                                                                                                                                                       
 quake*                                                                                                                                                                                                                                        
+racent                                                                                                                                                                                                                                        
 rapidapi*                                                                                                                                                                                                                                     
 rapiddns                                                                                                                                                                                                                                      
 redhuntlabs*                                                                                                                                                                                                                                  
+rsecloud*                                                                                                                                                                                                                                     
 securitytrails*                                                                                                                                                                                                                               
 shodan*                                                                                                                                                                                                                                       
 shodanx                                                                                                                                                                                                                                       
@@ -179,7 +196,8 @@ waybackarchive
 whoisxml*                                                                                                                                                                                                                                     
 zoomeyeapi*                                                                                                                                                                                                                                   
 rapidfinder*: Rapidfinder requires rapidapi api key but before it required to subscribe for free and please see here: https://rapidapi.com/Glavier/api/subdomain-finder3/pricing                                                              
-rapidscan*  : Rapidscan requires rapidapi api key but before it required to subscribe for free and please see here: https://rapidapi.com/sedrakpc/api/subdomain-scan1/pricing       
+rapidscan*: Rapidscan requires rapidapi api key but before it required to subscribe for free and please see here: https://rapidapi.com/sedrakpc/api/subdomain-scan1/pricing                                                                   
+coderog*: Coderog source required to subscribe for free and please see here: https://rapidapi.com/coderog-coderog-default/api/subdomain-finder5/pricing   
 ```
 
 here above we can see subdominator resources it uses and resource marked with an (*) need API keys to work and users can collect API keys from those websites and hyperlink will provided
