@@ -4,13 +4,13 @@ with open("README.md", "r") as streamr:
 
 setup(
     name='subdominator',
-    version='1.0.7',
+    version='1.0.8',
     author='D. Sanjai Kumar',
     author_email='bughunterz0047@gmail.com',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/sanjai-AK47/Subdominator",
-    description='Subdominator - An ultimate subdomain enumeration tool',
+    description='Subdominator - An ultimate subdomain enumeration tool for Security Researchers and Bug Bounty Hunters',
     packages=find_packages(),
     install_requires=[
         'aiofiles>=23.2.1',
