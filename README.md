@@ -273,7 +273,7 @@ dnsdumpster:
   - zsdqYb0rvIVYh2uPHo5Yk4EljV9GEKn44hDL9V2DFXznflW37Q5pZl8pvQHUHWav:Z488EzyPXVwDAhDGlm8gTBvkubRfLyBxuTytPjA17aa2yA5ULO8HySZoG6ptOKoY
 
 ```
-Booyah ⚡ completed , now you can run `subdominator` with its maxiumum and wait for 2-4 minutes then you will have your results.
+Booyah ⚡ completed , now you can run `subdominator` with its maximum and wait for 2-4 minutes then you will have your results.
 
 ### Security:
 
