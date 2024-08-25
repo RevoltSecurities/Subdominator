@@ -119,6 +119,7 @@ Claim your free API and Paid keys here:
 - **RSECloud**: [RSECloud](https://rsecloud.com/search)
 - **Myssl**: [Myssl](https://myssl.com)
 - **Racent**: [Racent](https://face.racent.com)
+- **Intelx**: [Intelx](intelx.io)
 
 **Notification Resources**:
 - **Slack**: [Slack](https://slack.com)
@@ -222,7 +223,7 @@ zooeyeapi:
    - Dnsdumpter Setup:
      
       ***Dnsdumpster requires csrf token and cookie to obtain it visit **Dnsdumpter**: [Dnsdumpster](https://dnsdumpster.com)
-      Search any domain and Intercept the requests your burp that contains token and cookie. Copy that and paste in your yaml file**
+      Search any domain and Intercept the requests your burp that contains token and cookie. Copy the csrf cookie and crsf tokens value only and paste in your yaml file**
 
       <h1 align="center">
         <img src="https://github.com/sanjai-AK47/Subdominator/assets/119435129/d0aa5316-7698-4942-9512-2b3c3dc0a007" width="700px">
@@ -233,9 +234,10 @@ zooeyeapi:
      - Step 1: First login a google account in your browser
      - Step 2: Visit [here](https://programmablesearchengine.google.com/controlpanel/create) and create a search engine and choose all web option like below mentioned in images
         <h1 align="center">
-        <img src="https://private-user-images.githubusercontent.com/119435129/273359357-7b871906-a08b-4473-bc47-31f797ae88f6.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTQ4MDg5NTMsIm5iZiI6MTcxNDgwODY1MywicGF0aCI6Ii8xMTk0MzUxMjkvMjczMzU5MzU3LTdiODcxOTA2LWEwOGItNDQ3My1iYzQ3LTMxZjc5N2FlODhmNi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNTA0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDUwNFQwNzQ0MTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04ODI0MzNhNzUwZWI0YzQ2ZDUyYTRmOWU1MDEzMjExNGQxYjAxNDNkZWY1NGVjNjA1YTYyMDRkZDQwZTgyNTQ3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.-4oyXpQwjgLoRfdgnRQgbrnz45j6rRVABSQ6jcGKCoo" width="700px">
+        <img src="https://private-user-images.githubusercontent.com/119435129/273359357-7b871906-a08b-4473-bc47-31f797ae88f6.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjQ1NzUxNzcsIm5iZiI6MTcyNDU3NDg3NywicGF0aCI6Ii8xMTk0MzUxMjkvMjczMzU5MzU3LTdiODcxOTA2LWEwOGItNDQ3My1iYzQ3LTMxZjc5N2FlODhmNi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwODI1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDgyNVQwODM0MzdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lYTU5YWYxNDYzN2M5OGZmZmUwN2FlNjZjMDJjYzdhMGQwZDc3Y2I3MWRhNGNlZjJhMmExMDUwYmQzZmI2Mzc2JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.LfgqduVOmGzrvZqoOyhzny3aErpT63Aqqfe4KQ-l4EM" width="700px">
         <br>
       </h1>
+      
      - Step 3: After Creating your successfull search engine it time to copy your cx id 
      - Step 4: After completing these all process now its time to grab your api keys of google [here](https://developers.google.com/custom-search/v1/introduction)
      - Step 5: Press the get key button and create a new project with any name you want and click next
@@ -247,7 +249,7 @@ google
   - 23892479:AIdjhakbkdiudgiao
 ```
 
-**So you configured this different resources of subdominator, now follow the other steps to setting up API keys which I mentioned before here** https://github.com/RevoltSecurities/Subdominator/edit/main/README.md#keys-configurations
+**So you configured this different resources of subdominator, now follow the other steps to setting up API keys which I mentioned before here:** https://github.com/RevoltSecurities/Subdominator/edit/main/README.md#keys-configurations
 **Now After setting up your api keys your provider yaml file looks like**
 ```yaml
 censys: 
