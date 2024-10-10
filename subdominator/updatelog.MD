@@ -1,23 +1,42 @@
-# Subdominator V1.0.8 updatelog 
+# Subdominator V1.0.9 Update Log
 
-**What's New?**
+## What's New?
 
-**Bug Patches**
+### Bug Fixes & Enhancements
 
-We have updated Subdominator V1.0.8 and patched a critical memory flaw that rises memory overload and leads to shutdown the system, We find the flaw
-and successfully patched in Subdominator new version and also we updated logical flaw in google resource and enhanced to get more
-results from google using google dorks.
+We’re excited to introduce **Subdominator V1.0.9**, featuring enhanced API passive resources and crucial bug fixes. This update resolves a false positive bug that affected users during recursive enumeration of subdomains. The root cause was traced to the **AbuseIPDB** and **ShodanX** sources. In this version, these sources will be excluded during recursive enumeration to ensure a smoother and more accurate experience.
 
-**Passive Resource Updates:**
+### Key Updates:
 
-**Subdominator** Updated with new 5 passive resources with total 40+ passive resources than anyother subdomain enumerations tools 
-and improved the asynchronous performance of subdominator to save your time as much as possible with more accurate results.
+- **Passive Resources:** 
+  - Over **50 passive resources** available for asset discovery, with **6 new additions**.
+  
+- **Improved Asynchronous Performance:** 
+  - Optimized to save time and enhance accuracy in results.
 
+- **New Flags for Enhanced Functionality:**
+  - **`-fw`, `--filter-wildcards`**: Filter out wildcard subdomains for cleaner output.
+  - **`-s`, `--silent`**: Limit output to essential results without overriding `-ski` or `-sti` flags.
+  - **`-oJ`, `--output-json`**: Output found subdomains in a JSON format to a specified file.
 
-- **New Passive Resourcess:**
-    - [C99](https://subdomainfinder.c99.nl/)
-    - [Fofa](https://en.fofa.info/)
-    - [CodeRog](https://rapidapi.com/coderog-coderog-default/api/subdomain-finder5/pricing) : CodeRog is a source that utilizes the same rapidapi key but requires subscription and its free $0
-    - [RSECloud](https://rsecloud.com/search)
-    - [Myssl](https://myssl.com)
-    - [Racent](https://face.racent.com)
+- **Stdin/Stdout Support:** 
+  - Subdominator now supports reading from stdin and piping outputs to other tools, facilitating streamlined bug bounty workflows.
+
+### Example Command:
+
+Here's a sample command to enumerate subdomains, identify alive subdomains, and crawl them:
+
+```bash
+echo hackerone.com | subdominator -s | subprober -s -nc -c 75 | spideyx crawler -c 50 -pl 5 -ar -o crawler.txt -dept 10
+```
+
+### New Passive Resources:
+
+We have added 6 new passive resources, bringing the total to over 50. The new resources are:
+
+- [Builtwith](https://api.builtwith.com/domain-api)
+- [Common Crawl](https://index.commoncrawl.org/)
+- [Cyfare](https://cyfare.net)
+- [Merklemap](https://www.merklemap.com)
+- [PassiveTotal](https://api.riskiq.net/api/pdns_pt/#/)
+- [Trickest](https://trickest.io/)
