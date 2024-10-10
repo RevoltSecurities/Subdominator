@@ -7,7 +7,7 @@
 
 Subdominator is a powerful tool for passive subdomain enumeration during bug hunting and reconnaissance processes. It is designed to help researchers and cybersecurity professionals discover potential security vulnerabilities by efficiently enumerating subdomains some various free passive resources.
 
-![GitHub last commit](https://img.shields.io/github/last-commit/RevoltSecurities/Subdominator) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/RevoltSecurities/Subdominator) [![GitHub license](https://img.shields.io/github/license/sanjai-AK47/Subprober)](https://github.com/RevoltSecurities/Subdominator/blob/main/LICENSE) [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/d-sanjai-kumar-109a7227b/)
+![GitHub last commit](https://img.shields.io/github/last-commit/RevoltSecurities/Subdominator) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/RevoltSecurities/Subdominator) [![GitHub license](https://img.shields.io/github/license/RevoltSecurities/Subdominator)](https://github.com/RevoltSecurities/Subdominator/blob/main/LICENSE) [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/d-sanjai-kumar-109a7227b/)
 
 ### Features:
 
@@ -17,69 +17,90 @@ Subdominator is a powerful tool for passive subdomain enumeration during bug hun
       </h1>
 
    - fast and powerfull to enumerate subdomains.
-   - 45+ passive results to enumerate subdomains.
+   - 50+ passive results to enumerate subdomains.
    - configurable API keys setup
    - Integrated notification system
+
+### Info:
+We request existing user to update their config yaml file with new resources by opening the config file in : ```bash $HOME/.config/Subdominator/provider-config.yaml``` and add the below resources:
+
+```yaml
+builwith:
+  - your-api-key1
+  - your-api-key2
+
+passivetotal:
+  - user-mail1:api-key1
+  - user-mail2:api-key2
+
+trickest:
+  - your-api-key1
+  - your-api-key2
+```
+by these your config yaml file will get updated or else check your yaml file that matches the below mentioned resources with *, The new users will required to update in next version if any new resources added
+in Subdominator.
 
 ### Usage:
 ```code
 subdominator -h
 ```
 ```yaml
-                    __         __                       _                    __                
-   _____  __  __   / /_   ____/ /  ____    ____ ___    (_)   ____   ____ _  / /_  ____    _____
-  / ___/ / / / /  / __ \ / __  /  / __ \  / __ `__ \  / /   / __ \ / __ `/ / __/ / __ \  / ___/
- (__  ) / /_/ /  / /_/ // /_/ /  / /_/ / / / / / / / / /   / / / // /_/ / / /_  / /_/ / / /    
-/____/  \__,_/  /_.___/ \__,_/   \____/ /_/ /_/ /_/ /_/   /_/ /_/ \__,_/  \__/  \____/ /_/     
-                                                                                               
+              |          |                   _)                |
+  __|  |   |  __ \    _` |   _ \   __ `__ \   |  __ \    _` |  __|   _ \    __|
+\__ \  |   |  |   |  (   |  (   |  |   |   |  |  |   |  (   |  |    (   |  |
+____/ \__,_| _.__/  \__,_| \___/  _|  _|  _| _| _|  _| \__,_| \__| \___/  _|
+
 
                      @RevoltSecurities
 
 
-          
+
 [DESCRIPTION]: Subdominator a passive subdomain enumeration that discovers subdomains for your targets using with passive and open source resources
 
-[USAGE]: 
+[USAGE]:
 
     subdominator [flags]
-    
-[FLAGS]: 
 
-    [INPUT]: 
-    
+[FLAGS]:
+
+    [INPUT]:
+
         -d,   --domain                  :  domain name to enumerate subdomains.
         -dL,  --domain-list             :  filename that contains domains for subdomain enumeration.
-        stdout                          :  subdominator supports stdout to pipe its output
-        
-    [OUTPUT]: 
-    
+        stdin/stdout                    :  subdominator now supports stdin/stdout
+
+    [OUTPUT]:
+
         -o,   --output                  :  filename to save the outputs.
         -oD,  --output-directory        :  directory name to save the outputs (use it when -dL is flag used).
-        
-    [OPTIMIZATION]: 
-    
-        -t,   --timeout                 : timeout value for every sources requests. 
-    
-    [Update]: 
-    
+        -oJ,  --output-json             :  filename to save output in json fromat
+
+    [OPTIMIZATION]:
+
+        -t,   --timeout                 :  timeout value for every sources requests.
+
+    [UPDATE]:
+
         -up,   --update                 :  update subdominator for latest version but yaml source update required manual to not affect your api keys configurations.
         -duc, --disable-update-check    :  disable automatic update check for subdominator
-        -sup, --show-updates            :  shows latest version updates of subdominator 
-        
-    [CONFIG]: 
-    
-        -nt,  --notify              :  send notification of found subdomain using source Slack, Pushbullet, Telegram, Discord
-        -p,   --proxy               :  http proxy to use with subdominator (intended for debugging the performance of subdominator).
-        -cp,  --config-path         :  custom path of config file for subdominator to read api keys ( default path: /home/sanjai/.config/Subdominator/provider-config.yaml)
-        
-    [DEBUG]: 
-    
-        -h,   --help                :  displays this help message and exits 
-        -v,   --version             :  show current version of subdominator and latest version if available and exits
-        -ske, --show-key-error      :  show keys error for out of credits and key not provided for particular sources
-        -sre, --show-timeout-error  :  show timeout error for sources that are timeout to connect
-        -nc,  --no-color            :  disable the colorised output of subdominator
-        -ls,  --list-source         :  display the sources of subdominator uses for subdomain enumerations and exits (included for upcoming updates on sources).
+        -sup, --show-updates            :  shows latest version updates of subdominator
+
+    [CONFIG]:
+
+        -nt,  --notify                  :  send notification of found subdomain using source Slack, Pushbullet, Telegram, Discord
+        -p,   --proxy                   :  http proxy to use with subdominator (intended for debugging the performance of subdominator).
+        -cp,  --config-path             :  custom path of config file for subdominator to read api keys ( default path: /home/sanjai/.config/Subdominator/provider-config.yaml)
+        -fw,  --filter-wildcards        :  filter the found subdomains with wildcards and give cleaned output
+
+    [DEBUG]:
+
+        -h,   --help                    :  displays this help message and exits
+        -s,   --silent                  :  show only subdomain in output (this is not included for -ski,-sti)
+        -v,   --version                 :  show current version of subdominator and latest version if available and exits
+        -ski, --show-key-info           :  show keys error for out of credits and key not provided for particular sources
+        -ste, --show-timeout-info       :  show timeout error for sources that are timeout to connect
+        -nc,  --no-color                :  disable the colorised output of subdominator
+        -ls,  --list-source             :  display the sources of subdominator uses for subdomain enumerations and exits (included for upcoming updates on sources).
 
 ```
 
@@ -89,37 +110,38 @@ Subdominator integrates with various free and Paid API passive sources to gather
 Claim your free API and Paid keys here:
 
 **Subdomains Resources**:
-- **VirusTotal**: [VirusTotal](https://www.virustotal.com)
-- **Chaos**: [Chaos](https://chaos.projectdiscovery.io)
-- **Dnsdumpter**: [Dnsdumpster](https://dnsdumpster.com)
-- **Whoisxml**: [WhoisXML](https://whois.whoisxmlapi.com)
-- **SecurityTrails**: [SecurityTrails](https://securitytrails.com)
-- **Bevigil**: [Bevigil](https://bevigil.com/)
-- **Binaryedge**: [BinaryEdge](https://binaryedge.io)
-- **Fullhunt**: [Fullhunt](https://fullhunt.io)
-- **Rapidapi**: [RapidAPI](https://rapidapi.com)
-- **Bufferover**: [Bufferover](https://tls.bufferover.run/)
-- **Certspotter**: [Certspotter](https://sslmate.com/certspotter)
-- **Censys**: [Censys](https://search.censys.io/)
-- **Fullhunt**: [Fullhunt](https://fullhunt.io/)
-- **Zoomeye**: [Zoomeye](https://www.zoomeye.org/)
-- **Netlas**: [Netlas](https://netlas.io/)
-- **Leakix**: [Leakix](https://leakix.net/)
-- **Redhunt**: [Redhunt](https://https://devportal.redhuntlabs.com/)
-- **Shodan** : [Shodan](https://shodan.io)
-- **Huntermap** : [Hunter](https://hunter.how/)
-- **Google**: [Google](https://developers.facebook.com/)
-- **Facebook**: [Facebook](https://programmablesearchengine.google.com/controlpanel/create)
-- **Quake**: [Quake](https://quake.360.cn/)
-- **RapidFinder**: [RapidFinder](https://rapidapi.com/Glavier/api/subdomain-finder3/pricing)
-- **RapidScan**: [RapidScan](https://rapidapi.com/sedrakpc/api/subdomain-scan1/pricing)
-- **Fofa**: [Fofa](https://en.fofa.info/)
-- **CodeRog**: [CodeRog](https://rapidapi.com/coderog-coderog-default/api/subdomain-finder5/pricing)
-- **C99**: [C99](https://subdomainfinder.c99.nl/)
-- **RSECloud**: [RSECloud](https://rsecloud.com/search)
-- **Myssl**: [Myssl](https://myssl.com)
-- **Racent**: [Racent](https://face.racent.com)
-- **Intelx**: [Intelx](intelx.io)
+- **VirusTotal***: [VirusTotal](https://www.virustotal.com)
+- **Chaos***: [Chaos](https://chaos.projectdiscovery.io)
+- **Dnsdumpter***: [Dnsdumpster](https://dnsdumpster.com)
+- **Whoisxml***: [WhoisXML](https://whois.whoisxmlapi.com)
+- **SecurityTrails***: [SecurityTrails](https://securitytrails.com)
+- **Bevigil***: [Bevigil](https://bevigil.com/)
+- **Binaryedge***: [BinaryEdge](https://binaryedge.io)
+- **Fullhunt***: [Fullhunt](https://fullhunt.io)
+- **Rapidapi***: [RapidAPI](https://rapidapi.com) (requires: Rapid api key) 
+- **Bufferover***: [Bufferover](https://tls.bufferover.run/)
+- **Certspotter***: [Certspotter](https://sslmate.com/certspotter)
+- **Censys***: [Censys](https://search.censys.io/)
+- **Fullhunt***: [Fullhunt](https://fullhunt.io/)
+- **Zoomeye***: [Zoomeye](https://www.zoomeye.org/)
+- **Netlas***: [Netlas](https://netlas.io/)
+- **Leakix***: [Leakix](https://leakix.net/)
+- **Redhunt***: [Redhunt](https://https://devportal.redhuntlabs.com/)
+- **Shodan*** : [Shodan](https://shodan.io)
+- **Huntermap*** : [Hunter](https://hunter.how/)
+- **Google***: [Google](https://developers.facebook.com/)
+- **Facebook***: [Facebook](https://programmablesearchengine.google.com/controlpanel/create)
+- **Quake***: [Quake](https://quake.360.cn/)
+- **RapidFinder***: [RapidFinder](https://rapidapi.com/Glavier/api/subdomain-finder3/pricing) (requires: Rapid api key)
+- **RapidScan***: [RapidScan](https://rapidapi.com/sedrakpc/api/subdomain-scan1/pricing) (requires: Rapid api key)
+- **Fofa***: [Fofa](https://en.fofa.info/)
+- **CodeRog***: [CodeRog](https://rapidapi.com/coderog-coderog-default/api/subdomain-finder5/pricing) (requires: Rapid api key)
+- **C99***: [C99](https://subdomainfinder.c99.nl/)
+- **RSECloud***: [RSECloud](https://rsecloud.com/search)
+- **Intelx***: [Intelx](intelx.io)
+- **Builtwith***:[Builtwith](https://api.builtwith.com/domain-api)
+- **Passivetotal***:[PassiveTotal](https://api.riskiq.net/api/pdns_pt/#/)
+- **Trickest***:[Trickest](https://trickest.io/)
 
 **Notification Resources**:
 - **Slack**: [Slack](https://slack.com)
@@ -132,6 +154,15 @@ Claim your free API and Paid keys here:
 ```code
 pip install git+https://github.com/RevoltSecurities/Subdominator
 ```
+and if any error occured with `httpx` package please use this command to install the tool:
+```bash
+pip install git+https://github.com/RevoltSecurities/Subdominator --no-deps==0.25.2
+```
+you can also install the tool using **pipx** and install the latest version by using this command:
+```bash
+pipx install git+https://github.com/RevoltSecurities/Subdominator
+```
+
 
 ### Post Installation setup:
 
@@ -149,56 +180,61 @@ subdominator -ls
 
                      @RevoltSecurities
 
-[Version]: Subdominator current version v1.0.8 (latest)
-[INFO]: Current Available free passive resources: [45]
+[Version]: Subdominator current version v1.0.9 (latest)
+[INFO]: Current Available free passive resources: [51]
 [INFO]: Sources marked with an * needs API key(s) or token(s) configuration to works
 [INFO]: Hey sanjai you can config your api keys or token here /home/sanjai/.config/Subdominator/provider-config.yaml to work
-
-abuseipDB                                                                                                                                                                                                                                     
-alienvault                                                                                                                                                                                                                                    
-anubis                                                                                                                                                                                                                                        
-bevigil*                                                                                                                                                                                                                                      
-binaryedge*                                                                                                                                                                                                                                   
-bufferover*                                                                                                                                                                                                                                   
-c99*                                                                                                                                                                                                                                          
-censys*                                                                                                                                                                                                                                       
-certspotter*                                                                                                                                                                                                                                  
-chaos*                                                                                                                                                                                                                                        
-columbusapi                                                                                                                                                                                                                                   
-crtsh                                                                                                                                                                                                                                         
-digitorus                                                                                                                                                                                                                                     
-dnsdumpster*                                                                                                                                                                                                                                  
-dnsrepo                                                                                                                                                                                                                                       
-fofa*                                                                                                                                                                                                                                         
-facebook*                                                                                                                                                                                                                                     
-fullhunt*                                                                                                                                                                                                                                     
-google*                                                                                                                                                                                                                                       
-hackertarget                                                                                                                                                                                                                                  
-huntermap*                                                                                                                                                                                                                                    
-intelx*                                                                                                                                                                                                                                       
-leakix*                                                                                                                                                                                                                                       
-myssl                                                                                                                                                                                                                                         
-netlas*                                                                                                                                                                                                                                       
-quake*                                                                                                                                                                                                                                        
-racent                                                                                                                                                                                                                                        
-rapidapi*                                                                                                                                                                                                                                     
-rapiddns                                                                                                                                                                                                                                      
-redhuntlabs*                                                                                                                                                                                                                                  
-rsecloud*                                                                                                                                                                                                                                     
-securitytrails*                                                                                                                                                                                                                               
-shodan*                                                                                                                                                                                                                                       
-shodanx                                                                                                                                                                                                                                       
-shrewdeye                                                                                                                                                                                                                                     
-sitedossier                                                                                                                                                                                                                                   
-subdomaincenter                                                                                                                                                                                                                               
-urlscan                                                                                                                                                                                                                                       
-virustotal*                                                                                                                                                                                                                                   
-waybackarchive                                                                                                                                                                                                                                
-whoisxml*                                                                                                                                                                                                                                     
-zoomeyeapi*                                                                                                                                                                                                                                   
-rapidfinder*: Rapidfinder requires rapidapi api key but before it required to subscribe for free and please see here: https://rapidapi.com/Glavier/api/subdomain-finder3/pricing                                                              
-rapidscan*: Rapidscan requires rapidapi api key but before it required to subscribe for free and please see here: https://rapidapi.com/sedrakpc/api/subdomain-scan1/pricing                                                                   
-coderog*: Coderog source required to subscribe for free and please see here: https://rapidapi.com/coderog-coderog-default/api/subdomain-finder5/pricing   
+abuseipDB
+alienvault
+anubis
+bevigil*
+binaryedge*
+bufferover*
+builtwith*
+c99*
+censys*
+certspotter*
+chaos*
+columbusapi
+commoncrawl
+crtsh
+cyfare
+digitorus
+dnsdumpster*
+dnsrepo
+fofa*
+facebook*
+fullhunt*
+google*
+hackertarget
+huntermap*
+intelx*
+leakix*
+merklemap
+myssl
+netlas*
+passivetotal*
+quake*
+racent
+rapidapi*
+rapiddns
+redhuntlabs*
+rsecloud*
+securitytrails*
+shodan*
+shodanx
+shrewdeye
+sitedossier
+subdomaincenter
+trickest*
+urlscan
+virustotal*
+waybackarchive
+whoisxml*
+zoomeyeapi*
+rapidfinder*: Rapidfinder requires rapidapi api key but before it required to subscribe for free and please see here: https://rapidapi.com/Glavier/api/subdomain-finder3/pricing
+rapidscan*: Rapidscan requires rapidapi api key but before it required to subscribe for free and please see here: https://rapidapi.com/sedrakpc/api/subdomain-scan1/pricing
+coderog*: Coderog source required to subscribe for free and please see here: https://rapidapi.com/coderog-coderog-default/api/subdomain-finder5/pricing
 ```
 
 here above we can see subdominator resources it uses and resource marked with an (*) need API keys to work and users can collect API keys from those websites and hyperlink will provided
@@ -275,7 +311,7 @@ dnsdumpster:
   - zsdqYb0rvIVYh2uPHo5Yk4EljV9GEKn44hDL9V2DFXznflW37Q5pZl8pvQHUHWav:Z488EzyPXVwDAhDGlm8gTBvkubRfLyBxuTytPjA17aa2yA5ULO8HySZoG6ptOKoY
 
 ```
-Booyah ⚡ completed , now you can run `subdominator` with its maximum and wait for 2-4 minutes then you will have your results.
+and dont forget to collect keys for updated resources, Booyah ⚡ completed , now you can run `subdominator` with its maximum and wait for 10-15 minutes then you will have your results.
 
 ### Security:
 
