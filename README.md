@@ -156,7 +156,7 @@ pip install git+https://github.com/RevoltSecurities/Subdominator
 ```
 and if any error occured with `httpx` package please use this command to install the tool:
 ```bash
-pip install git+https://github.com/RevoltSecurities/Subdominator --no-deps==0.25.2
+pip install git+https://github.com/RevoltSecurities/Subdominator --no-deps httpx==0.25.2
 ```
 you can also install the tool using **pipx** and install the latest version by using this command:
 ```bash
