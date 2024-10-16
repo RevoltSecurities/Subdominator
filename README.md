@@ -1,9 +1,9 @@
+## Subdominator - Unleash the Power of Subdomain Enumeration
+
 <h1 align="center">
   <img src="img/subdominator.png" alt="Subdominator" width="450px">
   <br>
 </h1>
-
-## Subdominator - Unleash the Power of Subdomain Enumeration
 
 Subdominator is a powerful tool for passive subdomain enumeration during bug hunting and reconnaissance processes. It is designed to help researchers and cybersecurity professionals discover potential security vulnerabilities by efficiently enumerating subdomains some various free passive resources.
 
