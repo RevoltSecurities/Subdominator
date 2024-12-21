@@ -89,6 +89,10 @@ async def rsecloud(domain, session, configs, username, args):
                     
                 data = await response.json()
                 
+                error = data.get("error", None)
+                if error is not None:
+                    return rseclouds
+                
                 subdomains =  data.get("data", {})
                 
                 total = data.get("total_pages", {})

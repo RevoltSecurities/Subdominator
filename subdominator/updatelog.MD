@@ -1,42 +1,30 @@
-# Subdominator V1.0.9 Update Log
+# Subdominator V2.0.0 Update Log
 
 ## What's New?
 
-### Bug Fixes & Enhancements
+We are excited to introduce **Subdominator V2.0.0**, featuring additional minor updates, bug fixes, and significant changes in the `rsecloud` resource handling and `dnsdumpster` API key configuration.
 
-We’re excited to introduce **Subdominator V1.0.9**, featuring enhanced API passive resources and crucial bug fixes. This update resolves a false positive bug that affected users during recursive enumeration of subdomains. The root cause was traced to the **AbuseIPDB** and **ShodanX** sources. In this version, these sources will be excluded during recursive enumeration to ensure a smoother and more accurate experience.
+### Bug Fixes & Enhancements:
 
-### Key Updates:
+**Resolved Performance Issue in `rsecloud` Resource:**  
+- A critical performance bug was identified in **Subdominator** where, upon reaching 100% of the API usage limit for `rsecloud`, the tool sent infinite requests due to an unhandled response. This caused severe performance degradation.
+- This issue was verified during internal testing and also reported as [Issue #20](https://github.com/RevoltSecurities/Subdominator/issues/20).  
+- Subdominator V2.0.0 addresses this problem by introducing proper response handling, preventing unnecessary request loops.
 
-- **Passive Resources:** 
-  - Over **50 passive resources** available for asset discovery, with **6 new additions**.
-  
-- **Improved Asynchronous Performance:** 
-  - Optimized to save time and enhance accuracy in results.
+### `dnsdumpster` Configuration Changes:
 
-- **New Flags for Enhanced Functionality:**
-  - **`-fw`, `--filter-wildcards`**: Filter out wildcard subdomains for cleaner output.
-  - **`-s`, `--silent`**: Limit output to essential results without overriding `-ski` or `-sti` flags.
-  - **`-oJ`, `--output-json`**: Output found subdomains in a JSON format to a specified file.
+Setting up **dnsdumpster** with its API keys has been simplified in this release. Follow these steps to configure it seamlessly:
 
-- **Stdin/Stdout Support:** 
-  - Subdominator now supports reading from stdin and piping outputs to other tools, facilitating streamlined bug bounty workflows.
+1. Visit the [dnsdumpster website](https://dnsdumpster.com) and register a new account.  
+2. After registering, navigate to your account dashboard to find your API key under the [My Account](https://dnsdumpster.com/my-account/) section.  
+3. Copy your API key(s) and paste them into the YAML configuration file as shown below:  
 
-### Example Command:
+    ```yaml
+    dnsdumpster:
+        - z4gi42ifs9asdjbopakwbhorhao0du42po92jkbnkjbsdug082sjbkdhohabdaoiuboadhg
+        - jdbsaoug0242kjblas42po92jkbnkjbsdug082sjbkdhohabadsjbudaugiuga98t24vi2u
+    ```
 
-Here's a sample command to enumerate subdomains, identify alive subdomains, and crawl them:
+4. Once updated, Subdominator will run smoothly without any exceptions related to `dnsdumpster` API configurations.
 
-```bash
-echo hackerone.com | subdominator -s | subprober -s -nc -c 75 | spideyx crawler -c 50 -pl 5 -ar -o crawler.txt -dept 10
-```
-
-### New Passive Resources:
-
-We have added 6 new passive resources, bringing the total to over 50. The new resources are:
-
-- [Builtwith](https://api.builtwith.com/domain-api)
-- [Common Crawl](https://index.commoncrawl.org/)
-- [Cyfare](https://cyfare.net)
-- [Merklemap](https://www.merklemap.com)
-- [PassiveTotal](https://api.riskiq.net/api/pdns_pt/#/)
-- [Trickest](https://trickest.io/)
+With these updates, **Subdominator V2.0.0** ensures better performance, reliability, and ease of use.

@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as streamr:
 
 setup(
     name='subdominator',
-    version='1.0.9',
+    version='2.0.0',
     author='D. Sanjai Kumar',
     author_email='bughunterz0047@gmail.com',
     long_description=long_description,
@@ -23,7 +23,8 @@ setup(
         'PyYAML>=6.0.1',
         'Requests>=2.31.0',
         'rich>=13.7.1',
-        'urllib3>=1.26.18'
+        'urllib3>=1.26.18',
+        'tldextract>=5.1.2'
     ],
     entry_points={
         'console_scripts': [
