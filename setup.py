@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as streamr:
 
 setup(
     name='subdominator',
-    version='1.0.9',
+    version='2.0.0',
     author='D. Sanjai Kumar',
     author_email='bughunterz0047@gmail.com',
     long_description=long_description,

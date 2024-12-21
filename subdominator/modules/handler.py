@@ -126,7 +126,7 @@ async def __initiate__(domain):
 def gitversion():
     try:
         latest = version()
-        current = "v1.0.9"
+        current = "v2.0.0"
         if latest == current:
             print(f"[{blue}{bold}version{reset}]:{bold}{white}subdominator current version {current} ({green}latest{reset}{bold}{white}){reset}", file=sys.stderr)
         else:
@@ -142,8 +142,8 @@ def update_handler():
             updatelog()
             quit()
         
-        current = "v1.0.9"
-        pypiold = "1.0.9"
+        current = "v2.0.0"
+        pypiold = "2.0.0"
         git = version()
         
         if current == git:
