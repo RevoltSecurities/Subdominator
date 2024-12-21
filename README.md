@@ -1,7 +1,7 @@
 ## Subdominator - Unleash the Power of Subdomain Enumeration
 
 <h1 align="center">
-  <img src="img/subdominator.png" alt="Subdominator" width="450px">
+  <img src="img/subdominator-v2.png" alt="Subdominator" width="450px">
   <br>
 </h1>
 
