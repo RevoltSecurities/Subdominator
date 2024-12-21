@@ -23,7 +23,8 @@ setup(
         'PyYAML>=6.0.1',
         'Requests>=2.31.0',
         'rich>=13.7.1',
-        'urllib3>=1.26.18'
+        'urllib3>=1.26.18',
+        'tldextract>=5.1.2'
     ],
     entry_points={
         'console_scripts': [
