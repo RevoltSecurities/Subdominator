@@ -54,7 +54,8 @@ async def merklemap(Domain, args):
     try:
         resploader = []
         url = f"https://api.merklemap.com/search?query=*.{Domain}&stream=true"
-        async with httpx.AsyncClient() as client:
+        proxy = args.proxy if args.proxy else None
+        async with httpx.AsyncClient(proxy=proxy, verify=False) as client:
             async with client.stream("GET", url, timeout=httpx.Timeout(connect=30, read=1000.0, write=None, pool=None)) as response:
                 lines = []
                 async for line in response.aiter_lines():

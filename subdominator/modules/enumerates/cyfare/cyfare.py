@@ -13,7 +13,9 @@ async def cyfare(domain, session, args):
         Cyfare = []
         url = "https://cyfare.net/apps/subfind/query.php"
         headers = {
-            "User-Agent": UserAgent().random
+            "User-Agent": UserAgent().random,
+            "Origin": "https://cyfare.net",
+            "Content-Type": "application/json"
         }
         jbody = {
             "domain": f"{domain}"

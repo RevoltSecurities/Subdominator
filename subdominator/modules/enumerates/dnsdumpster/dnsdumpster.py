@@ -16,6 +16,7 @@ reset = Style.RESET_ALL
 async def dnsdumpster(domain, session, configs, username, args):
     
     try:
+        dnsdumpsters = []
         
         try:
             
@@ -33,12 +34,9 @@ async def dnsdumpster(domain, session, configs, username, args):
                     
                     return []
                 
-                cooktoken = random.choice(data.get("dnsdumpster", []))
+                randomapikey = random.choice(data.get("dnsdumpster", []))
                 
-                randcookie, randtoken = cooktoken.split(":")
-                
-                if randcookie is None or randtoken is None:
-                    
+                if randomapikey is None:
                     return []
                 
         except yaml.YAMLError as e:
@@ -76,50 +74,33 @@ async def dnsdumpster(domain, session, configs, username, args):
             if args.sec_deb:
                 print(f"[{bold}{red}WRN{reset}]: {bold}{white}Exception in dnsdumpster reader block: {e}, {type(e)}", file=sys.stderr) 
         try:
+            sections = ['a', 'cname', 'mx', 'ns']
             
-            dnsdumpsters = []
-            
-            url = f"https://dnsdumpster.com/"
-                
-            auth = {
-                'Cookie': f'csrftoken={randcookie}',
-                'User-Agent': UserAgent().random,
-                'Referer': 'https://dnsdumpster.com/'
-                }
-            
-            data = {
-                'csrfmiddlewaretoken': f'{randtoken}',
-                'targetip': domain,
-                'user': 'free'
-               }
+            url = f"https://api.dnsdumpster.com/domain/{domain}"
+            headers = {
+                "X-API-Key": randomapikey
+            }
+            page = 1
             proxy = args.proxy if args.proxy else None
-            async with session.post(url, headers=auth, data=data, timeout=args.timeout, proxy=proxy, ssl=False) as response:
-                
-                data = await response.text()
-                
-                if response.status != 200:
-                    return []
-                
-                pattern = re.compile(rf"\b[a-zA-Z0-9]+\b\.{domain}\b")
-                
-                subdomains = pattern.findall(data)
-                
-                subdomains1 = re.findall(fr'(?<=http://)[\w.-]+(?=\.{domain})', data) #re from stf
-                
-                for subs in subdomains1:
-                    if not subs.endswith(f"{domain}"): 
-                        dnsdumpsters.append(f"{subs}.{domain}") 
-                    else:
-                        dnsdumpsters.append(subs) 
-                                        
-                for subdomain in subdomains:
-                    if not subdomain.endswith(f"{domain}"): 
-                        dnsdumpsters.append(f"{subdomain}.{domain}")
-                    else:
-                        dnsdumpsters.append(subdomain)
-                        
-                return dnsdumpsters
-            
+            while True:
+                params = {"page": page}
+                async with session.get(url, headers=headers, params=params,timeout=args.timeout, proxy=proxy, ssl=False) as response:
+                    if response.status != 200:
+                        return dnsdumpsters
+                    
+                    data = await response.json()
+                    
+                    error = data.get("error", None)
+                    if error is not None:
+                        return dnsdumpsters
+                    
+                    for section in sections:
+                        if section in data:
+                            matching_domains = [
+                                record["host"] for record in data[section] if record["host"].endswith(f".{domain}")
+                                ]
+                            dnsdumpsters.extend(matching_domains)
+                    page +=1
         except aiohttp.ServerConnectionError as e:
             
             if args.show_timeout_info:
@@ -149,9 +130,9 @@ async def dnsdumpster(domain, session, configs, username, args):
                            
         except Exception as e:
             if args.sec_deb:
-                print(f"[{bold}{red}WRN{reset}]: {bold}{white}Exception occured in api dnsdumpster req block: {e}, due to: {type(e)}{reset}", file=sys.stderr)
-                    
+                print(f"[{bold}{red}WRN{reset}]: {bold}{white}Exception occured in api dnsdumpster req block: {e}, due to: {type(e)}{reset}", file=sys.stderr)  
+            return dnsdumpsters
     except Exception as e:
         if args.sec_deb:
             print(f"[{bold}{red}WRN{reset}]: {bold}{white}Exception occured in api dnsdumpster main block: {e}, due to: {type(e)}", file=sys.stderr)
-                
+        return dnsdumpsters
