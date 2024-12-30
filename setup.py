@@ -24,7 +24,8 @@ setup(
         'Requests>=2.31.0',
         'rich>=13.7.1',
         'urllib3>=1.26.18',
-        'tldextract>=5.1.2'
+        'tldextract>=5.1.2',
+        'colorama>=0.4.6'
     ],
     entry_points={
         'console_scripts': [
