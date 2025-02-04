@@ -37,6 +37,10 @@ def help(path):
         -oD,  --output-directory        :  directory name to save the outputs (use it when -dL is flag used).
         -oJ,  --output-json             :  filename to save output in json fromat
         
+    {bold}{white}[{reset}{bold}{blue}SOURCE{reset}{bold}{white}]{reset}: {bold}{white}
+    
+        -sc,   --sources                 :  specify sources to use for enumeration (-sc crtsh,shodan).
+        
     {bold}{white}[{reset}{bold}{blue}OPTIMIZATION{reset}{bold}{white}]{reset}: {bold}{white}
     
         -t,   --timeout                 :  timeout value for every sources requests. 
