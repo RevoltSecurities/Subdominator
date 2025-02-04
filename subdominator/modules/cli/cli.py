@@ -3,6 +3,8 @@ from colorama import Fore,Back,Style
 import argparse
 import time as t
 import random
+import traceback
+
 red =  Fore.RED
 green = Fore.GREEN
 magenta = Fore.MAGENTA
@@ -15,6 +17,9 @@ reset = Style.RESET_ALL
 bold = Style.BRIGHT
 colors = [ green, cyan, blue]
 random_color = random.choice(colors)
+
+args = None
+
 def cli():
     try:
         parser = argparse.ArgumentParser(add_help=False, usage=argparse.SUPPRESS,exit_on_error=False)
@@ -39,6 +44,8 @@ def cli():
         parser.add_argument("-fw", "--filter-wildcards", action="store_true")
         parser.add_argument("-oJ", "--output-json", type=str)
         parser.add_argument("-s", "--silent", action="store_true")
+        parser.add_argument("-sc", "--sources", type=lambda s: s.split(","), help="Comma-separated list of sources")
+
         global args 
                 
         return parser.parse_args()
@@ -59,10 +66,12 @@ def cli():
         
     except Exception as e:
         
+        print(f"[{bold}{blue}INFO{reset}]: {bold}{white}Unexpected Error: {traceback.format_exc()} {reset}")
+        
         pass
     
     except KeyboardInterrupt as e:
         
-        print(f"\n[{bold}{blue}INF{reset}]: {bold}{white}CTRL+C Pressed{reset}")
+        print(f"\n[{bold}{blue}INFO{reset}]: {bold}{white}CTRL+C Pressed{reset}")
         
         SystemExit

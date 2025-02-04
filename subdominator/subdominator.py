@@ -1,3 +1,6 @@
+import sys
+sys.path.append("/home/retro/tools/Subdominator")
+
 from subdominator.modules.handler import main_handler
 
 def main():
