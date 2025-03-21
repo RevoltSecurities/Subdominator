@@ -1,9 +1,11 @@
 def filters(results):
     filtered = []
-    for subdomains in results:
-        if subdomains is None:
-            subdomains = []
-        for subdomain in subdomains:
-            if subdomain is not None:
-                filtered.append(subdomain)
-    return sorted(set(filtered))
+    for result in results:
+        source = result["source"]
+        subdomains = result["subdomains"]
+        if subdomains is not None and subdomains != []:
+            filtered.append({
+                "source": source,
+                "subdomains": [s for s in subdomains if s is not None]
+            })
+    return filtered

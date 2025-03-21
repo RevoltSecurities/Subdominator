@@ -51,11 +51,12 @@ async def jsonsave(domain, subdomains, filename, args):
             else:
                 filename = args.output_json
         results = []
-        for subdomain in subdomains:
+        for subdomain, sources in subdomains.items():
             results.append({
-                        "subdomain": subdomain,
-                        "domain": domain
-                    })
+                "subdomain": subdomain,
+                "domain": domain,
+                "sources": list(sorted(sources))
+            })
         async with aiofiles.open(filename, "a") as streamw:
             for output in results:
                 await streamw.write(json.dumps(output)+"\n")

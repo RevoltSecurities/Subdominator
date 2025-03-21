@@ -106,16 +106,67 @@ username = get_username()
 async def __initiate__(domain):
     try:
         async with aiohttp.ClientSession() as session:
-            tasks = [abuseipdb(domain, session, args),alienvault(domain, session, args), anubis(domain, session, args), bevigil(domain, session, configpath, username, args), binaryedge(domain, session, configpath, username, args),
-                     bufferover(domain, session, configpath, username, args), builtwith(domain, session, configpath, username, args),c99(domain, session, configpath, username, args),censys(domain, session, configpath, username, args), certspotter(domain, session, configpath, username, args), chaos(domain, session, configpath, username, args),coderog(domain, session, configpath, username, args),
-                     columbusapi(domain, session, args), commoncrawl(domain, args),crtsh(domain, session, args), cyfare(domain, session, args),digitorus(domain, session, args), fofa(domain,session, configpath, username, args),dnsdumpster(domain, session, configpath, username, args), dnsrepo(domain, session, args),
-                     facebook(domain, session, configpath, username, args), fullhunt(domain, session, configpath, username, args), google(domain, session, configpath, username, args),hackertarget(domain, session, args), huntermap(domain, session, configpath, username, args), 
-                     intelx(domain, session, configpath, username, args), leakix(domain, session, configpath, username, args), merklemap(domain, args),myssl(domain, session, args),netlas(domain, session, configpath, username, args), passivetotal(domain, session, configpath, username, args),quake(domain, session, configpath, username, args),
-                     rapidapi(domain, session, configpath, username, args), rapiddns(domain, session, args), rapidfinder(domain, session, configpath, username, args), rapidscan(domain, session, configpath, username, args),redhuntlabs(domain, session, configpath, username, args) ,racent(domain, session, args) ,rsecloud(domain, session, configpath, username, args) ,securitytrails(domain, session, configpath, username, args),
-                     shodan(domain, session, configpath, username, args), shodanx(domain, session, args), shrewdeye(domain, session, args), sitedossier(domain, session, args), subdomaincenter(domain, session, args),trickest(domain, configpath, username, args),
-                     urlscan(domain, session, args), virustotal(domain, session, configpath, username, args), waybackarchive(domain, args), whoisxml(domain, session, configpath, username, args), zoomeyeapi(domain, session, configpath, username, args)]            
-            results = await asyncio.gather(*tasks)
-            return results
+            # Create a dictionary of source tasks
+            tasks = {
+                "abuseipdb": abuseipdb(domain, session, args),
+                "alienvault": alienvault(domain, session, args),
+                "anubis": anubis(domain, session, args),
+                "bevigil": bevigil(domain, session, configpath, username, args),
+                "binaryedge": binaryedge(domain, session, configpath, username, args),
+                "bufferover": bufferover(domain, session, configpath, username, args),
+                "builtwith": builtwith(domain, session, configpath, username, args),
+                "c99": c99(domain, session, configpath, username, args),
+                "censys": censys(domain, session, configpath, username, args),
+                "certspotter": certspotter(domain, session, configpath, username, args),
+                "chaos": chaos(domain, session, configpath, username, args),
+                "coderog": coderog(domain, session, configpath, username, args),
+                "columbusapi": columbusapi(domain, session, args),
+                "commoncrawl": commoncrawl(domain, args),
+                "crtsh": crtsh(domain, session, args),
+                "cyfare": cyfare(domain, session, args),
+                "digitorus": digitorus(domain, session, args),
+                "fofa": fofa(domain, session, configpath, username, args),
+                "dnsdumpster": dnsdumpster(domain, session, configpath, username, args),
+                "dnsrepo": dnsrepo(domain, session, args),
+                "facebook": facebook(domain, session, configpath, username, args),
+                "fullhunt": fullhunt(domain, session, configpath, username, args),
+                "google": google(domain, session, configpath, username, args),
+                "hackertarget": hackertarget(domain, session, args),
+                "huntermap": huntermap(domain, session, configpath, username, args),
+                "intelx": intelx(domain, session, configpath, username, args),
+                "leakix": leakix(domain, session, configpath, username, args),
+                "merklemap": merklemap(domain, args),
+                "myssl": myssl(domain, session, args),
+                "netlas": netlas(domain, session, configpath, username, args),
+                "passivetotal": passivetotal(domain, session, configpath, username, args),
+                "quake": quake(domain, session, configpath, username, args),
+                "rapidapi": rapidapi(domain, session, configpath, username, args),
+                "rapiddns": rapiddns(domain, session, args),
+                "rapidfinder": rapidfinder(domain, session, configpath, username, args),
+                "rapidscan": rapidscan(domain, session, configpath, username, args),
+                "redhuntlabs": redhuntlabs(domain, session, configpath, username, args),
+                "racent": racent(domain, session, args),
+                "rsecloud": rsecloud(domain, session, configpath, username, args),
+                "securitytrails": securitytrails(domain, session, configpath, username, args),
+                "shodan": shodan(domain, session, configpath, username, args),
+                "shodanx": shodanx(domain, session, args),
+                "shrewdeye": shrewdeye(domain, session, args),
+                "sitedossier": sitedossier(domain, session, args),
+                "subdomaincenter": subdomaincenter(domain, session, args),
+                "trickest": trickest(domain, configpath, username, args),
+                "urlscan": urlscan(domain, session, args),
+                "virustotal": virustotal(domain, session, configpath, username, args),
+                "waybackarchive": waybackarchive(domain, args),
+                "whoisxml": whoisxml(domain, session, configpath, username, args),
+                "zoomeyeapi": zoomeyeapi(domain, session, configpath, username, args)
+            }
+            
+            # Execute all tasks and get results
+            results = await asyncio.gather(*tasks.values())
+            
+            # Combine source names with their results
+            return [{"source": source, "subdomains": result} for source, result in zip(tasks.keys(), results)]
+        
     except KeyboardInterrupt as e:
         SystemExit
     
@@ -214,22 +265,31 @@ async def _domain_handler_(domain):
         start = time.time()
         results = await __initiate__(domain)
         filtered = filters(results)
-        final= set()
+        final = {}  # Changed from set to dict to store subdomain -> sources mapping
 
-        for subdomain in filtered:
-            if args.filter_wildcards:
-                if subdomain.startswith("*."):
-                    subdomain = subdomain[2:]
-            if subdomain.endswith(f".{domain}") and subdomain not in final:
-                print(subdomain)
-                final.add(subdomain)
-                if args.output:
-                    file(subdomain, domain, args)
-                elif args.output_directory:
-                    dir(subdomain, domain, args)
+        # First collect all subdomains and their sources
+        for result in filtered:
+            source = result["source"]
+            subdomains = result["subdomains"]
+            for subdomain in subdomains:
+                if args.filter_wildcards:
+                    if subdomain.startswith("*."):
+                        subdomain = subdomain[2:]
+                if subdomain.endswith(f".{domain}"):
+                    if subdomain not in final:
+                        final[subdomain] = set()
+                    final[subdomain].add(source)
+                    if args.output:
+                        file(subdomain, domain, args)
+                    elif args.output_directory:
+                        dir(subdomain, domain, args)
+
+        # Now print all subdomains with their complete source lists
+        for subdomain, sources in sorted(final.items()):
+            print(f"{subdomain} (sources: {', '.join(sorted(sources))})")
 
         if args.output_json:
-            await jsonsave(domain, final,args.output_json, args)
+            await jsonsave(domain, final, args.output_json, args)
         
         if args.notify:
             await notify(domain, final, configpath, username, args)
