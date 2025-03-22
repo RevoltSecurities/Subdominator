@@ -47,7 +47,7 @@ def sources():
               "[***virustotal****](https://virustotal.com/)",
               "[***waybackarchive***](https://archive.org/wayback)",
               "[***whoisxml****](https://whoisxmlapi.com)",
-              "[***zoomeyeapi****](https://docs.projectdiscovery.io/tools/subfinder/install#zoomeye-api)", 
+              "[***zoomeyeapi****](https://www.zoomeye.hk/)", 
               "[***rapidfinder****](https://rapidapi.com/Glavier/api/subdomain-finder3/pricing)", 
               "[***rapidscan****](https://rapidapi.com/sedrakpc/api/subdomain-scan1/pricing)",]
     return source
