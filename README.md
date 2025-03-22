@@ -13,10 +13,10 @@
 
 
 <p align="center">
-  <a href="https://github.com/RevoltSecurities/Subdominator/edit/main/README.md#features">Features</a> |
-  <a href="https://github.com/RevoltSecurities/Subdominator/edit/main/README.md#usage">Usage</a> |
-  <a href="https://github.com/RevoltSecurities/Subdominator/edit/main/README.md#installation">Installation</a> |
-  <a href="https://github.com/RevoltSecurities/Subdominator/edit/main/README.md#subdominator-documentation">Documentation</a>
+  <a href="https://github.com/RevoltSecurities/Subdominator/tree/main#features">Features</a> |
+  <a href="https://github.com/RevoltSecurities/Subdominator/tree/main#usage">Usage</a> |
+  <a href="https://github.com/RevoltSecurities/Subdominator/tree/main#installation">Installation</a> |
+  <a href="https://github.com/RevoltSecurities/Subdominator/tree/main#subdominator-documentation">Documentation</a>
 </p>
 
 <div align="center">
