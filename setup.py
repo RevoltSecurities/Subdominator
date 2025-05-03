@@ -30,7 +30,8 @@ setup(
         'setuptools>=75.6.0',
         'SQLAlchemy>=2.0.32',
         'tldextract>=5.1.2',
-        'weasyprint>=65.0'
+        'weasyprint>=65.0',
+        'aiosqlite>=0.21.0',
     ],
     entry_points={
         'console_scripts': [
