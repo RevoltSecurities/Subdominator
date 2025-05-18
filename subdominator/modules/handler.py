@@ -184,7 +184,7 @@ async def __initiate__(domain):
 def gitversion():
     try:
         latest = version()
-        current = "v2.1.1"
+        current = "v2.1.0"
         if latest == current:
             print(f"[{blue}{bold}version{reset}]:{bold}{white}subdominator current version {current} ({green}latest{reset}{bold}{white}){reset}", file=sys.stderr)
         else:
@@ -199,8 +199,8 @@ def update_handler():
             updatelog()
             Exit()
         
-        current = "v2.1.1"
-        pypiold = "2.1.1"
+        current = "v2.1.0"
+        pypiold = "2.1.0"
         git = version()
         
         if current == git:
@@ -334,7 +334,7 @@ async def handler():
         if args.domain_list:
             if not args.silent:
                 logger(f"Loading provider configuration file from {configpath}", "info" , args.no_color)
-            domains = await reader(args.domain_list, args)
+            domains = reader(args.domain_list, args)
             if domains:
                 for domain in domains:
                     if not args.silent:

@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as streamr:
 
 setup(
     name='subdominator',
-    version='2.1.1',
+    version='2.1.0',
     author='D. Sanjai Kumar',
     author_email='bughunterz0047@gmail.com',
     description='Subdominator - An ultimate subdomain enumeration tool for Security Researchers and Bug Bounty Hunters',
