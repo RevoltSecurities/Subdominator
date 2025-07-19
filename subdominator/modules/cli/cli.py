@@ -35,11 +35,11 @@ def cli():
         parser.add_argument("-shell", "--shell", action="store_true")
         return parser.parse_args()
     except argparse.ArgumentError as e:
-        logger(f"Please use the command for more infromation: {bold}{blue}subdominator -h{reset}", "warn")
+        logger(f"Please use the command for more information: {bold}{blue}subdominator -h{reset}", "warn")
         Exit(1)
     except argparse.ArgumentTypeError as e:
-        logger(f"Please use the command for more infromation: {bold}{blue}subdominator -h{reset}" ,"warn")
+        logger(f"Please use the command for more information: {bold}{blue}subdominator -h{reset}" ,"warn")
         Exit(1)        
     except Exception as e:
-        logger(f"Unahandled Exception occured in the CLI module due to: {e}", "warn")
+        logger(f"Unhandled Exception occured in the CLI module due to: {e}", "warn")
         Exit(1)
