@@ -4,7 +4,9 @@ import sqlite3
 from subdominator.modules.utils.utils import *
 from subdominator.modules.logger.logger import logger
 
-yamls = """arpsyndicate:[]
+yamls = """
+
+arpsyndicate:[]
 
 bevigil: []          
 
@@ -48,6 +50,8 @@ netlas: []
 
 odin: []
 
+pugrecon: []
+
 quake: []
 
 rapidapi: []
@@ -69,6 +73,7 @@ whoisxmlapi: []
 zoomeyeapi: []
 
 # for notifications
+
 slack: []
 
 pushbullet: []
