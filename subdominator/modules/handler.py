@@ -85,6 +85,7 @@ try:
     from .subscraper.odin.odin import odin
     from .subscraper.hudsonrock.hudsonrock import hudsonrock
     from .subscraper.threatcrowd.threatcrowd import threatcrowd
+    from .subscraper.pugrecon.pugrecon import pugrecon
     from .save.save import file, dir, jsonsave
     from .notify.notify import notify
 except ImportError as e:
@@ -173,7 +174,8 @@ async def __initiate__(domain):
                      digitalyama(domain, session, configpath, username, args), 
                      odin(domain, session,configpath,username,args), 
                      hudsonrock(domain, session, args), 
-                     threatcrowd(domain, session, args) 
+                     threatcrowd(domain, session, args),
+                     pugrecon(domain, session, configpath, args)
                      ]             
             results = await asyncio.gather(*tasks)
             return results        
@@ -184,7 +186,7 @@ async def __initiate__(domain):
 def gitversion():
     try:
         latest = version()
-        current = "v2.1.1"
+        current = "v2.1.2"
         if latest == current:
             print(f"[{blue}{bold}version{reset}]:{bold}{white}subdominator current version {current} ({green}latest{reset}{bold}{white}){reset}", file=sys.stderr)
         else:
@@ -199,8 +201,8 @@ def update_handler():
             updatelog()
             Exit()
         
-        current = "v2.1.1"
-        pypiold = "2.1.1"
+        current = "v2.1.2"
+        pypiold = "2.1.2"
         git = version()
         
         if current == git:

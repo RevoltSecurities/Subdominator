@@ -31,6 +31,7 @@ def sources():
               "[***myssl***](https://myssl.com)",
               "[***netlas****](https://netlas.io/)",
               "[***odin****](https://odin.io/)",
+              "[***pugrecon***](https://pugrecon.com/)",
               "[***quake****](https://quake.360.cn/)", 
               "[***racent***](https://face.racent.com)",
               "[***rapidapi****](https://rapidapi.com/hub)",
