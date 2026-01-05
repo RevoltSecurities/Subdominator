@@ -38,6 +38,7 @@ try:
         check_directory_permission,
         check_file_permission,
         Exit,
+        CleanExit,
     )
     from .subscraper.abuseipdb.abuseipdb import abuseipdb
     from .subscraper.alienvault.alientvault import alienvault
@@ -361,7 +362,7 @@ async def _domain_handler_(domain):
             )
             logger(f"Happy Hacking {username} ☠️ 🔥 🚀{reset}", "info", args.no_color)
     except KeyboardInterrupt as e:
-        Exit(1)
+        raise CleanExit()
 
 
 async def handler():
@@ -457,12 +458,31 @@ async def handler():
                         )
                     await _domain_handler_(domain)
             Exit()
-    except KeyboardInterrupt as e:
-        Exit()
+    except (KeyboardInterrupt, CleanExit) as e:
+        await cleanup()
+        raise
+
+
+async def cleanup():
+    try:
+        tasks = [
+            task for task in asyncio.all_tasks() if task is not asyncio.current_task()
+        ]
+        for task in tasks:
+            task.cancel()
+        if tasks:
+            await asyncio.wait_for(
+                asyncio.gather(*tasks, return_exceptions=True), timeout=2.0
+            )
+        from .models.models import async_engine
+
+        await async_engine.dispose()
+    except Exception:
+        pass
 
 
 def main_handler():
     try:
         asyncio.run(handler())
-    except KeyboardInterrupt as e:
+    except (KeyboardInterrupt, CleanExit) as e:
         sys.exit(1)
