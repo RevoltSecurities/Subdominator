@@ -4,26 +4,37 @@ from subdominator.modules.utils.utils import UserAgents
 
 cyfares = []
 
+
 async def cyfare(domain: str, session: httpx.AsyncClient, args):
     try:
-        if args.include_resources and "cyfare" not in args.include_resources and not args.all:
+        if (
+            args.include_resources
+            and "cyfare" not in args.include_resources
+            and not args.all
+        ):
             return cyfares
-        
+
         if args.exclude_resources and "cyfare" in args.exclude_resources:
             return cyfares
 
         url = "https://cyfare.net/apps/VulnerabilityStudio/subfind/query.php"
         headers = {
-            "User-Agent": UserAgents(),  
+            "User-Agent": UserAgents(),
             "Origin": "https://cyfare.net",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         }
         json_body = {"domain": domain}
 
-        response: httpx.Response = await session.request("POST", url, headers=headers, json=json_body, timeout=args.timeout)
+        response: httpx.Response = await session.request(
+            "POST", url, headers=headers, json=json_body, timeout=args.timeout
+        )
         if response.status_code != 200:
             if args.verbose:
-                logger(f"Cyfare API returned bad response status: {response.status_code}.", "warn", args.no_color)
+                logger(
+                    f"Cyfare API returned bad response status: {response.status_code}.",
+                    "warn",
+                    args.no_color,
+                )
             return cyfares
 
         data = response.json()
@@ -35,9 +46,17 @@ async def cyfare(domain: str, session: httpx.AsyncClient, args):
 
     except Exception as e:
         if args.verbose:
-            logger(f"Exception occurred in Cyfare API module: {e}, {type(e)}", "warn", args.no_color)
+            logger(
+                f"Exception occurred in Cyfare API module: {e}, {type(e)}",
+                "warn",
+                args.no_color,
+            )
 
     finally:
         if args.verbose:
-            logger(f"Total Subdomains found by Cyfare API: {len(cyfares)}", "info", args.no_color)
-        return cyfares
+            logger(
+                f"Total Subdomains found by Cyfare API: {len(cyfares)}",
+                "info",
+                args.no_color,
+            )
+    return cyfares

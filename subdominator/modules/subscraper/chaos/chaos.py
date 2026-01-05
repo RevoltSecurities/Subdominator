@@ -1,13 +1,19 @@
 import httpx
 from subdominator.modules.logger.logger import logger
 from subdominator.modules.utils.utils import singlekeyloader
+
 chaoss = []
+
 
 async def chaos(domain: str, session: httpx.AsyncClient, configs: str, args):
     try:
-        if args.include_resources and "chaos" not in args.include_resources and not args.all:
+        if (
+            args.include_resources
+            and "chaos" not in args.include_resources
+            and not args.all
+        ):
             return chaoss
-        
+
         if args.exclude_resources and "chaos" in args.exclude_resources:
             return chaoss
 
@@ -18,12 +24,18 @@ async def chaos(domain: str, session: httpx.AsyncClient, configs: str, args):
         url = f"https://dns.projectdiscovery.io/dns/{domain}/subdomains"
         headers = {"Authorization": randomkey}
 
-        response: httpx.Response = await session.request("GET", url, headers=headers, timeout=args.timeout)
+        response: httpx.Response = await session.request(
+            "GET", url, headers=headers, timeout=args.timeout
+        )
         if response.status_code != 200:
             if args.verbose:
-                logger(f"Chaos API returned response status: {response.status_code}", "warn", args.no_color)
+                logger(
+                    f"Chaos API returned response status: {response.status_code}",
+                    "warn",
+                    args.no_color,
+                )
             return chaoss
-        
+
         data = response.json()
         if "subdomains" in data:
             for subdomain in data["subdomains"]:
@@ -38,8 +50,16 @@ async def chaos(domain: str, session: httpx.AsyncClient, configs: str, args):
             logger(f"Timeout reached for Chaos API due to: {e}", "warn", args.no_color)
     except Exception as e:
         if args.verbose:
-            logger(f"Exception error occurred in Chaos API module due to: {e}, {type(e)}", "warn", args.no_color)
+            logger(
+                f"Exception error occurred in Chaos API module due to: {e}, {type(e)}",
+                "warn",
+                args.no_color,
+            )
     finally:
         if args.verbose:
-            logger(f"Total Subdomains found by Chaos API: {len(chaoss)}", "info", args.no_color)
-        return chaoss
+            logger(
+                f"Total Subdomains found by Chaos API: {len(chaoss)}",
+                "info",
+                args.no_color,
+            )
+    return chaoss

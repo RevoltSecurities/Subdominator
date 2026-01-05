@@ -1,11 +1,19 @@
 import httpx
 from subdominator.modules.logger.logger import logger
-from subdominator.modules.utils.utils import UserAgents,dualkeyloader
+from subdominator.modules.utils.utils import UserAgents, dualkeyloader
+
 googles = []
 
-async def google(domain: str, session: httpx.AsyncClient, configs: str, username: str, args):
+
+async def google(
+    domain: str, session: httpx.AsyncClient, configs: str, username: str, args
+):
     try:
-        if args.include_resources and "google" not in args.include_resources and not args.all:
+        if (
+            args.include_resources
+            and "google" not in args.include_resources
+            and not args.all
+        ):
             return googles
 
         if args.exclude_resources and "google" in args.exclude_resources:
@@ -20,10 +28,10 @@ async def google(domain: str, session: httpx.AsyncClient, configs: str, username
             if randomcx is None or randomkey is None:
                 return googles
             url = f"https://customsearch.googleapis.com/customsearch/v1?q={dork}&cx={randomcx}&num=10&start={page}&key={randomkey}&alt=json"
-            headers = {
-                "User-Agent": UserAgents()
-            }
-            response: httpx.Response = await session.request("GET", url, headers=headers, timeout=args.timeout)
+            headers = {"User-Agent": UserAgents()}
+            response: httpx.Response = await session.request(
+                "GET", url, headers=headers, timeout=args.timeout
+            )
             if response.status_code != 200:
                 return googles
             data = response.json()
@@ -37,11 +45,21 @@ async def google(domain: str, session: httpx.AsyncClient, configs: str, username
             page += 1
     except httpx.TimeoutException as e:
         if args.show_timeout_info:
-            logger(f"Timeout reached for Google API, due to: {e}", "warn", args.no_color)
+            logger(
+                f"Timeout reached for Google API, due to: {e}", "warn", args.no_color
+            )
     except Exception as e:
         if args.verbose:
-            logger(f"Exception occurred in Google API module: {e}, {type(e)}", "warn", args.no_color)
+            logger(
+                f"Exception occurred in Google API module: {e}, {type(e)}",
+                "warn",
+                args.no_color,
+            )
     finally:
         if args.verbose:
-            logger(f"Total subdomains found by Google API: {len(googles)}", "info", args.no_color)
-        return googles
+            logger(
+                f"Total subdomains found by Google API: {len(googles)}",
+                "info",
+                args.no_color,
+            )
+    return googles

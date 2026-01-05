@@ -113,4 +113,4 @@ async def commoncrawl(Domain, args):
     finally:
         if args.verbose:
             logger(f"Total Subdomains found by Commoncrawl API: {len(Commoncrawls)}")
-        return Commoncrawls
+    return Commoncrawls

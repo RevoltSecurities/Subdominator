@@ -4,9 +4,16 @@ from subdominator.modules.utils.utils import UserAgents, singlekeyloader
 
 rapidfinders = []
 
-async def rapidfinder(domain: str, session: httpx.AsyncClient, configs: str, username: str, args):
+
+async def rapidfinder(
+    domain: str, session: httpx.AsyncClient, configs: str, username: str, args
+):
     try:
-        if args.include_resources and "rapidfinder" not in args.include_resources and not args.all:
+        if (
+            args.include_resources
+            and "rapidfinder" not in args.include_resources
+            and not args.all
+        ):
             return rapidfinders
 
         if args.exclude_resources and "rapidfinder" in args.exclude_resources:
@@ -21,18 +28,28 @@ async def rapidfinder(domain: str, session: httpx.AsyncClient, configs: str, use
         headers = {
             "User-Agent": UserAgents(),
             "X-RapidAPI-Key": randomkey,
-            "X-RapidAPI-Host": "subdomain-finder3.p.rapidapi.com"
+            "X-RapidAPI-Host": "subdomain-finder3.p.rapidapi.com",
         }
 
-        response: httpx.Response = await session.get(url, headers=headers, timeout=args.timeout, params=params)
+        response: httpx.Response = await session.get(
+            url, headers=headers, timeout=args.timeout, params=params
+        )
         if response.status_code == 403:
             if args.show_key_info:
-                logger(f"Rapidfinder blocking our request, {username} please check that you subscribed to the Rapidfinder API service: {randomkey}", "warn", args.no_color)
+                logger(
+                    f"Rapidfinder blocking our request, {username} please check that you subscribed to the Rapidfinder API service: {randomkey}",
+                    "warn",
+                    args.no_color,
+                )
             return rapidfinders
 
         if response.status_code != 200:
             if args.show_key_info:
-                logger(f"Rapidfinder blocking our request, {username} please check your API usage for this key: {randomkey}", "warn", args.no_color)
+                logger(
+                    f"Rapidfinder blocking our request, {username} please check your API usage for this key: {randomkey}",
+                    "warn",
+                    args.no_color,
+                )
             return rapidfinders
 
         data = response.json()
@@ -40,11 +57,23 @@ async def rapidfinder(domain: str, session: httpx.AsyncClient, configs: str, use
             rapidfinders.append(item["subdomain"])
     except httpx.TimeoutException as e:
         if args.show_timeout_info:
-            logger(f"Timeout reached for Rapidfinder API, due to: {e}", "warn", args.no_color)
+            logger(
+                f"Timeout reached for Rapidfinder API, due to: {e}",
+                "warn",
+                args.no_color,
+            )
     except Exception as e:
         if args.verbose:
-            logger(f"Exception error occurred in Rapidfinder API module due to: {e}, {type(e)}", "warn", args.no_color)
+            logger(
+                f"Exception error occurred in Rapidfinder API module due to: {e}, {type(e)}",
+                "warn",
+                args.no_color,
+            )
     finally:
         if args.verbose:
-            logger(f"Total Subdomains found by Rapidfinder API: {len(rapidfinders)}", "info", args.no_color)
-        return rapidfinders
+            logger(
+                f"Total Subdomains found by Rapidfinder API: {len(rapidfinders)}",
+                "info",
+                args.no_color,
+            )
+    return rapidfinders

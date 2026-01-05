@@ -60,4 +60,4 @@ async def waybackarchive(domain, args):
                 "info",
                 args.no_color,
             )
-        return Waybackurls
+    return Waybackurls

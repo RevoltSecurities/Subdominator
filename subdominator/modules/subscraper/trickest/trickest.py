@@ -103,4 +103,4 @@ async def trickest(domain: str, configs: str, args):
                 "info",
                 args.no_color,
             )
-        return Trickest
+    return Trickest

@@ -1,13 +1,21 @@
 import httpx
 from subdominator.modules.logger.logger import logger
 from subdominator.modules.utils.utils import singlekeyloader
+
 netlass = []
 
-async def netlas(domain: str, session: httpx.AsyncClient, configs: str, username: str, args):    
+
+async def netlas(
+    domain: str, session: httpx.AsyncClient, configs: str, username: str, args
+):
     try:
         start = 0
         page_size = 20
-        if args.include_resources and "netlas" not in args.include_resources and not args.all:
+        if (
+            args.include_resources
+            and "netlas" not in args.include_resources
+            and not args.all
+        ):
             return netlass
         if args.exclude_resources and "netlas" in args.exclude_resources:
             return netlass
@@ -23,26 +31,42 @@ async def netlas(domain: str, session: httpx.AsyncClient, configs: str, username
                 "GET",
                 req_url,
                 headers=headers,
-                timeout=httpx.Timeout(timeout=args.timeout, connect=args.timeout, pool=None, write=None, read=120),
+                timeout=httpx.Timeout(
+                    timeout=args.timeout,
+                    connect=args.timeout,
+                    pool=None,
+                    write=None,
+                    read=120,
+                ),
             )
             if response.status_code != 200:
                 if args.show_key_info:
-                    logger(f"Netlas API request failed. {username}, check API key usage: {randomkey}", "warn", args.no_color)
+                    logger(
+                        f"Netlas API request failed. {username}, check API key usage: {randomkey}",
+                        "warn",
+                        args.no_color,
+                    )
                 return netlass
             data = response.json()
             items = data.get("items", [])
             if not items:
-                break  
+                break
             for item in items:
                 netlass.append(item["data"]["domain"])
-            start += page_size 
+            start += page_size
     except httpx.TimeoutException as e:
         if args.show_timeout_info:
             logger(f"Timeout reached for Netlas API: {e}", "warn", args.no_color)
     except Exception as e:
         if args.verbose:
-            logger(f"Exception in Netlas API module: {e}, {type(e)}", "warn", args.no_color)
+            logger(
+                f"Exception in Netlas API module: {e}, {type(e)}", "warn", args.no_color
+            )
     finally:
         if args.verbose:
-            logger(f"Total Subdomains found by Netlas API: {len(netlass)}", "info", args.no_color)
-        return netlass
+            logger(
+                f"Total Subdomains found by Netlas API: {len(netlass)}",
+                "info",
+                args.no_color,
+            )
+    return netlass
