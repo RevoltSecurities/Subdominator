@@ -31,6 +31,8 @@ setup(
         'SQLAlchemy>=2.0.32',
         'tldextract>=5.1.2',
         'aiosqlite>=0.21.0',
+        'socksio>=1',
+        'greenlet>=3',
     ],
     extra_require={
         "PDF": [
