@@ -484,5 +484,7 @@ async def cleanup():
 def main_handler():
     try:
         asyncio.run(handler())
-    except (KeyboardInterrupt, CleanExit) as e:
+    except KeyboardInterrupt:
         sys.exit(1)
+    except CleanExit:
+        sys.exit(0)
