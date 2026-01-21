@@ -206,13 +206,18 @@ Ensure you have **Python 3.12 or later** installed before proceeding with the in
 
 ```bash
 python3 --version
-```  
+```
+
+Subdominator core modules doesn't include PDF generation dependency, if you fancy a PDF report, use PDF extra tags when installing:
+```bash
+pipx install 'subdominator[PDF]'
+```
 
 #### ✅ **Install Subdominator from PyPI** (Recommended)  
 The easiest way to install Subdominator is via PyPI:  
 
 ```bash
-pip install --upgrade subdominator
+pip install --upgrade 'subdominator[PDF]'
 ```  
 
 #### ✅ **Install the Latest Version from GitHub**  
@@ -226,13 +231,13 @@ pip install --upgrade git+https://github.com/RevoltSecurities/Subdominator
 To avoid dependency conflicts, you can install Subdominator using `pipx`:  
 
 ```bash
-pipx install subdominator
+pipx install 'subdominator[PDF]'
 ```  
 
 To install the latest version from GitHub with `pipx`:  
 
 ```bash
-pipx install git+https://github.com/RevoltSecurities/Subdominator
+pipx install 'subdominator[PDF] @ git+https://github.com/RevoltSecurities/Subdominator'
 ```  
 
 #### ✅ **Install from Git Source** (For Development)  
@@ -242,7 +247,7 @@ For users who want to contribute or modify the tool, clone and install directly 
 git clone https://github.com/RevoltSecurities/Subdominator.git
 cd Subdominator
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install -e . # or pip install -e ".[PDF]" to support PDF report generation
 ```  
 
 After installation, you can verify if Subdominator is installed correctly by running:  

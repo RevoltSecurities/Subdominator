@@ -1,11 +1,19 @@
 import httpx
 from subdominator.modules.logger.logger import logger
 from subdominator.modules.utils.utils import singlekeyloader, UserAgents
+
 quakes = []
 
-async def quake(domain: str, session: httpx.AsyncClient, configs: str, username: str, args):
+
+async def quake(
+    domain: str, session: httpx.AsyncClient, configs: str, username: str, args
+):
     try:
-        if args.include_resources and "quake" not in args.include_resources and not args.all:
+        if (
+            args.include_resources
+            and "quake" not in args.include_resources
+            and not args.all
+        ):
             return quakes
         if args.exclude_resources and "quake" in args.exclude_resources:
             return quakes
@@ -21,7 +29,7 @@ async def quake(domain: str, session: httpx.AsyncClient, configs: str, username:
             "Accept-Language": "en",
             "Connection": "close",
             "Content-Type": "application/json",
-            "X-Quaketoken": randomkey
+            "X-Quaketoken": randomkey,
         }
         data = {
             "query": f"domain: {domain}",
@@ -30,10 +38,16 @@ async def quake(domain: str, session: httpx.AsyncClient, configs: str, username:
             "start": 0,
             "size": 500,
         }
-        response: httpx.Response = await session.request("POST",url,headers=headers,json=data,timeout=args.timeout)
+        response: httpx.Response = await session.request(
+            "POST", url, headers=headers, json=data, timeout=args.timeout
+        )
         if response.status_code != 200:
             if args.show_key_info:
-                logger(f"Quake API blocking request. {username}, check API key usage: {randomkey}", "warn", args.no_color)
+                logger(
+                    f"Quake API blocking request. {username}, check API key usage: {randomkey}",
+                    "warn",
+                    args.no_color,
+                )
             return quakes
         result = response.json()
         for entry in result.get("data", []):
@@ -45,8 +59,16 @@ async def quake(domain: str, session: httpx.AsyncClient, configs: str, username:
             logger("Timeout reached for Quake API", "warn", args.no_color)
     except Exception as e:
         if args.verbose:
-            logger(f"Exception in Quake API module due to: {e}, {type(e)}", "warn", args.no_color)
+            logger(
+                f"Exception in Quake API module due to: {e}, {type(e)}",
+                "warn",
+                args.no_color,
+            )
     finally:
         if args.verbose:
-            logger(f"Total Subdomains found by Quake API: {len(quakes)}", "info", args.no_color)
-        return quakes
+            logger(
+                f"Total Subdomains found by Quake API: {len(quakes)}",
+                "info",
+                args.no_color,
+            )
+    return quakes

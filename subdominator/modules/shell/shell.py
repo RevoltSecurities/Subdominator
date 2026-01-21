@@ -9,7 +9,6 @@ from subdominator.modules.utils.utils import Exit
 from rich.console import Console
 from rich.table import Table
 from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML
 
 console = Console()
 
@@ -191,7 +190,6 @@ class SubDominatorShell:
                 console.print(f"[bold green]HTML report saved as {output_file}[/bold green]")
             elif format_type.lower() == "pdf":
                 self.generate_pdf_report(html_report, output_file)
-                console.print(f"[bold green]PDF report saved as {output_file}[/bold green]")
             else:
                 console.print(f"[bold yellow]Report generation only supports pdf/html format, please use a valid report generation format.[/bold yellow]")
                 return
@@ -201,7 +199,14 @@ class SubDominatorShell:
         return template.render(domain=report_data["domain"], subdomains=report_data["subdomains"])
     
     def generate_pdf_report(self,html_report, output_file):
+        try:
+            from weasyprint import HTML
+        except ModuleNotFoundError:
+            console.print("[bold red]PDF report requires weasyprint module[/bold red]")
+            console.print("[bold green]Hint:[/bold green] pip install 'subdominator[PDF]'")
+            return
         HTML(string=html_report).write_pdf(output_file)
+        console.print(f"[bold green]PDF report saved as {output_file}[/bold green]")
     
     def load_subdomains_from_file(self, filename):
         if not os.path.exists(filename):
