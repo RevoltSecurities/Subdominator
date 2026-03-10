@@ -32,6 +32,8 @@ try:
     from .version.version import version
     from .logger.logger import logger
     from .utils.utils import filters,reader,split_to_list, check_directory_permission,check_file_permission, Exit
+    # Import the new scanner module
+    from .scanner.sourcemap import check_sourcemap_leakage
     from .subscraper.abuseipdb.abuseipdb import abuseipdb
     from .subscraper.alienvault.alientvault import alienvault
     from .subscraper.anubis.anubis import anubis
@@ -270,7 +272,28 @@ async def _domain_handler_(domain):
                 file(output, domain, args)
             elif args.output_directory:
                 dir(output, domain, args)
-        
+
+        # START NEW FEATURE: Sourcemap Leakage Check
+        if args.sourcemap:
+            if not args.silent:
+                logger(f"Checking for Sourcemap Leakage on {len(final)} subdomains...", "info", args.no_color)
+            
+            # Use Semaphore to limit concurrent web requests during scanning
+            sem = asyncio.Semaphore(10) 
+            
+            async def limited_check(sub):
+                async with sem:
+                    return await check_sourcemap_leakage(sub, timeout=args.timeout)
+
+            scan_tasks = [limited_check(sub) for sub in final]
+            scan_results = await asyncio.gather(*scan_tasks)
+            
+            for res in scan_results:
+                if res and res.get("vulnerable"):
+                    msg = f"VULNERABLE: Sourcemap Leakage at {res['subdomain']} ({res['count']} maps found)"
+                    logger(msg, "info", args.no_color) # You can customize this logger level
+        # END NEW FEATURE
+
         async with AsyncSessionLocal() as db:
             await add_or_update_domain(db, domain, final)
         

@@ -31,7 +31,9 @@ def help(path, dbpath):
     {bold}{white}[{reset}{bold}{blue}OPTIMIZATION{reset}{bold}{white}]{reset}:
     
         {bold}{white}-t,   --timeout               :  Set timeout value for API requests (default: 30s).
-        -fw,  --filter-wildcards      :  Filter out wildcard subdomains.{reset}
+        -fw,  --filter-wildcards      :  Filter out wildcard subdomains.
+        -sm,  --sourcemap             :  Check for sourcemap leakage on discovered subdomains.{reset}
+        
 
     {bold}{white}[{reset}{bold}{blue}CONFIGURATION{reset}{bold}{white}]{reset}:
     
