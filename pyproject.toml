@@ -1,0 +1,40 @@
+[project]
+name = "subdominator"
+version = "3.0.0"
+description = "Modern passive subdomain enumeration with structured resources, retries, recursion, and persistence."
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "MIT" }
+authors = [
+  { name = "D. Sanjai Kumar" }
+]
+dependencies = [
+  "aiofiles>=24.1.0",
+  "aiohttp>=3.11.18",
+  "aiosqlite>=0.21.0",
+  "alembic>=1.16.1",
+  "pydantic>=2.11.3",
+  "pydantic-settings>=2.9.1",
+  "rich>=14.0.0",
+  "richparser>=1.0.1",
+  "revoltlogger>=1.0.1",
+  "revoltutils>=1.0.2",
+  "sqlalchemy>=2.0.40",
+  "tldextract>=5.3.0",
+  "asyncpg>=0.31.0",
+]
+
+[project.scripts]
+subdominator = "subdominator.cli.app:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/subdominator"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
