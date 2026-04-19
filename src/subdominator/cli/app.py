@@ -12,7 +12,8 @@ from rich.text import Text
 from rich.table import Table
 from richparser import RichParser
 from revoltlogger import LogLevel, Logger
-from revoltutils import FileUtils
+from revoltutils import FileUtils,Banner
+from gitupdater import GitUpdater
 
 from subdominator.core.constants import APP_NAME, DEFAULT_PROVIDER_CONFIG
 from subdominator.core.provider_config import ProviderConfig
@@ -36,25 +37,28 @@ def build_parser() -> RichParser:
     parser.add_argument("resource", "--all", action="store_true", help="Use all resources")
     parser.add_argument(
         "resource",
+        "-ir",
         "--include-resources",
         type=str,
         help="Comma-separated resources to include",
     )
     parser.add_argument(
         "resource",
+        "-er",
         "--exclude-resources",
         type=str,
         help="Comma-separated resources to exclude",
     )
-    parser.add_argument("resource", "--list-resources", action="store_true", help="List resources")
-    parser.add_argument("resource", "--shell", action="store_true", help="Launch interactive shell")
-    parser.add_argument("resource", "--dork", type=str, help="Custom search dork for supported resources")
-    parser.add_argument("runtime", "--timeout", type=float, default=20.0, help="Request timeout")
-    parser.add_argument("runtime", "--retries", type=int, default=3, help="Retry count")
-    parser.add_argument("runtime", "--retry-backoff", type=float, default=1.0, help="Retry backoff")
-    parser.add_argument("runtime", "--concurrency", type=int, default=8, help="Concurrent resource execution")
+    parser.add_argument("resource","-ls", "--list-resources", action="store_true", help="List resources")
+    parser.add_argument("resource", "-sh", "--shell", action="store_true", help="Launch interactive shell")
+    parser.add_argument("resource", "-dk", "--dork", type=str, help="Custom search dork for supported resources")
+    parser.add_argument("runtime", "-t", "--timeout", type=float, default=20.0, help="Request timeout")
+    parser.add_argument("runtime", "-rt", "--retries", type=int, default=3, help="Retry count")
+    parser.add_argument("runtime", "-rb", "--retry-backoff", type=float, default=1.0, help="Retry backoff")
+    parser.add_argument("runtime", "-c", "--concurrency", type=int, default=8, help="Concurrent resource execution")
     parser.add_argument(
         "runtime",
+        "-rd",
         "--recursive-depth",
         type=int,
         default=0,
@@ -62,20 +66,20 @@ def build_parser() -> RichParser:
     )
     parser.add_argument("output", "-o", "--output", type=str, help="Output file path")
     parser.add_argument("output", "-oD", "--output-directory", type=str, help="Output directory")
-    parser.add_argument("output", "--json", action="store_true", help="Write JSONL output")
-    parser.add_argument("output", "--table", action="store_true", help="Print subdomains in table format")
-    parser.add_argument("output", "--report-json", type=str, help="Write a JSON summary report")
-    parser.add_argument("output", "--show-summary", action="store_true", help="Print a run summary")
-    parser.add_argument("output", "--show-resource-stats", action="store_true", help="Print per-resource stats")
-    parser.add_argument("storage", "--db-path", type=str, help="Custom database path")
-    parser.add_argument("storage", "--save-db", action="store_true", help="Persist findings to the DB")
-    parser.add_argument("storage", "--no-db", action="store_true", help="Disable DB persistence")
-    parser.add_argument("config", "--config-path", type=str, help="Custom provider config path")
-    parser.add_argument("config", "--show-config-path", action="store_true", help="Show provider config path")
-    parser.add_argument("debug", "-V", "--verbose", action="store_true", help="Verbose logging")
+    parser.add_argument("output", "-j","--json", action="store_true", help="Write JSONL output")
+    parser.add_argument("output", "-tb","--table", action="store_true", help="Print subdomains in table format")
+    parser.add_argument("output", "-rj","--report-json", type=str, help="Write a JSON summary report")
+    parser.add_argument("output", "-ss","--show-summary", action="store_true", help="Print a run summary")
+    parser.add_argument("output", "-srs","--show-resource-stats", action="store_true", help="Print per-resource stats")
+    parser.add_argument("storage", "-dp","--db-path", type=str, help="Custom database path")
+    parser.add_argument("storage", "-sd","--save-db", action="store_true", help="Persist findings to the DB")
+    parser.add_argument("storage", "-nd","--no-db", action="store_true", help="Disable DB persistence")
+    parser.add_argument("config", "-cp","--config-path", type=str, help="Custom provider config path")
+    parser.add_argument("config", "-scp","--show-config-path", action="store_true", help="Show provider config path")
+    parser.add_argument("debug", "-v", "--verbose", action="store_true", help="Verbose logging")
     parser.add_argument("debug", "-k", "--insecure", action="store_true", help="Skip SSL certificate verification")
-    parser.add_argument("debug", "--proxy", type=str, help="HTTP proxy")
-    parser.add_argument("debug", "--no-color", action="store_true", help="Disable colored logs")
+    parser.add_argument("debug", "-p", "--proxy", type=str, help="HTTP proxy")
+    parser.add_argument("debug", "-nc", "--no-color", action="store_true", help="Disable colored logs")
     return parser
 
 
@@ -127,11 +131,14 @@ def _merge_with_historical_findings(summary, historical_findings):
 
 
 async def run(cancel_event: asyncio.Event | None = None) -> int:
+    gitmanager = GitUpdater("RevoltSecurities/Subdominator", "v3.0.0", "subdominator")
+    banner = Banner("Subdominator", "RevoltSecurities")
+    banner.render()
     parser = build_parser()
     args = parser.parse_args()
-
+    await gitmanager.versionlog()
     level = LogLevel.DEBUG if args.verbose else LogLevel.INFO
-    logger = Logger(name="subdominator", level=level, colored=not args.no_color)
+    logger = Logger(level=level, colored=not args.no_color)
     console = Console()
 
     defaults = RuntimeSettings.defaults()

@@ -462,6 +462,20 @@ wheels = [
 ]
 
 [[package]]
+name = "gitupdater"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "revoltlogger" },
+    { name = "revoltutils" },
+    { name = "rich" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ae/b9/0d43d203a32a54a41c640849e1ef5b89eea9d098e2524ae9919c737cfc9d/gitupdater-1.0.0.tar.gz", hash = "sha256:c55ccb34ff40edafc1c16339afa7663d1cc8cf63256c8d80db8702031c1f3d0e", size = 18043, upload-time = "2025-07-07T12:24:37.666Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/83/c2/619acc1a4c3d9729040e280e485d2374ae008b958a1b96dde34d556b5958/gitupdater-1.0.0-py3-none-any.whl", hash = "sha256:342025786610ea2a001a0beb6a4175f27e6ccdf75b28a083a2bfa022cbd61978", size = 4313, upload-time = "2025-07-07T12:24:36.372Z" },
+]
+
+[[package]]
 name = "graphemeu"
 version = "0.7.2"
 source = { registry = "https://pypi.org/simple" }
@@ -1149,6 +1163,7 @@ dependencies = [
     { name = "alembic" },
     { name = "appdirs" },
     { name = "asyncpg" },
+    { name = "gitupdater" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "revoltlogger" },
@@ -1167,6 +1182,7 @@ requires-dist = [
     { name = "alembic", specifier = ">=1.16.1" },
     { name = "appdirs", specifier = ">=1.4.4" },
     { name = "asyncpg", specifier = ">=0.31.0" },
+    { name = "gitupdater", specifier = ">=1.0.0" },
     { name = "pydantic", specifier = ">=2.11.3" },
     { name = "pydantic-settings", specifier = ">=2.9.1" },
     { name = "revoltlogger", specifier = ">=1.0.1" },

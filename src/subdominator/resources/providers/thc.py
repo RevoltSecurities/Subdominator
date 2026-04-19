@@ -8,7 +8,15 @@ class ThcResource(BaseResource):
     name = "thc"
     requires_config = False
 
+    def __init__(self, *args: object, **kwargs: object) -> None:
+        super().__init__(*args, **kwargs)
+        self._rate_limited = False
+
     async def enumerate(self, target: str, recursion_depth: int) -> ResourceResult:
+        if self._rate_limited:
+            self.client.logger.debug("Skipping thc: provider is rate-limited for the current run")
+            return ResourceResult(self.name, target, recursion_depth, [])
+
         headers = {"Content-Type": "application/json"}
         api_url = "https://ip.thc.org/api/v1/lookup/subdomains"
         page_state = ""
@@ -29,7 +37,9 @@ class ThcResource(BaseResource):
                     headers=headers,
                     expected_status={200},
                 )
-            except RuntimeError:
+            except RuntimeError as exc:
+                if "status 429" in str(exc):
+                    self._rate_limited = True
                 break
 
             if isinstance(data, dict):

@@ -23,6 +23,7 @@ dependencies = [
   "sqlalchemy>=2.0.40",
   "tldextract>=5.3.0",
   "asyncpg>=0.31.0",
+  "gitupdater>=1.0.0",
 ]
 
 [project.scripts]

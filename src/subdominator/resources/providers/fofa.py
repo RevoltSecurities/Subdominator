@@ -20,16 +20,19 @@ class FofaResource(BaseResource):
         findings: set[str] = set()
 
         while True:
-            data = await self.client.get_json(
-                "https://fofa.info/api/v1/search/all",
-                params={
-                    "key": key,
-                    "qbase64": query,
-                    "page": str(page),
-                    "full": "true",
-                    "size": "1000",
-                },
-            )
+            try:
+                data = await self.client.get_json(
+                    "https://fofa.info/api/v1/search/all",
+                    params={
+                        "key": key,
+                        "qbase64": query,
+                        "page": str(page),
+                        "full": "true",
+                        "size": "1000",
+                    },
+                )
+            except RuntimeError:
+                break
             results = data.get("results", [])
             if not results:
                 break
@@ -50,4 +53,3 @@ class FofaResource(BaseResource):
             page += 1
 
         return ResourceResult(self.name, target, recursion_depth, self.normalize_findings(target, findings))
-

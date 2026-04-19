@@ -77,6 +77,8 @@ class RetryableHttpClient:
                         f"{method} {url} returned unexpected status {response.status}"
                     )
                     self.logger.debug(str(last_error))
+                    if not self._should_retry_status(response.status):
+                        break
             except (
                 aiohttp.ClientError,
                 asyncio.TimeoutError,
@@ -89,6 +91,14 @@ class RetryableHttpClient:
                 await asyncio.sleep(self.retry_backoff * attempt)
 
         raise RuntimeError(f"request failed after {self.retries} attempts: {last_error}")
+
+    @staticmethod
+    def _should_retry_status(status_code: int) -> bool:
+        # Retry transient server/network-side failures, but do not keep hammering
+        # endpoints on client-side errors like auth problems or rate limits.
+        if 400 <= status_code < 500 and status_code != 408:
+            return False
+        return True
 
     async def get_json(
         self,
