@@ -13,6 +13,7 @@ dependencies = [
   "aiohttp>=3.11.18",
   "aiosqlite>=0.21.0",
   "alembic>=1.16.1",
+  "appdirs>=1.4.4",
   "pydantic>=2.11.3",
   "pydantic-settings>=2.9.1",
   "rich>=14.0.0",
@@ -37,4 +38,3 @@ packages = ["src/subdominator"]
 [tool.ruff]
 line-length = 100
 target-version = "py313"
-

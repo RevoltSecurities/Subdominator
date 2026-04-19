@@ -29,5 +29,5 @@ subdominator -d example.com --all
 subdominator -d example.com --all --recursive-depth 1 --save-db --output results.txt
 subdominator -d example.com --include-resources crtsh,certspotter,alienvault
 subdominator --list-resources
+subdominator --shell
 ```
-

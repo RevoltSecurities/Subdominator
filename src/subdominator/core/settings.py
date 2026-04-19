@@ -2,11 +2,17 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from appdirs import user_cache_dir
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from revoltutils import Config
 
-from subdominator.core.constants import APP_NAME, DEFAULT_DB_NAME, DEFAULT_PROVIDER_CONFIG
+from subdominator.core.constants import (
+    APP_NAME,
+    DEFAULT_DB_NAME,
+    DEFAULT_PROVIDER_CONFIG,
+    LEGACY_CACHE_DB_DIR,
+)
 
 
 class RuntimeSettings(BaseSettings):
@@ -36,7 +42,12 @@ class RuntimeSettings(BaseSettings):
     @classmethod
     def defaults(cls) -> "RuntimeSettings":
         app_config = Config(app_name=APP_NAME)
+        legacy_db_path = cls.legacy_db_path()
         return cls(
             config_path=app_config.get_config_path(DEFAULT_PROVIDER_CONFIG),
-            db_path=app_config.get_config_path(DEFAULT_DB_NAME),
+            db_path=legacy_db_path,
         )
+
+    @staticmethod
+    def legacy_db_path() -> Path:
+        return Path(user_cache_dir()) / LEGACY_CACHE_DB_DIR / DEFAULT_DB_NAME

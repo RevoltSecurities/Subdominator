@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy import DateTime, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -15,7 +15,7 @@ class EnumerationRun(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     root_domain: Mapped[str] = mapped_column(String(255), index=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(UTC))
     findings: Mapped[list["FindingRecord"]] = relationship(back_populates="run", cascade="all, delete-orphan")
 
 
@@ -32,7 +32,6 @@ class FindingRecord(Base):
     resource: Mapped[str] = mapped_column(String(64), index=True)
     query_target: Mapped[str] = mapped_column(String(255))
     recursion_depth: Mapped[int] = mapped_column(Integer, default=0)
-    discovered_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    discovered_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(UTC))
 
     run: Mapped[EnumerationRun] = relationship(back_populates="findings")
-

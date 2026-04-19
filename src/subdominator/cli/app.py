@@ -17,6 +17,7 @@ from revoltutils import FileUtils
 from subdominator.core.constants import APP_NAME, DEFAULT_PROVIDER_CONFIG
 from subdominator.core.provider_config import ProviderConfig
 from subdominator.core.settings import RuntimeSettings
+from subdominator.cli.shell import SubdominatorShell
 from subdominator.http.retryable import RetryableHttpClient
 from subdominator.output.writer import OutputWriter
 from subdominator.resources.registry import ResourceRegistry
@@ -46,6 +47,7 @@ def build_parser() -> RichParser:
         help="Comma-separated resources to exclude",
     )
     parser.add_argument("resource", "--list-resources", action="store_true", help="List resources")
+    parser.add_argument("resource", "--shell", action="store_true", help="Launch interactive shell")
     parser.add_argument("resource", "--dork", type=str, help="Custom search dork for supported resources")
     parser.add_argument("runtime", "--timeout", type=float, default=20.0, help="Request timeout")
     parser.add_argument("runtime", "--retries", type=int, default=3, help="Retry count")
@@ -104,6 +106,26 @@ async def _load_domains(args) -> list[str]:
     return []
 
 
+def _merge_with_historical_findings(summary, historical_findings):
+    if not historical_findings:
+        return summary
+
+    merged: dict[str, object] = {finding.subdomain: finding for finding in summary.findings}
+    fresh_subdomains = set(merged)
+    historical_subdomains = {item.subdomain for item in historical_findings}
+    historical_only = 0
+    for finding in historical_findings:
+        if finding.subdomain not in merged:
+            merged[finding.subdomain] = finding
+            historical_only += 1
+
+    summary.findings = sorted(merged.values(), key=lambda item: item.subdomain)
+    summary.historical_findings_count = len(historical_findings)
+    summary.new_findings_count = sum(1 for subdomain in fresh_subdomains if subdomain not in historical_subdomains)
+    summary.reused_historical_findings_count = historical_only
+    return summary
+
+
 async def run(cancel_event: asyncio.Event | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args()
@@ -151,8 +173,8 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
         ssl_verify=settings.ssl_verify,
     ) as client:
         registry = ResourceRegistry(client, provider_config, dork=args.dork)
+        metadata = registry.all_metadata()
         if args.list_resources:
-            metadata = registry.all_metadata()
             logger.info(f"Current Available passive resources: [{len(metadata)}]")
             logger.info("Sources marked with an * needs API key(s) or token(s) configuration to works")
             logger.info("Sources marked with an ~ can optionally use API key(s) or token(s) configuration to improve results")
@@ -170,6 +192,22 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
                     )
                 )
             return 0
+
+        if args.shell:
+            database = Database(settings.db_path)
+            database.initialize()
+            repository = EnumerationRepository(database)
+            shell = SubdominatorShell(
+                console=console,
+                repository=repository,
+                db_path=settings.db_path,
+                config_path=settings.config_path,
+                resource_metadata=metadata,
+            )
+            try:
+                return await shell.run()
+            finally:
+                database.engine.dispose()
 
         await provider_config.load()
 
@@ -197,11 +235,14 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
             repository = EnumerationRepository(database)
 
         for domain in domains:
+            historical_findings = repository.get_saved_findings(domain) if repository is not None else []
             summary = await service.enumerate(
                 domain=domain,
                 resources=resources,
                 recursive_depth=settings.recursive_depth,
             )
+            fresh_findings = list(summary.findings)
+            summary = _merge_with_historical_findings(summary, historical_findings)
             if settings.json_output:
                 for finding in summary.findings:
                     logger.stdinlog(f'{{"domain":"{finding.domain}","subdomain":"{finding.subdomain}","resource":"{finding.resource}"}}')
@@ -240,8 +281,11 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
             if args.show_summary or args.show_resource_stats or args.verbose:
                 _print_summary(console, summary, show_resource_stats=args.show_resource_stats or args.verbose)
             if settings.save_db and repository is not None:
-                run_id = repository.save_findings(domain, summary.findings)
-                logger.success(f"Saved {summary.total_unique_findings} findings for {domain} in run {run_id}")
+                run_id = repository.save_findings(domain, fresh_findings)
+                if run_id is None:
+                    logger.success(f"Saved {summary.new_findings_count} new finding(s) for {domain} in legacy DB format")
+                else:
+                    logger.success(f"Saved {summary.new_findings_count} new finding(s) for {domain} in run {run_id}")
 
         if database is not None:
             database.engine.dispose()
@@ -291,6 +335,10 @@ def _print_summary(console: Console, summary, *, show_resource_stats: bool) -> N
     overview.add_column("Metric", style="bold white")
     overview.add_column("Value", style="green")
     overview.add_row("Unique Findings", str(summary.total_unique_findings))
+    overview.add_row("Fresh Resource Findings", str(summary.fresh_findings_count))
+    overview.add_row("Historical Findings", str(summary.historical_findings_count))
+    overview.add_row("New Since Past Data", f"[green]{summary.new_findings_count}[/green]")
+    overview.add_row("Reused Historical Only", str(summary.reused_historical_findings_count))
     overview.add_row("Targets Scanned", str(len(summary.targets_scanned)))
     overview.add_row("Resource Executions", str(summary.total_resource_executions))
     overview.add_row("Successful Resources", f"[green]{summary.successful_resource_executions}[/green]")

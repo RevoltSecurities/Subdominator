@@ -47,6 +47,10 @@ class EnumerationSummary:
     targets_scanned: list[str]
     findings: list[Finding]
     resource_executions: list[ResourceExecution]
+    fresh_findings_count: int = 0
+    historical_findings_count: int = 0
+    new_findings_count: int = 0
+    reused_historical_findings_count: int = 0
 
     @property
     def duration_ms(self) -> int:

@@ -115,6 +115,8 @@ class EnumerationService:
             targets_scanned=sorted(seen_targets),
             findings=sorted(unique_findings.values(), key=lambda item: item.subdomain),
             resource_executions=resource_executions,
+            fresh_findings_count=len(unique_findings),
+            new_findings_count=len(unique_findings),
         )
 
     async def _run_resource(self, resource: BaseResource, target: str, depth: int) -> ResourceResult:
