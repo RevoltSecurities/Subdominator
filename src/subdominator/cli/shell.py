@@ -11,6 +11,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
+from subdominator.core.models import Finding
 from subdominator.storage.repository import EnumerationRepository
 
 
@@ -47,8 +48,19 @@ class SubdominatorShell:
     async def run(self) -> int:
         self._print_welcome()
         while True:
-            raw = await asyncio.to_thread(self.console.input, "[bold cyan]subdominator-shell[/bold cyan]> ")
-            command = parse_shell_command(raw)
+            try:
+                raw = await asyncio.to_thread(
+                    self.console.input,
+                    "[bold cyan]subdominator-shell[/bold cyan]> ",
+                )
+            except (EOFError, KeyboardInterrupt):
+                self.console.print("\n[bold yellow]Exiting shell.[/bold yellow]")
+                return 0
+            try:
+                command = parse_shell_command(raw)
+            except ValueError as exc:
+                self.console.print(f"[bold yellow]Input parse error:[/bold yellow] {exc}")
+                continue
             if command is None:
                 continue
             if command.name in {"exit", "quit"}:
@@ -70,6 +82,9 @@ class SubdominatorShell:
                 continue
             if command.name == "findings":
                 self._show_findings(command.args)
+                continue
+            if command.name == "add":
+                self._add_domain(command.args)
                 continue
             if command.name == "delete":
                 self._delete_domain(command.args)
@@ -109,6 +124,8 @@ class SubdominatorShell:
         table.add_row("domains", "List stored root domains")
         table.add_row("domain <root>", "Show stored domain summary")
         table.add_row("findings <root>", "Show stored findings for a root domain")
+        table.add_row("add <root> <file>", "Add or merge findings from a text file")
+        table.add_row("add domain <root> <file>", "Legacy-style alias for text-file import")
         table.add_row("runs [root]", "Show recent stored runs, optionally filtered by root")
         table.add_row("export <root> <path> [txt|json]", "Export findings to a file")
         table.add_row("delete <root>", "Delete a root domain and its stored runs/findings")
@@ -192,6 +209,40 @@ class SubdominatorShell:
         self.console.print("[bold yellow]Run history is unavailable for the legacy DB format.[/bold yellow]")
         return
 
+    def _add_domain(self, args: list[str]) -> None:
+        if len(args) == 3 and args[0].lower() == "domain":
+            root_domain = args[1].strip().lower()
+            input_path = Path(args[2])
+        elif len(args) == 2:
+            root_domain = args[0].strip().lower()
+            input_path = Path(args[1])
+        else:
+            self.console.print("[bold yellow]Usage:[/bold yellow] add <root-domain> <txt-file>")
+            self.console.print("[bold yellow]Usage:[/bold yellow] add domain <root-domain> <txt-file>")
+            return
+
+        findings = self._load_findings_file(root_domain, input_path)
+        if not findings:
+            self.console.print(f"[bold yellow]No valid findings found in {input_path} for {root_domain}.[/bold yellow]")
+            return
+
+        before_count = self.repository.count_findings(root_domain)
+        self.repository.save_findings(root_domain, findings)
+        after_count = self.repository.count_findings(root_domain)
+        added_count = after_count - before_count
+
+        if before_count == 0:
+            self.console.print(
+                f"[bold green]Added[/bold green] {after_count} finding(s) for [bold white]{root_domain}[/bold white]."
+            )
+        else:
+            self.console.print(
+                f"[bold green]Merged[/bold green] {len(findings)} input finding(s) into [bold white]{root_domain}[/bold white]."
+            )
+            self.console.print(
+                f"[bold white]Newly added:[/bold white] {added_count}  [bold white]Already present:[/bold white] {len(findings) - added_count}"
+            )
+
     def _delete_domain(self, args: list[str]) -> None:
         if len(args) != 1:
             self.console.print("[bold yellow]Usage:[/bold yellow] delete <root-domain>")
@@ -252,3 +303,30 @@ class SubdominatorShell:
                 marker = "~"
             table.add_row(str(item["name"]), marker)
         self.console.print(table)
+
+    def _load_findings_file(self, root_domain: str, input_path: Path) -> list[Finding]:
+        if not input_path.exists() or not input_path.is_file():
+            self.console.print(f"[bold yellow]File not found:[/bold yellow] {input_path}")
+            return []
+
+        findings: list[Finding] = []
+        seen: set[str] = set()
+        for line in input_path.read_text(encoding="utf-8").splitlines():
+            value = line.strip().lower().lstrip("*.")
+            if not value:
+                continue
+            if value != root_domain and not value.endswith(f".{root_domain}"):
+                continue
+            if value in seen:
+                continue
+            seen.add(value)
+            findings.append(
+                Finding(
+                    domain=root_domain,
+                    subdomain=value,
+                    resource="shell-add",
+                    query_target=root_domain,
+                    recursion_depth=0,
+                )
+            )
+        return findings

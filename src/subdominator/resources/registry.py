@@ -155,6 +155,13 @@ RESOURCE_TYPES = [
     ZoomEyeApiResource,
 ]
 
+DEFAULT_DISABLED_RESOURCES = {
+    "commoncrawl",
+    "github",
+    "virustotal",
+    "waybackarchive",
+}
+
 
 class ResourceRegistry:
     def __init__(
@@ -199,10 +206,12 @@ class ResourceRegistry:
         include_set = {item.strip().lower() for item in include or [] if item.strip()}
         exclude_set = {item.strip().lower() for item in exclude or [] if item.strip()}
 
-        if include_all or not include_set:
+        if include_set:
+            names = include_set.intersection(self._resources)
+        elif include_all:
             names = set(self._resources)
         else:
-            names = include_set.intersection(self._resources)
+            names = set(self._resources) - DEFAULT_DISABLED_RESOURCES
 
         names -= exclude_set
         return [self._resources[name] for name in sorted(names)]

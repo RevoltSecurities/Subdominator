@@ -66,6 +66,38 @@ class RegistryTests(unittest.TestCase):
             self.assertTrue(metadata["netlas"])
             self.assertTrue(metadata["zoomeyeapi"])
 
+    def test_default_selection_skips_long_running_resources(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config = ProviderConfig(Path(tmpdir) / "provider-config.yaml")
+            asyncio.run(config.load())
+
+            async def run_check() -> tuple[list[str], list[str], list[str], list[str]]:
+                async with RetryableHttpClient(
+                    logger=Logger(name="test", level=LogLevel.NONE),
+                    timeout=1,
+                    retries=1,
+                ) as client:
+                    registry = ResourceRegistry(client, config)
+                    default_names = [resource.name for resource in registry.select()]
+                    all_names = [resource.name for resource in registry.select(include_all=True)]
+                    include_names = [resource.name for resource in registry.select(include=["github", "virustotal"])]
+                    exclude_names = [
+                        resource.name
+                        for resource in registry.select(include=["github", "virustotal"], exclude=["github"])
+                    ]
+                    return default_names, all_names, include_names, exclude_names
+
+            default_names, all_names, include_names, exclude_names = asyncio.run(run_check())
+
+            self.assertNotIn("commoncrawl", default_names)
+            self.assertNotIn("github", default_names)
+            self.assertNotIn("virustotal", default_names)
+            self.assertNotIn("waybackarchive", default_names)
+            self.assertIn("github", all_names)
+            self.assertIn("virustotal", all_names)
+            self.assertEqual(include_names, ["github", "virustotal"])
+            self.assertEqual(exclude_names, ["virustotal"])
+
 
 if __name__ == "__main__":
     unittest.main()

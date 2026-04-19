@@ -40,6 +40,9 @@ class EnumerationRepository:
     def __init__(self, database) -> None:
         self.database = database
 
+    def count_findings(self, root_domain: str) -> int:
+        return len(self._load_subdomains(root_domain))
+
     def get_saved_findings(self, root_domain: str) -> list[Finding]:
         return [
             Finding(
