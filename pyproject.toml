@@ -1,7 +1,7 @@
 [project]
 name = "subdominator"
 version = "3.0.0"
-description = "Modern passive subdomain enumeration with structured resources, retries, recursion, and persistence."
+description = "High-performance passive subdomain enumeration engine for effortless asset discovery and rapid reconnaissance."
 readme = "README.md"
 requires-python = ">=3.13"
 license = { text = "MIT" }
@@ -12,7 +12,6 @@ dependencies = [
   "aiofiles>=24.1.0",
   "aiohttp>=3.11.18",
   "aiosqlite>=0.21.0",
-  "alembic>=1.16.1",
   "appdirs>=1.4.4",
   "pydantic>=2.11.3",
   "pydantic-settings>=2.9.1",
@@ -22,7 +21,6 @@ dependencies = [
   "revoltutils>=1.0.2",
   "sqlalchemy>=2.0.40",
   "tldextract>=5.3.0",
-  "asyncpg>=0.31.0",
   "gitupdater>=1.0.0",
 ]
 

@@ -26,6 +26,7 @@ from subdominator.resources.providers.crtsh import CrtShResource
 from subdominator.resources.providers.cyfare import CyfareResource
 from subdominator.resources.providers.digitalyama import DigitalYamaResource
 from subdominator.resources.providers.digitorus import DigitorusResource
+from subdominator.resources.providers.domscan import DomScanResource
 from subdominator.resources.providers.dnsdb import DnsdbResource
 from subdominator.resources.providers.dnsdumpster import DnsDumpsterResource
 from subdominator.resources.providers.dnsrepo import DnsRepoResource
@@ -101,6 +102,7 @@ RESOURCE_TYPES = [
     CyfareResource,
     DigitalYamaResource,
     DigitorusResource,
+    DomScanResource,
     DnsdbResource,
     DnsDumpsterResource,
     DnsRepoResource,
