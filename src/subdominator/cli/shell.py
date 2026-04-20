@@ -12,7 +12,8 @@ from rich.panel import Panel
 from rich.table import Table
 
 from subdominator.core.constants import VERSION
-from subdominator.core.models import Finding
+from subdominator.core.models import EnumerationSummary, Finding, ResourceExecution
+from subdominator.output.reports import ReportGenerator
 from subdominator.storage.repository import EnumerationRepository
 from gitupdater import GitUpdater
 
@@ -137,7 +138,7 @@ class SubdominatorShell:
         table.add_row("add <root> <file>", "Add or merge findings from a text file")
         table.add_row("add domain <root> <file>", "Legacy-style alias for text-file import")
         table.add_row("runs [root]", "Show recent stored runs, optionally filtered by root")
-        table.add_row("export <root> <path> [txt|json]", "Export findings to a file")
+        table.add_row("export <root> <path> [txt|json|html]", "Export findings to a file")
         table.add_row("delete <root>", "Delete a root domain and its stored runs/findings")
         table.add_row("resources", "List current resource catalog markers")
         table.add_row("config", "Show config and database paths")
@@ -298,10 +299,55 @@ class SubdominatorShell:
                 ],
             }
             output_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        elif export_format == "html":
+            summary = self._generate_synthetic_summary(root_domain, findings)
+            ReportGenerator.to_html(output_path, summary)
         else:
-            self.console.print("[bold yellow]Export format must be txt or json.[/bold yellow]")
+            self.console.print("[bold yellow]Export format must be txt, json, or html.[/bold yellow]")
             return
         self.console.print(f"[bold green]Exported[/bold green] {len(findings)} finding(s) to {output_path}")
+
+    def _generate_synthetic_summary(self, root_domain: str, findings: list[Finding]) -> EnumerationSummary:
+        """Create a synthetic EnumerationSummary from historical findings."""
+        from datetime import UTC, datetime
+        
+        # Sort findings by subdomain for the report
+        sorted_findings = sorted(findings, key=lambda f: f.subdomain)
+        
+        # Pull seen targets from findings
+        seen_targets = {f.domain for f in findings} | {f.query_target for f in findings}
+        
+        # Find earliest/latest dates
+        if findings:
+            started_at = min(f.discovered_at for f in findings)
+            completed_at = max(f.discovered_at for f in findings)
+        else:
+            started_at = completed_at = datetime.now(UTC)
+
+        # Build dummy resource executions based on unique resources seen
+        resources = {f.resource for f in findings}
+        resource_executions = [
+            ResourceExecution(
+                resource=res,
+                target="[multiple]",
+                recursion_depth=0,
+                findings_count=sum(1 for f in findings if f.resource == res),
+                duration_ms=0,
+                error=None
+            )
+            for res in resources
+        ]
+
+        return EnumerationSummary(
+            root_domain=root_domain,
+            recursive_depth=0,
+            started_at=started_at,
+            completed_at=completed_at,
+            targets_scanned=list(seen_targets),
+            findings=sorted_findings,
+            resource_executions=resource_executions,
+            historical_findings_count=len(findings),
+        )
 
     def _show_resources(self) -> None:
         table = Table(title="Resources", box=box.ROUNDED, header_style="bold cyan")

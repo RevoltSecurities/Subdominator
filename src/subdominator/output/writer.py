@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 from pathlib import Path
 
@@ -7,6 +8,7 @@ import aiofiles
 from revoltutils import FolderUtils
 
 from subdominator.core.models import EnumerationSummary, Finding
+from subdominator.output.reports import ReportGenerator
 
 
 class OutputWriter:
@@ -70,35 +72,63 @@ class OutputWriter:
 
         if report_json is not None:
             await FolderUtils.create_folder(str(report_json.parent), exist_ok=True)
-            text = json.dumps(
-                {
-                    "root_domain": summary.root_domain,
-                    "recursive_depth": summary.recursive_depth,
-                    "started_at": summary.started_at.isoformat(),
-                    "completed_at": summary.completed_at.isoformat(),
-                    "duration_ms": summary.duration_ms,
-                    "targets_scanned": summary.targets_scanned,
-                    "total_unique_findings": summary.total_unique_findings,
-                    "fresh_findings_count": summary.fresh_findings_count,
-                    "historical_findings_count": summary.historical_findings_count,
-                    "new_findings_count": summary.new_findings_count,
-                    "reused_historical_findings_count": summary.reused_historical_findings_count,
-                    "total_resource_executions": summary.total_resource_executions,
-                    "successful_resource_executions": summary.successful_resource_executions,
-                    "failed_resource_executions": summary.failed_resource_executions,
-                    "resource_executions": [
-                        {
-                            "resource": execution.resource,
-                            "target": execution.target,
-                            "recursion_depth": execution.recursion_depth,
-                            "findings_count": execution.findings_count,
-                            "duration_ms": execution.duration_ms,
-                            "error": execution.error,
-                        }
-                        for execution in summary.resource_executions
-                    ],
-                },
-                indent=2,
-            ) + "\n"
+            text = (
+                json.dumps(
+                    {
+                        "root_domain": summary.root_domain,
+                        "recursive_depth": summary.recursive_depth,
+                        "started_at": summary.started_at.isoformat(),
+                        "completed_at": summary.completed_at.isoformat(),
+                        "duration_ms": summary.duration_ms,
+                        "targets_scanned": summary.targets_scanned,
+                        "total_unique_findings": summary.total_unique_findings,
+                        "fresh_findings_count": summary.fresh_findings_count,
+                        "historical_findings_count": summary.historical_findings_count,
+                        "new_findings_count": summary.new_findings_count,
+                        "reused_historical_findings_count": summary.reused_historical_findings_count,
+                        "total_resource_executions": summary.total_resource_executions,
+                        "successful_resource_executions": summary.successful_resource_executions,
+                        "failed_resource_executions": summary.failed_resource_executions,
+                        "resource_executions": [
+                            {
+                                "resource": execution.resource,
+                                "target": execution.target,
+                                "recursion_depth": execution.recursion_depth,
+                                "findings_count": execution.findings_count,
+                                "duration_ms": execution.duration_ms,
+                                "error": execution.error,
+                            }
+                            for execution in summary.resource_executions
+                        ],
+                    },
+                    indent=2,
+                )
+                + "\n"
+            )
             async with aiofiles.open(report_json, "w", encoding="utf-8") as fh:
                 await fh.write(text)
+
+    async def write_html(self, summary: EnumerationSummary, output: Path) -> None:
+        """Write an HTML report, offloading synchronous file I/O to a thread."""
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, ReportGenerator.to_html, output, summary)
+
+
+    @staticmethod
+    def resolve_report_path(
+        base: Path,
+        root_domain: str,
+        suffix: str,
+        multi_domain: bool,
+    ) -> Path:
+        """
+        If running against a single domain, return ``base`` as-is.
+        If running against multiple domains, insert the domain name before the
+        suffix so each domain gets its own file, e.g.::
+
+            report.html  →  report.example.com.html
+        """
+        if not multi_domain:
+            return base
+        stem = base.stem
+        return base.with_name(f"{stem}.{root_domain}{suffix}")

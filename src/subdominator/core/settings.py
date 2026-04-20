@@ -33,6 +33,7 @@ class RuntimeSettings(BaseSettings):
     output_dir: Path | None = None
     json_output: bool = False
     table_output: bool = False
+    html_output: Path | None = None
     no_color: bool = False
     all_resources: bool = False
     ssl_verify: bool = True

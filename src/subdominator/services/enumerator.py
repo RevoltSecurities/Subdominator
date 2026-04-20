@@ -44,24 +44,24 @@ class EnumerationService:
                 tasks = {asyncio.create_task(self._run_resource(resource, current_target, depth)) for resource in resources}
                 cancel_task = asyncio.create_task(self.cancel_event.wait()) if self.cancel_event else None
 
-                while tasks:
-                    wait_list = list(tasks)
-                    if cancel_task and not cancel_task.done():
-                        wait_list.append(cancel_task)
+                try:
+                    while tasks:
+                        wait_list = list(tasks)
+                        if cancel_task and not cancel_task.done():
+                            wait_list.append(cancel_task)
 
-                    done, pending = await asyncio.wait(wait_list, return_when=asyncio.FIRST_COMPLETED)
+                        done, pending = await asyncio.wait(wait_list, return_when=asyncio.FIRST_COMPLETED)
 
-                    if cancel_task and cancel_task in done:
-                        self.logger.warn("Scan interrupted by user! Gracefully finalizing partial results...")
-                        for task in tasks:
-                            if not task.done():
-                                task.cancel()
-                        break
+                        if cancel_task and cancel_task in done:
+                            self.logger.warn("Scan interrupted by user! Gracefully finalizing partial results...")
+                            for task in tasks:
+                                if not task.done():
+                                    task.cancel()
+                            break
 
-                    tasks = set(task for task in done if task != cancel_task) | {task for task in pending if task != cancel_task}
-
-                    for task in [t for t in done if t != cancel_task]:
-                        tasks.remove(task)
+                        done_tasks = [t for t in done if t != cancel_task]
+                        for task in done_tasks:
+                            tasks.remove(task)
                         try:
                             result = task.result()
                         except asyncio.CancelledError:
@@ -111,9 +111,19 @@ class EnumerationService:
                             if inserted:
                                 fresh_count += 1
 
-                            if depth < recursive_depth and subdomain not in seen_targets:
-                                seen_targets.add(subdomain)
-                                queue.append((subdomain, depth + 1))
+                                if depth < recursive_depth:
+                                    if subdomain not in seen_targets:
+                                        seen_targets.add(subdomain)
+                                        queue.append((subdomain, depth + 1))
+                                    else:
+                                        self.logger.debug(f"Recursion skipped for {subdomain}: already targeted at this or higher depth")
+                finally:
+                    if cancel_task and not cancel_task.done():
+                        cancel_task.cancel()
+                        try:
+                            await cancel_task
+                        except asyncio.CancelledError:
+                            pass
 
                 if cancel_task and cancel_task.done():
                     break

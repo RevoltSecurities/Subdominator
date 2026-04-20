@@ -68,6 +68,7 @@ def build_parser() -> RichParser:
     parser.add_argument("output", "-oD", "--output-directory", type=str, help="Output directory")
     parser.add_argument("output", "-j","--json", action="store_true", help="Write JSONL output")
     parser.add_argument("output", "-tb","--table", action="store_true", help="Print subdomains in table format")
+    parser.add_argument("output", "-oh","--html", type=str, help="Write a high-quality HTML report")
     parser.add_argument("output", "-rj","--report-json", type=str, help="Write a JSON summary report")
     parser.add_argument("output", "-ss","--show-summary", action="store_true", help="Print a run summary")
     parser.add_argument("output", "-srs","--show-resource-stats", action="store_true", help="Print per-resource stats")
@@ -159,6 +160,7 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
         output_dir=args.output_directory,
         json_output=args.json,
         table_output=args.table,
+        html_output=Path(args.html) if args.html else None,
         log_level="DEBUG" if args.verbose else "INFO",
         include_resources=_split_csv(args.include_resources),
         exclude_resources=_split_csv(args.exclude_resources),
@@ -271,6 +273,7 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
             database.initialize()
             repository = EnumerationRepository(database)
 
+        multi_domain = len(domains) > 1
         for domain in domains:
             historical_findings = repository.get_saved_findings(domain) if repository is not None else []
             summary = await service.enumerate(
@@ -300,10 +303,10 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
                 findings_table.add_column("No.", justify="right", style="bold cyan")
                 findings_table.add_column("Subdomain", style="bold white")
                 findings_table.add_column("Resource", style="magenta")
-                
+
                 for idx, finding in enumerate(summary.findings, start=1):
                     findings_table.add_row(str(idx), finding.subdomain, finding.resource)
-                
+
                 if summary.findings:
                     console.print(findings_table)
                 else:
@@ -315,6 +318,13 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
                 json_output=settings.json_output,
                 report_json=Path(args.report_json) if args.report_json else None,
             )
+            if settings.output or settings.output_dir:
+                output_path = settings.output if settings.output else settings.output_dir / f"{domain}.{'jsonl' if settings.json_output else 'txt'}"
+                logger.success(f"Findings saved to {output_path}")
+            
+            if args.report_json:
+                rj_path = Path(args.report_json) if not settings.output_dir else settings.output_dir / f"{domain}.summary.json"
+                logger.success(f"JSON summary report saved to {rj_path}")
             if args.show_summary or args.show_resource_stats or args.verbose:
                 _print_summary(console, summary, show_resource_stats=args.show_resource_stats or args.verbose)
             if settings.save_db and repository is not None:
@@ -323,6 +333,14 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
                     logger.success(f"Saved {summary.new_findings_count} new finding(s) for {domain} in legacy DB format")
                 else:
                     logger.success(f"Saved {summary.new_findings_count} new finding(s) for {domain} in run {run_id}")
+
+            if settings.html_output:
+                html_path = OutputWriter.resolve_report_path(
+                    settings.html_output, domain, ".html", multi_domain
+                )
+                await writer.write_html(summary, html_path)
+                logger.success(f"HTML report saved to {html_path}")
+
 
         if database is not None:
             database.engine.dispose()
@@ -353,10 +371,16 @@ def main() -> None:
         pending = [task for task in asyncio.all_tasks(loop) if not task.done()]
         for task in pending:
             task.cancel()
+        
         if pending:
-            loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
+            try:
+                loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
+            except Exception:
+                pass
+                
         asyncio.set_event_loop(None)
         loop.close()
+    
     raise SystemExit(exit_code)
 
 

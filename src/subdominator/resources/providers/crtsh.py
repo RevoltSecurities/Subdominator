@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import asyncpg
-
 from subdominator.core.models import ResourceResult
 from subdominator.resources.base import BaseResource
 
@@ -11,9 +9,11 @@ class CrtShResource(BaseResource):
 
     async def enumerate(self, target: str, recursion_depth: int) -> ResourceResult:
         findings: list[str] = []
-        
+
         try:
             findings = await self._get_from_sql(target)
+        except ImportError:
+            self.client.logger.debug("crtsh postgres skipped: asyncpg not installed, using HTTP fallback")
         except Exception as e:
             self.client.logger.debug(f"crtsh postgres connection failed for {target}: {e}")
 
@@ -25,8 +25,13 @@ class CrtShResource(BaseResource):
         )
 
     async def _get_from_sql(self, target: str) -> list[str]:
+        try:
+            import asyncpg
+        except ImportError:
+            raise ImportError("asyncpg is required for crt.sh PostgreSQL queries")
+
         findings: list[str] = []
-        timeout = 20.0  # Default timeout
+        timeout = 20.0
         if hasattr(self.client, "timeout") and hasattr(self.client.timeout, "total") and self.client.timeout.total:
              timeout = self.client.timeout.total
 
