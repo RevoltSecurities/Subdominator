@@ -15,7 +15,7 @@ from revoltlogger import LogLevel, Logger
 from revoltutils import FileUtils, Banner, HealthCheck, ConnectionInfo
 from gitupdater import GitUpdater
 
-from subdominator.core.constants import APP_NAME, DEFAULT_PROVIDER_CONFIG, VERSION
+from subdominator.core.constants import APP_NAME,VERSION
 from subdominator.core.provider_config import ProviderConfig
 from subdominator.core.settings import RuntimeSettings
 from subdominator.cli.shell import SubdominatorShell
@@ -31,7 +31,7 @@ from subdominator.storage.repository import EnumerationRepository
 
 
 def build_parser() -> RichParser:
-    parser = RichParser(description="Subdominator 3 - passive subdomain enumeration")
+    parser = RichParser(description=f"Subdominator: High-performance passive subdomain enumeration engine for effortless asset discovery and rapid reconnaissance")
     parser.add_argument("input", "-d", "--domain", type=str, help="Target domain")
     parser.add_argument("input", "-dL", "--domain-list", type=str, help="File containing domains")
     parser.add_argument("resource", "--all", action="store_true", help="Use all resources")
@@ -169,6 +169,11 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
         release=args.release,
         health_check=args.health_check,
     )
+
+    if args.config_path:
+        logger.info(f"Loading provider configuration from {args.config_path}")
+    else:
+        logger.info(f"Loading provider configuration from {defaults.config_path}")
 
     if settings.health_check:
         info: ConnectionInfo = await HealthCheck.check_connection("google.com", 80)
