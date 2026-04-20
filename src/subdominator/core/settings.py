@@ -36,6 +36,9 @@ class RuntimeSettings(BaseSettings):
     no_color: bool = False
     all_resources: bool = False
     ssl_verify: bool = True
+    update: bool = False
+    release: bool = False
+    health_check: bool = False
     include_resources: list[str] = Field(default_factory=list)
     exclude_resources: list[str] = Field(default_factory=list)
 

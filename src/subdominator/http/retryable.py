@@ -8,6 +8,7 @@ from typing import Any
 
 import aiohttp
 from revoltlogger import Logger
+from subdominator.core.constants import VERSION
 
 
 class RetryableHttpClient:
@@ -26,7 +27,7 @@ class RetryableHttpClient:
         self.timeout = aiohttp.ClientTimeout(total=timeout, connect=timeout)
         self.retries = retries
         self.retry_backoff = retry_backoff
-        self.user_agent = user_agent or "Subdominator/V3.0.0"
+        self.user_agent = user_agent or f"Subdominator/{VERSION}"
         self.proxy = proxy
         self._session: aiohttp.ClientSession | None = None
 

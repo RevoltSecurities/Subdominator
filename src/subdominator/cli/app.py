@@ -12,10 +12,10 @@ from rich.text import Text
 from rich.table import Table
 from richparser import RichParser
 from revoltlogger import LogLevel, Logger
-from revoltutils import FileUtils,Banner
+from revoltutils import FileUtils, Banner, HealthCheck, ConnectionInfo
 from gitupdater import GitUpdater
 
-from subdominator.core.constants import APP_NAME, DEFAULT_PROVIDER_CONFIG
+from subdominator.core.constants import APP_NAME, DEFAULT_PROVIDER_CONFIG, VERSION
 from subdominator.core.provider_config import ProviderConfig
 from subdominator.core.settings import RuntimeSettings
 from subdominator.cli.shell import SubdominatorShell
@@ -80,6 +80,9 @@ def build_parser() -> RichParser:
     parser.add_argument("debug", "-k", "--insecure", action="store_true", help="Skip SSL certificate verification")
     parser.add_argument("debug", "-p", "--proxy", type=str, help="HTTP proxy")
     parser.add_argument("debug", "-nc", "--no-color", action="store_true", help="Disable colored logs")
+    parser.add_argument("update", "-up", "--update", action="store_true", help="Update Subdominator to its latest version")
+    parser.add_argument("update", "-release", "--release", action="store_true", help="Show release notes of Subdominator's latest version")
+    parser.add_argument("debug", "-hc", "--health-check", action="store_true", help="Check internet connectivity and API status")
     return parser
 
 
@@ -131,7 +134,7 @@ def _merge_with_historical_findings(summary, historical_findings):
 
 
 async def run(cancel_event: asyncio.Event | None = None) -> int:
-    gitmanager = GitUpdater("RevoltSecurities/Subdominator", "v3.0.0", "subdominator")
+    gitmanager = GitUpdater("RevoltSecurities/Subdominator", VERSION, "subdominator")
     banner = Banner("Subdominator", "RevoltSecurities")
     banner.render()
     parser = build_parser()
@@ -162,8 +165,29 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
         all_resources=args.all,
         no_color=args.no_color,
         ssl_verify=not args.insecure,
+        update=args.update,
+        release=args.release,
+        health_check=args.health_check,
     )
 
+    if settings.health_check:
+        info: ConnectionInfo = await HealthCheck.check_connection("google.com", 80)
+        logger.info(f"{info.message}")
+        return 0
+
+    if settings.update:
+        updated = await gitmanager.update()
+        if updated:
+            logger.info(f"{APP_NAME} updated to the latest version successfully")
+            await gitmanager.show_update_log()
+            return 0
+        else:
+            logger.custom("failed", f"{APP_NAME} update failed, please update manually", "CRITICAL")
+            return 1
+
+    if settings.release:
+        await gitmanager.show_update_log()
+        return 0
 
     if args.show_config_path:
         logger.stdinlog(str(settings.config_path))
@@ -210,6 +234,7 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
                 db_path=settings.db_path,
                 config_path=settings.config_path,
                 resource_metadata=metadata,
+                gitmanager=gitmanager,
             )
             try:
                 return await shell.run()
@@ -412,3 +437,7 @@ def _print_summary(console: Console, summary, *, show_resource_stats: bool) -> N
                 status,
             )
         console.print(resource_table)
+        
+
+if __name__ == "__main__":
+    main()

@@ -11,8 +11,10 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
+from subdominator.core.constants import VERSION
 from subdominator.core.models import Finding
 from subdominator.storage.repository import EnumerationRepository
+from gitupdater import GitUpdater
 
 
 @dataclass(slots=True)
@@ -38,12 +40,14 @@ class SubdominatorShell:
         db_path: Path,
         config_path: Path,
         resource_metadata: list[dict[str, str | bool]],
+        gitmanager: GitUpdater,
     ) -> None:
         self.console = console
         self.repository = repository
         self.db_path = db_path
         self.config_path = config_path
         self.resource_metadata = resource_metadata
+        self.gitmanager = gitmanager
 
     async def run(self) -> int:
         self._print_welcome()
@@ -99,6 +103,12 @@ class SubdominatorShell:
                 self.console.print(f"[bold white]Config:[/bold white] {self.config_path}")
                 self.console.print(f"[bold white]Database:[/bold white] {self.db_path}")
                 continue
+            if command.name == "update":
+                await self.gitmanager.update()
+                continue
+            if command.name == "release":
+                await self.gitmanager.show_update_log()
+                continue
             self.console.print(f"[bold red]Unknown command:[/bold red] {command.name}")
             self.console.print("[dim]Type 'help' to see supported commands.[/dim]")
 
@@ -107,7 +117,7 @@ class SubdominatorShell:
             Panel.fit(
                 "\n".join(
                     [
-                        "[bold white]Subdominator Shell[/bold white]",
+                        f"[bold white]Subdominator Shell {VERSION}[/bold white]",
                         f"[dim]DB[/dim] {self.db_path}",
                         f"[dim]Config[/dim] {self.config_path}",
                         "[dim]Type 'help' for commands.[/dim]",
@@ -131,6 +141,8 @@ class SubdominatorShell:
         table.add_row("delete <root>", "Delete a root domain and its stored runs/findings")
         table.add_row("resources", "List current resource catalog markers")
         table.add_row("config", "Show config and database paths")
+        table.add_row("update", "Update Subdominator to its latest version")
+        table.add_row("release", "Show release notes of Subdominator's latest version")
         table.add_row("clear", "Clear the screen")
         table.add_row("exit", "Exit the shell")
         self.console.print(table)
