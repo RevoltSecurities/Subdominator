@@ -7,8 +7,7 @@ from subdominator.resources.base import BaseResource
 
 class RobtexResource(BaseResource):
     name = "robtex"
-    requires_config = False
-    has_optional_config = True
+    requires_config = True
 
     async def enumerate(self, target: str, recursion_depth: int) -> ResourceResult:
         key = self.get_required_value()

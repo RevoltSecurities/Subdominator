@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import logging
 from subdominator.core.models import ResourceResult
 from subdominator.resources.base import BaseResource
 
-logger = logging.getLogger(__name__)
 
 
 class ThreatBookResource(BaseResource):

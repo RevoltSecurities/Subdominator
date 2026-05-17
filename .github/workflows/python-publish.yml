@@ -1,44 +1,33 @@
 name: Release to PyPI
 
 on:
-
   release:
-
     types:
       - created
 
 jobs:
-
   deploy:
-
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     steps:
-
       - name: Check out code
-
-        uses: actions/checkout@v2
-
+        uses: actions/checkout@v4
 
       - name: Set up Python
-
-        uses: actions/setup-python@v2
-
+        uses: actions/setup-python@v5
         with:
+          python-version: "3.13"
 
-          python-version: 3.13.2
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
-      - name: Install dependencies
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install setuptools wheel twine
+      - name: Build package
+        run: uv build
 
-      - name: Build and publish
-        run: |
-          python3 setup.py sdist bdist_wheel
-          python3 -m twine upload dist/*.tar.gz
+      - name: Publish to PyPI
+        run: uv publish
         env:
-
-          TWINE_USERNAME: ${{ secrets.PYPI_USER }}
-          
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}

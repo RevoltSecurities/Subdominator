@@ -1,11 +1,12 @@
-import logging
+from __future__ import annotations
+
 import re
 import urllib.parse
 from urllib.parse import urlparse
+
 from subdominator.core.models import ResourceResult
 from subdominator.resources.base import BaseResource
 
-logger = logging.getLogger(__name__)
 
 class UrlscanResource(BaseResource):
     name = "urlscan"

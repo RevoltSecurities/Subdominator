@@ -1,10 +1,7 @@
 from __future__ import annotations
 
-import logging
 from subdominator.core.models import ResourceResult
 from subdominator.resources.base import BaseResource
-
-logger = logging.getLogger(__name__)
 
 
 class ThreatMinerResource(BaseResource):
@@ -28,7 +25,7 @@ class ThreatMinerResource(BaseResource):
             status_code = data.get("status_code", "")
             if str(status_code) != "200":
                 msg = data.get("status_message", "Unknown status")
-                logger.debug(f"[ThreatMiner] API Error: {msg}")
+                self.client.logger.debug(f"threatminer API error for {target}: {msg}")
 
             results = data.get("results", [])
             if isinstance(results, list):

@@ -284,11 +284,19 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
             fresh_findings = list(summary.findings)
             summary = _merge_with_historical_findings(summary, historical_findings)
             if settings.json_output:
-                for finding in summary.findings:
-                    logger.stdinlog(f'{{"domain":"{finding.domain}","subdomain":"{finding.subdomain}","resource":"{finding.resource}"}}')
+                try:
+                    for finding in summary.findings:
+                        sys.stdout.write(f'{{"domain":"{finding.domain}","subdomain":"{finding.subdomain}","resource":"{finding.resource}"}}\n')
+                    sys.stdout.flush()
+                except BrokenPipeError:
+                    sys.stdout = None  # type: ignore[assignment]
             elif not settings.table_output:
-                for finding in summary.findings:
-                    logger.stdinlog(finding.subdomain)
+                try:
+                    for finding in summary.findings:
+                        sys.stdout.write(finding.subdomain + "\n")
+                    sys.stdout.flush()
+                except BrokenPipeError:
+                    sys.stdout = None  # type: ignore[assignment]
                 if not summary.findings:
                     logger.warn(f"No subdomains discovered for {domain}")
             else:

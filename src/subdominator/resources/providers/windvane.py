@@ -30,9 +30,10 @@ class WindvaneResource(BaseResource):
             }
 
             try:
-                data = await self.client.post_json(
+                data = await self.client.request_json(
+                    "POST",
                     api_url,
-                    json=req_body,
+                    json_body=req_body,
                     headers=headers,
                     expected_status={200},
                 )

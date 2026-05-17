@@ -62,61 +62,61 @@ class EnumerationService:
                         done_tasks = [t for t in done if t != cancel_task]
                         for task in done_tasks:
                             tasks.remove(task)
-                        try:
-                            result = task.result()
-                        except asyncio.CancelledError:
-                            continue
+                            try:
+                                result = task.result()
+                            except asyncio.CancelledError:
+                                continue
 
-                        if isinstance(result, Exception):
-                            self.logger.warn(f"Resource failed: {result}")
+                            if isinstance(result, Exception):
+                                self.logger.warn(f"Resource failed: {result}")
+                                resource_executions.append(
+                                    ResourceExecution(
+                                        resource="unknown",
+                                        target=current_target,
+                                        recursion_depth=depth,
+                                        findings_count=0,
+                                        duration_ms=0,
+                                        error=str(result),
+                                    )
+                                )
+                                continue
+
+                            self.logger.debug(
+                                f"{result.resource} returned {len(result.findings)} findings for {current_target}"
+                            )
                             resource_executions.append(
                                 ResourceExecution(
-                                    resource="unknown",
-                                    target=current_target,
-                                    recursion_depth=depth,
-                                    findings_count=0,
-                                    duration_ms=0,
-                                    error=str(result),
+                                    resource=result.resource,
+                                    target=result.target,
+                                    recursion_depth=result.recursion_depth,
+                                    findings_count=len(result.findings),
+                                    duration_ms=result.duration_ms,
+                                    error=result.error,
                                 )
                             )
-                            continue
 
-                        self.logger.debug(
-                            f"{result.resource} returned {len(result.findings)} findings for {current_target}"
-                        )
-                        resource_executions.append(
-                            ResourceExecution(
-                                resource=result.resource,
-                                target=result.target,
-                                recursion_depth=result.recursion_depth,
-                                findings_count=len(result.findings),
-                                duration_ms=result.duration_ms,
-                                error=result.error,
-                            )
-                        )
+                            for subdomain in result.findings:
+                                # atomic add: returns False if key already exists — natural dedup
+                                # across concurrent resource tasks writing the same subdomain.
+                                inserted = await findings_cache.add(
+                                    subdomain,
+                                    Finding(
+                                        domain=domain,
+                                        subdomain=subdomain,
+                                        resource=result.resource,
+                                        query_target=result.target,
+                                        recursion_depth=result.recursion_depth,
+                                    ),
+                                )
+                                if inserted:
+                                    fresh_count += 1
 
-                        for subdomain in result.findings:
-                            # atomic add: returns False if key already exists — natural dedup
-                            # across concurrent resource tasks writing the same subdomain.
-                            inserted = await findings_cache.add(
-                                subdomain,
-                                Finding(
-                                    domain=domain,
-                                    subdomain=subdomain,
-                                    resource=result.resource,
-                                    query_target=result.target,
-                                    recursion_depth=result.recursion_depth,
-                                ),
-                            )
-                            if inserted:
-                                fresh_count += 1
-
-                                if depth < recursive_depth:
-                                    if subdomain not in seen_targets:
-                                        seen_targets.add(subdomain)
-                                        queue.append((subdomain, depth + 1))
-                                    else:
-                                        self.logger.debug(f"Recursion skipped for {subdomain}: already targeted at this or higher depth")
+                                    if depth < recursive_depth:
+                                        if subdomain not in seen_targets:
+                                            seen_targets.add(subdomain)
+                                            queue.append((subdomain, depth + 1))
+                                        else:
+                                            self.logger.debug(f"Recursion skipped for {subdomain}: already targeted at this or higher depth")
                 finally:
                     if cancel_task and not cancel_task.done():
                         cancel_task.cancel()

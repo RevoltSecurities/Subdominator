@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from datetime import UTC, datetime
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from rich.console import Console
 
@@ -41,6 +41,7 @@ class ShellCommandTests(unittest.TestCase):
                 db_path=Path(tmpdir) / "test.db",
                 config_path=Path(tmpdir) / "provider-config.yaml",
                 resource_metadata=[],
+                gitmanager=MagicMock(),
             )
 
             with patch.object(shell.console, "input", side_effect=EOFError):
@@ -61,6 +62,7 @@ class ShellCommandTests(unittest.TestCase):
                 db_path=Path(tmpdir) / "test.db",
                 config_path=Path(tmpdir) / "provider-config.yaml",
                 resource_metadata=[],
+                gitmanager=MagicMock(),
             )
 
             with patch.object(shell.console, "input", side_effect=["help\\", "exit"]):
@@ -144,6 +146,7 @@ class RepositoryShellSupportTests(unittest.TestCase):
                 db_path=Path(tmpdir) / "test.db",
                 config_path=Path(tmpdir) / "provider-config.yaml",
                 resource_metadata=[],
+                gitmanager=MagicMock(),
             )
             input_path = Path(tmpdir) / "subs.txt"
             input_path.write_text(
