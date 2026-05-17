@@ -30,7 +30,7 @@ class ThreatBookResource(BaseResource):
             response_code = data.get("response_code")
             if response_code != 0:
                 msg = data.get("verbose_msg", "Unknown error")
-                logger.debug(f"[ThreatBook] API Error code {response_code}, {msg}")
+                self.client.logger.debug(f"threatbook API error for {target}: code {response_code}, {msg}")
                 return ResourceResult(self.name, target, recursion_depth, [])
 
             data_dict = data.get("data")
