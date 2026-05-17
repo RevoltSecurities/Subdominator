@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="static/subdominator.png" alt="Subdominator" width="460px">
+  <img src="static/subdominator-v2.png" alt="Subdominator" width="460px">
   <br>
 </h1>
 
@@ -41,6 +41,11 @@ Built on Python's async/await stack (`asyncio` + `aiohttp`), it handles 100K+ su
 ---
 
 ## Features
+
+<h1 align="center">
+        <img src="static/subdominator-output.png" width="700px">
+        <br>
+      </h1>
 
 - **73 passive OSINT sources** — CT logs, search engines, threat intel, DNS archives, and more
 - **Recursive enumeration** — automatically scan discovered subdomains to any depth
