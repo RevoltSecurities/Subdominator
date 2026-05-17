@@ -128,6 +128,21 @@ Use a custom config path with `--config-path` / `-cp`:
 subdominator -d example.com -cp /path/to/my-config.yaml
 ```
 
+### Environment variables
+
+All settings can be driven by environment variables instead of CLI flags. The prefix is `SUBDOMINATOR_`:
+
+| Environment variable | Equivalent flag | Effect |
+|---|---|---|
+| `SUBDOMINATOR_SSL_VERIFY=false` | `--insecure` / `-k` | Disable SSL certificate verification on all HTTP connections |
+| `SUBDOMINATOR_PROXY=http://host:port` | `--proxy` / `-p` | Route all HTTP requests through this proxy |
+| `SUBDOMINATOR_TIMEOUT=30` | `--timeout` / `-t` | Override default request timeout |
+| `SUBDOMINATOR_CONCURRENCY=16` | `--concurrency` / `-c` | Override default concurrency |
+
+> **Priority:** CLI flags always win over environment variables. If both are set, the CLI flag takes effect.
+
+Standard proxy env vars (`HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY`) are also respected automatically via aiohttp's `trust_env` — no prefix needed.
+
 ### Key aliases
 
 | Config key | Used by providers |

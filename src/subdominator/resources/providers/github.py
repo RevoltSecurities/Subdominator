@@ -76,7 +76,7 @@ class GithubResource(BaseResource):
         }
 
         try:
-            async with self.client._session.request("GET", url, headers=headers) as resp:
+            async with self.client._session.request("GET", url, headers=headers, proxy=self.client.proxy) as resp:
                 text = await resp.text()
                 status = resp.status
                 resp_headers = dict(resp.headers)

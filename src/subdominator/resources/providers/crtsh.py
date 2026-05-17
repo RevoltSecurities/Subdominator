@@ -41,6 +41,7 @@ class CrtShResource(BaseResource):
             database="certwatch",
             timeout=timeout,
             statement_cache_size=0,
+            ssl=False,
         )
 
         try:
