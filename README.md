@@ -48,7 +48,7 @@ Built on Python's async/await stack (`asyncio` + `aiohttp`), it handles 100K+ su
 - **Concurrent execution** — configurable parallelism with async-first architecture
 - **Interactive audit shell** — search, filter, export, and manage historical findings
 - **Multiple output formats** — plain text, JSONL stream, JSON report, HTML report
-- **SQLite persistence** — save and query findings across sessions with `--save-db`
+- **SQLite persistence** — findings are saved automatically to a local SQLite database; query and export via the interactive shell
 - **Health diagnostics** — verify connectivity and API key status before a run
 - **Docker-ready** — pre-built images on GHCR, no local Python setup required
 
@@ -171,7 +171,16 @@ subdominator [flags]
 | `--concurrency` | `-c` | Parallel resource slots (default: 8) |
 | `--timeout` | `-t` | HTTP timeout in seconds (default: 20.0) |
 | `--retries` | `-rt` | Retries per failed request (default: 3) |
+| `--retry-backoff` | `-rb` | Backoff multiplier in seconds between retries (default: 1.0) |
+| `--proxy` | `-p` | HTTP proxy URL (e.g. `http://127.0.0.1:8080`) |
+| `--insecure` | `-k` | Skip SSL certificate verification |
+
+### Config
+
+| Flag | Short | Description |
+|---|---|---|
 | `--config-path` | `-cp` | Path to custom provider config YAML |
+| `--show-config-path` | `-scp` | Print the active provider config path and exit |
 
 ### Output
 
@@ -180,20 +189,27 @@ subdominator [flags]
 | `--output` | `-o` | Write plain-text results to a file |
 | `--output-directory` | `-oD` | Directory to save per-domain files (bulk mode) |
 | `--html` | `-oh` | Generate an HTML report (requires `jinja2`) |
+| `--report-json` | `-rj` | Write a JSON summary report |
 | `--json` | `-j` | Stream JSONL to stdout (`{"domain":...,"subdomain":...,"resource":...}`) |
 | `--table` | `-tb` | Print findings as a formatted terminal table |
 | `--show-summary` | `-ss` | Print a run summary after completion |
+| `--show-resource-stats` | `-srs` | Print per-resource finding counts and durations |
 
 ### Storage & diagnostics
 
 | Flag | Short | Description |
 |---|---|---|
-| `--save-db` | `-sd` | Persist findings to the local SQLite database |
+| `--db-path` | `-dp` | Custom path for the SQLite database file |
+| `--no-db` | `-nd` | Disable automatic DB persistence for this run |
+| `--save-db` | `-sd` | Explicitly enable DB persistence (on by default) |
 | `--shell` | `-sh` | Open the interactive audit shell |
 | `--health-check` | `-hc` | Verify connectivity and API key status |
 | `--update` | `-up` | Update Subdominator to the latest release |
+| `--release` | `-release` | Show release notes for the latest version |
 | `--verbose` | `-v` | Enable debug logging |
 | `--no-color` | `-nc` | Disable colored output |
+
+> **DB persistence is enabled by default.** Every run saves findings to the local SQLite database automatically. Use `--no-db` to skip persistence for a specific run, or `--db-path` to write to a different file.
 
 ---
 
@@ -234,9 +250,19 @@ subdominator -d example.com -er commoncrawl,waybackarchive
 subdominator -dL domains.txt -oD ./output/
 ```
 
-**Full scan with all sources + HTML report + DB save:**
+**Disable DB persistence for a one-off scan:**
 ```bash
-subdominator -d example.com --all -oh report.html -sd
+subdominator -d example.com -nd
+```
+
+**Use a custom SQLite database path:**
+```bash
+subdominator -d example.com -dp /data/recon.db
+```
+
+**Full scan with all sources + HTML report:**
+```bash
+subdominator -d example.com --all -oh report.html
 ```
 
 **Custom Google dork:**
@@ -318,13 +344,19 @@ Newline-delimited JSON, one finding per line. Designed for `jq`, `grep`, and pip
 
 A full standalone HTML report. Requires the `jinja2` optional dependency (`pip install "subdominator[reports]"`).
 
-### Summary (`-ss`)
+### Summary (`-ss` / `-srs`)
 
-Prints a run summary table showing per-resource finding counts, duration, and errors.
+`--show-summary` prints an overview table (total findings, resource counts, duration). `--show-resource-stats` adds a per-resource breakdown with individual finding counts and durations.
 
-### Database (`-sd`)
+### JSON report (`-rj report.json`)
 
-Saves all findings to SQLite at `~/.local/share/subdominator/subdominator.db`. Query and export from the `--shell`.
+A full structured JSON summary of the run, including resource execution metadata, useful for feeding into other tools.
+
+### Database (automatic)
+
+Findings are automatically saved to SQLite at `~/.local/share/subdominator/subdominator.db` on every run. Use `--no-db` to skip for a specific run, or `--db-path` to write to a custom path. Query and export from the interactive `--shell`.
+
+> **Note on crt.sh and PostgreSQL:** The `crtsh` provider internally queries the public crt.sh certificate transparency database over a direct PostgreSQL connection (using `asyncpg`). This is a read-only query to the crt.sh public server — Subdominator itself does not expose or require any PostgreSQL connection for its own data storage.
 
 ---
 
@@ -386,17 +418,17 @@ Saves all findings to SQLite at `~/.local/share/subdominator/subdominator.db`. Q
 | `digitalyama` | https://digitalyama.com/ | API key |
 | `dnsdb` | https://api.dnsdb.info | API key |
 | `dnsdumpster` | https://dnsdumpster.com/ | API key |
-| `domainsproject` | https://domainsproject.org/ | API key |
+| `domainsproject` | https://domainsproject.org/ | `username:password` pair |
 | `domscan` | https://domscan.net | API key |
-| `dnsrepo` | https://dnsarchive.net/ | API key |
+| `dnsrepo` | https://dnsarchive.net/ | `access_token:api_key` pair |
 | `driftnet` | https://driftnet.io/ | API key |
 | `facebook` | https://developers.facebook.com/ | App ID + Secret |
-| `fofa` | https://en.fofa.info/ | `email:key` pair |
+| `fofa` | https://en.fofa.info/ | API key |
 | `fullhunt` | https://fullhunt.io/ | API key |
 | `github` † | https://github.com/ | Personal Access Token |
 | `google` | https://programmablesearchengine.google.com/controlpanel/create | `cx:key` pair |
 | `huntermap` | https://hunter.how/ | API key |
-| `intelx` | https://intelx.io/ | API key |
+| `intelx` | https://intelx.io/ | `host:key` pair (e.g. `2.intelx.io:YOUR_KEY`) |
 | `leakix` | https://leakix.net/ | API key |
 | `merklemap` | https://www.merklemap.com/ | API key |
 | `netlas` | https://netlas.io/ | API key |
@@ -408,7 +440,7 @@ Saves all findings to SQLite at `~/.local/share/subdominator/subdominator.db`. Q
 | `rapidapi` | https://rapidapi.com/hub | API key (shared by `coderog`, `rapidfinder`, `rapidscan`) |
 | `rapidfinder` | https://rapidapi.com/Glavier/api/subdomain-finder3/pricing | RapidAPI key (alias: `rapidapi`) |
 | `rapidscan` | https://rapidapi.com/sedrakpc/api/subdomain-scan1/pricing | RapidAPI key (alias: `rapidapi`) |
-| `redhuntlabs` | https://devportal.redhuntlabs.com/ | API key |
+| `redhuntlabs` | https://devportal.redhuntlabs.com/ | `endpoint_url:api_key` pair |
 | `robtex` | https://proapi.robtex.com/ | API key |
 | `rsecloud` | https://rsecloud.com/search | API key |
 | `securitytrails` | https://securitytrails.com/ | API key |
@@ -420,7 +452,7 @@ Saves all findings to SQLite at `~/.local/share/subdominator/subdominator.db`. Q
 | `whoisfreaks` | https://whoisfreaks.com/ | API key |
 | `whoisxml` | https://whoisxmlapi.com/ | API key (alias: `whoisxmlapi`) |
 | `windvane` | https://windvane.lichoin.com/ | API key |
-| `zoomeyeapi` | https://www.zoomeye.hk/ | API key (alias: `zoomeye`) |
+| `zoomeyeapi` | https://www.zoomeye.hk/ | `host:key` pair (alias: `zoomeye`) |
 
 ---
 
