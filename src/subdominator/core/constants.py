@@ -1,0 +1,6 @@
+APP_NAME = "Subdominator"
+DEFAULT_PROVIDER_CONFIG = "provider-config.yaml"
+DEFAULT_DB_NAME = "subdominator.db"
+DEFAULT_OUTPUT_NAME = "subdominator.txt"
+LEGACY_CACHE_DB_DIR = "SubdominatorDB"
+VERSION = "v3.0.0"

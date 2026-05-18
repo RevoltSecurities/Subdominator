@@ -1,62 +1,51 @@
 # Subdominator - Docker Usage
-This README provides instructions for using the **Subdominator** tool inside a Docker container for subdomain enumeration.
+This guide provides instructions for using **Subdominator v3.0.0** inside a Docker container for high-performance subdomain enumeration.
 
-## Installation
-To build the Docker image, run the following command:
-
-```bash
-sudo docker build -t subdominator .
-```
-This will create the `subdominator` image using the `Dockerfile` in the current directory.
-
-## Docker Commands
-
-### 1. **Subdomain Enumeration for a Single Domain**
-To perform subdomain enumeration for a **single domain** and save the output to a file, use:
+## 🚀 Installation
+To build the Docker image, run the following command from the **project root**:
 
 ```bash
-sudo docker run --rm -it -v $(pwd):/output subdominator -d redacted.com --output /output/outfile.txt
+docker build -t subdominator -f Docker/Dockerfile .
 ```
 
-Explanation:
-- **`-d redacted.com`**: Specifies the domain for subdomain enumeration.
-- **`--output /output/outfile.txt`**: Saves the output to a file. The `$(pwd)` mounts the current working directory to `/output` inside the container.
+## 🛠 Docker Commands
 
-### 2. **Subdomain Enumeration for a List of Domains**
-
-If you have a **list of root domains** in a file (e.g., `input.txt`) and want to enumerate subdomains for all domains, use the following command:
+### 1. **Basic Enumeration**
+Scan a **single domain** and save the output to your local machine:
 
 ```bash
-sudo docker run --rm -v /home/pugal/tools/Subdominator/input.txt:/input.txt -v /home/pugal/tools/Subdominator/output-directory:/output-directory subdominator -dL /input.txt -oD /output-directory
+docker run --rm -it -v $(pwd):/output subdominator -d example.com -o /output/results.txt
 ```
 
-Explanation:
-- **`-dL /input.txt`**: Specifies the file containing the list of domains.
-- **`-oD /output-directory`**: Specifies the directory to save the output. The directory is mounted from your local machine to the Docker container.
-
-### 3. **Subdomain Enumeration with Output in JSON Format**
-
-If you want to save the output in **JSON format**, use the `-oJ` flag:
+### 2. **Deep Recon (Recursive)**
+Perform a recursive scan with a depth of 2 and generate an HTML report:
 
 ```bash
-sudo docker run --rm -it -v $(pwd):/output subdominator -d thx.com -oJ /output/outfile.json
+docker run --rm -it -v $(pwd):/output subdominator -d example.com -rd 2 -oh /output/report.html
 ```
 
-Explanation:
-- **`-d thx.com`**: Specifies the domain for subdomain enumeration.
-- **`-oJ /output/outfile.json`**: Saves the output in JSON format.
-
-## Example with Custom Configuration
-
-If you want to specify a custom configuration file for API keys, you can mount the configuration file into the container:
+### 3. **Bulk Enumeration**
+If you have a list of domains in `input.txt`, mount the file and an output directory:
 
 ```bash
-sudo docker run --rm -v /path/to/config:/custom-config subdominator -cp /custom-config/config.yaml -d example.com --output /output/outfile.txt
+docker run --rm -v $(pwd)/input.txt:/input.txt -v $(pwd)/results:/results subdominator -dL /input.txt -oD /results
 ```
 
-### Explanation:
-- **`-cp /custom-config/config.yaml`**: Specifies the custom path for the configuration file.
+### 4. **Using Custom Configuration**
+To use your local API keys and configuration, mount your config directory:
 
-## Notes
-- Replace `/path/to/config` and `/home/pugal/tools/Subdominator/` with the actual paths on your system.
-- Ensure the output directory (`/output` or `/output-directory`) exists on your local machine or Docker will create it inside the container.
+```bash
+docker run --rm -v ~/.config/Subdominator:/config subdominator -cp /config/provider-config.yaml -d example.com
+```
+
+## 💡 Key Flags for Docker
+- **`-d`**: Target domain.
+- **`-rd`**: Recursion depth.
+- **`-oh`**: Generate a high-quality HTML report.
+- **`-j`**: Output JSONL stream to stdout.
+- **`-o`**: Save findings to a specific file.
+- **`-sd`**: Persist findings to the container's database (or mount one using `-v`).
+
+## 📝 Notes
+- Always use absolute paths or `$(pwd)` when mounting volumes for input/output files.
+- Ensure your output paths within the command (e.g., `-o /output/file.txt`) match the container's mount point.

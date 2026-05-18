@@ -1,0 +1,6 @@
+.venv/
+.uv-cache/
+__pycache__/
+*.pyc
+*.db
+.codex
