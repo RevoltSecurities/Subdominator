@@ -2,6 +2,36 @@
 
 ---
 
+## v3.0.1 — Patch Release
+
+> **Release date:** 2026-05-30
+
+### Bug Fix: Automatic v2 → v3 Config Migration
+
+Users upgrading from Subdominator v2 to v3 encountered an immediate crash on every run when a v2-generated `provider-config.yaml` was present on disk:
+
+```
+yaml.scanner.ScannerError: mapping values are not allowed here
+  in "<unicode string>", line 3, column 8:
+    bevigil: []
+```
+
+**Root cause:** The v2 config writer emitted `arpsyndicate:[]` (no space between colon and `[]`) as the first line. YAML treats this as a plain scalar rather than a mapping key, breaking the document structure for every line that follows. v3's config loader had no error handling around `yaml.safe_load()`, so the exception crashed the tool entirely.
+
+**Fix:** v3.0.1 detects the malformed file automatically and migrates it in-place:
+
+- All API keys you had configured in v2 are preserved
+- Placeholder values (`#YOUR_API_KEY`) are filtered out
+- The file is rewritten in valid v3 YAML format immediately
+- A single notice is printed so you know the migration occurred
+- No manual steps required — just run `subdominator` as normal
+
+Both v2 config formats are handled: the flat format (`arpsyndicate:[]`) used by v2.1.x and the older nested format (`Bevigil:\n  api_key: value`) used by very early v2 releases.
+
+> **Workaround for v3.0.0 (no longer needed):** Delete `~/.config/Subdominator/provider-config.yaml` and let Subdominator regenerate it, then re-enter your keys.
+
+---
+
 ## v3.0.0 — The Precision Discovery Release
 
 > **Release date:** 2026-05-17
