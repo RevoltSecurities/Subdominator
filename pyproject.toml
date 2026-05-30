@@ -1,6 +1,6 @@
 [project]
 name = "subdominator"
-version = "3.0.0"
+version = "3.0.1"
 description = "High-performance passive subdomain enumeration engine for effortless asset discovery and rapid reconnaissance."
 readme = "README.md"
 requires-python = ">=3.13"
