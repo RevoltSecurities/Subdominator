@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import re
 import random
+import sys
 from pathlib import Path
 
 import aiofiles
@@ -99,7 +101,20 @@ class ProviderConfig:
 
         async with aiofiles.open(self.path, encoding="utf-8") as fh:
             raw = await fh.read()
-        loaded: dict = yaml.safe_load(raw) or {}
+
+        migrated = False
+        try:
+            loaded: dict = yaml.safe_load(raw) or {}
+        except yaml.YAMLError:
+            loaded = self._parse_v2(raw)
+            migrated = True
+            print(
+                f"\n[Subdominator] provider-config.yaml was in an older v2 format and has "
+                f"been automatically migrated to v3. Your existing API keys have been preserved.\n"
+                f"  Config: {self.path}\n",
+                file=sys.stderr,
+            )
+
         self.data = {
             str(key).lower(): [str(value) for value in values]
             for key, values in loaded.items()
@@ -111,12 +126,65 @@ class ProviderConfig:
             if key not in self.data:
                 self.data[key] = []
                 missing_keys = True
-                
-        if missing_keys:
+
+        if missing_keys or migrated:
             await self.dump(self.data)
 
+    def _parse_v2(self, raw: str) -> dict[str, list[str]]:
+        """Line-by-line parser for v2 provider-config formats that fail yaml.safe_load.
+
+        Handles both v2 formats found in the wild:
+        - Flat (v2.1.x): arpsyndicate:[]  /  bevigil: [mykey]  /  block list (- mykey)
+        - Nested (very old v2): Bevigil:\\n  api_key: realvalue
+
+        Placeholder values starting with '#' are filtered out.
+        """
+        data: dict[str, list[str]] = {}
+        current_key: str | None = None
+
+        for line in raw.splitlines():
+            stripped = line.strip()
+
+            if not stripped or stripped.startswith('#'):
+                continue
+
+            # Block list item: "- value" under the current provider key
+            if stripped.startswith('- ') and current_key is not None:
+                value = stripped[2:].strip().strip('"\'')
+                if value and not value.startswith('#'):
+                    data.setdefault(current_key, []).append(value)
+                continue
+
+            m = re.match(r'^([A-Za-z][A-Za-z0-9_]*)\s*:\s*(.*)', stripped)
+            if not m:
+                continue
+
+            key_raw, value_part = m.group(1), m.group(2).strip()
+
+            # Indented line = nested sub-field of current provider (very old v2 format)
+            if line[:1] in (' ', '\t') and current_key is not None:
+                if value_part and not value_part.startswith('#'):
+                    data.setdefault(current_key, []).append(value_part)
+                continue
+
+            # Top-level provider key
+            current_key = key_raw.lower()
+            data.setdefault(current_key, [])
+
+            # Inline flow sequence: [] or [val] or [v1, v2]
+            if value_part.startswith('['):
+                inner = value_part.lstrip('[').rstrip().rstrip(']').strip()
+                if inner:
+                    for v in inner.split(','):
+                        v = v.strip().strip('"\'')
+                        if v and not v.startswith('#'):
+                            data[current_key].append(v)
+            elif value_part and not value_part.startswith('#'):
+                data[current_key].append(value_part)
+
+        return data
+
     async def dump(self, data: dict) -> None:
-        """Write *data* back to the provider config file using yaml.dump."""
         self.path.parent.mkdir(parents=True, exist_ok=True)
         text = yaml.dump(data, default_flow_style=False, allow_unicode=True)
         async with aiofiles.open(self.path, "w", encoding="utf-8") as fh:
