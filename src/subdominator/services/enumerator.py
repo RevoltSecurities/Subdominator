@@ -67,20 +67,6 @@ class EnumerationService:
                             except asyncio.CancelledError:
                                 continue
 
-                            if isinstance(result, Exception):
-                                self.logger.warn(f"Resource failed: {result}")
-                                resource_executions.append(
-                                    ResourceExecution(
-                                        resource="unknown",
-                                        target=current_target,
-                                        recursion_depth=depth,
-                                        findings_count=0,
-                                        duration_ms=0,
-                                        error=str(result),
-                                    )
-                                )
-                                continue
-
                             self.logger.debug(
                                 f"{result.resource} returned {len(result.findings)} findings for {current_target}"
                             )
