@@ -2,6 +2,64 @@
 
 ---
 
+## v3.0.2 — Patch Release
+
+> **Release date:** 2026-06-21
+
+### Bug Fix: `-dL` crash — `TypeError: object async_generator` on Python 3.13 (Issue #48)
+
+Running Subdominator with a domain list file (`-dL domains.txt`) crashed immediately on Python 3.13:
+
+```
+TypeError: object async_generator can't be used in 'await' expression
+```
+
+**Root cause:** `FileUtils.stream()` from `revoltutils` is an `AsyncGenerator[str, None]` — it uses `yield` internally and must be consumed with `async for`. The call site in `cli/app.py` used `await FileUtils.stream(...)` instead, which is a `TypeError` on any Python version that enforces the async/coroutine protocol strictly. Python 3.13 surfaces this as an unhandled exception that terminates the process.
+
+**Fix:** Changed the list comprehension in `_build_targets()` from:
+
+```python
+return [line.strip() for line in await FileUtils.stream(args.domain_list) if line.strip()]
+```
+
+to an async comprehension that iterates the generator correctly:
+
+```python
+return [line.strip() async for line in FileUtils.stream(args.domain_list) if line.strip()]
+```
+
+All other `FileUtils.stream()` call sites in the codebase already used `async for` — this was the only remaining `await` usage.
+
+---
+
+### Bug Fix: HTML report version badge hardcoded as `v3.0.0`
+
+HTML reports generated with `--html` / `-oh` always displayed `v3.0.0` in the version badge and footer regardless of the installed version.
+
+**Root cause:** The Jinja2 template strings in `output/reports.py` had the version value hardcoded as a string literal. Version bumps in `__init__.py`, `constants.py`, and `pyproject.toml` had no effect on the rendered report.
+
+**Fix:** The `VERSION` constant from `subdominator.core.constants` is now imported and passed as a template variable:
+
+```python
+template.render(..., version=VERSION)
+```
+
+The template uses `{{ version }}` in both the badge and footer. Future version bumps automatically propagate to all HTML report output with no additional changes required.
+
+---
+
+### Chore: Remove dead `storage/models.py`
+
+`src/subdominator/storage/models.py` defined two SQLAlchemy ORM models — `EnumerationRun` and `FindingRecord` — that were never imported or referenced anywhere in the codebase. The storage layer (`storage/database.py`) uses raw SQL exclusively and creates a single `subdomains` table; the ORM `Base.metadata` was never wired to any session or engine. `storage/__init__.py` exports nothing (`__all__ = []`), so the models were not loaded at runtime. File removed.
+
+---
+
+### Chore: Remove unreachable branch in `services/enumerator.py`
+
+A dead `isinstance(result, Exception)` check was present in the task-result processing loop. It could never be `True` because `_run_resource` catches all `Exception` subclasses internally and always returns a `ResourceResult` — it never raises. `asyncio.CancelledError` (a `BaseException`, not an `Exception`) is handled separately by the `except asyncio.CancelledError: continue` block and does not reach this path. Branch removed; surrounding logic is unchanged.
+
+---
+
 ## v3.0.1 — Patch Release
 
 > **Release date:** 2026-05-30
