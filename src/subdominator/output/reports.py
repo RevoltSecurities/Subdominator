@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 from pathlib import Path
 
+from subdominator.core.constants import VERSION
 from subdominator.core.models import EnumerationSummary
 
 
@@ -145,7 +146,7 @@ class ReportGenerator:
             <p class="meta">Target: <strong style="color:var(--text)">{{ summary.root_domain }}</strong>
                &nbsp;·&nbsp; Generated: {{ generated_str }}</p>
         </div>
-        <div><span class="badge">v3.0.0</span></div>
+        <div><span class="badge">{{ version }}</span></div>
     </div>
 
     <!-- ── Executive Summary ──────────────────────────────────────────── -->
@@ -232,7 +233,7 @@ class ReportGenerator:
     </div>
 
     <div class="footer">
-        Generated with <strong>Subdominator v3.0.0</strong> &bullet;
+        Generated with <strong>Subdominator {{ version }}</strong> &bullet;
         <a href="https://github.com/RevoltSecurities/Subdominator"
            style="color:var(--primary);text-decoration:none">RevoltSecurities</a>
     </div>
@@ -247,6 +248,7 @@ class ReportGenerator:
             started_str=started_str,
             generated_str=generated_str,
             duration_s=duration_s,
+            version=VERSION,
         )
         target_file.parent.mkdir(parents=True, exist_ok=True)
         target_file.write_text(content, encoding="utf-8")
