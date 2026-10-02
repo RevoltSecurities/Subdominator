@@ -274,7 +274,7 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
             repository = EnumerationRepository(database)
 
         multi_domain = len(domains) > 1
-        for domain in domains:
+        for domain_index, domain in enumerate(domains):
             historical_findings = repository.get_saved_findings(domain) if repository is not None else []
             summary = await service.enumerate(
                 domain=domain,
@@ -324,6 +324,7 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
                 output=settings.output,
                 output_dir=settings.output_dir,
                 json_output=settings.json_output,
+                append=settings.output is not None and domain_index > 0,
                 report_json=Path(args.report_json) if args.report_json else None,
             )
             if settings.output or settings.output_dir:
