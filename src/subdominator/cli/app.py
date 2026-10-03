@@ -325,7 +325,13 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
                 output_dir=settings.output_dir,
                 json_output=settings.json_output,
                 append=settings.output is not None and domain_index > 0,
-                report_json=Path(args.report_json) if args.report_json else None,
+                report_json=(
+                    OutputWriter.resolve_report_path(
+                        Path(args.report_json), domain, ".json", multi_domain
+                    )
+                    if args.report_json
+                    else None
+                ),
             )
             if settings.output or settings.output_dir:
                 output_path = settings.output if settings.output else settings.output_dir / f"{domain}.{'jsonl' if settings.json_output else 'txt'}"
