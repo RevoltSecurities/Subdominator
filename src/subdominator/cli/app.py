@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import asyncio
 import signal
 import sys
@@ -55,7 +56,14 @@ def build_parser() -> RichParser:
     parser.add_argument("runtime", "-t", "--timeout", type=float, default=20.0, help="Request timeout")
     parser.add_argument("runtime", "-rt", "--retries", type=int, default=3, help="Retry count")
     parser.add_argument("runtime", "-rb", "--retry-backoff", type=float, default=1.0, help="Retry backoff")
-    parser.add_argument("runtime", "-c", "--concurrency", type=int, default=8, help="Concurrent resource execution")
+    parser.add_argument(
+        "runtime",
+        "-c",
+        "--concurrency",
+        type=_positive_concurrency,
+        default=8,
+        help="Concurrent resource execution (must be at least 1)",
+    )
     parser.add_argument(
         "runtime",
         "-rd",
@@ -102,6 +110,13 @@ def _split_csv(value: str | None) -> list[str]:
     if not value:
         return []
     return [item.strip().lower() for item in value.split(",") if item.strip()]
+
+
+def _positive_concurrency(value: str) -> int:
+    concurrency = int(value)
+    if concurrency < 1:
+        raise argparse.ArgumentTypeError("must be at least 1")
+    return concurrency
 
 
 async def _load_domains(args) -> list[str]:

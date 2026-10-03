@@ -14,6 +14,8 @@ from subdominator.resources.base import BaseResource
 
 class EnumerationService:
     def __init__(self, logger: Logger, concurrency: int = 8, cancel_event: asyncio.Event | None = None) -> None:
+        if concurrency < 1:
+            raise ValueError("concurrency must be at least 1")
         self.logger = logger
         self.semaphore = asyncio.Semaphore(concurrency)
         self.cancel_event = cancel_event
@@ -51,13 +53,6 @@ class EnumerationService:
                             wait_list.append(cancel_task)
 
                         done, pending = await asyncio.wait(wait_list, return_when=asyncio.FIRST_COMPLETED)
-
-                        if cancel_task and cancel_task in done:
-                            self.logger.warn("Scan interrupted by user! Gracefully finalizing partial results...")
-                            for task in tasks:
-                                if not task.done():
-                                    task.cancel()
-                            break
 
                         done_tasks = [t for t in done if t != cancel_task]
                         for task in done_tasks:
@@ -103,6 +98,13 @@ class EnumerationService:
                                             queue.append((subdomain, depth + 1))
                                         else:
                                             self.logger.debug(f"Recursion skipped for {subdomain}: already targeted at this or higher depth")
+
+                        if cancel_task and cancel_task in done:
+                            self.logger.warn("Scan interrupted by user! Gracefully finalizing partial results...")
+                            for task in tasks:
+                                if not task.done():
+                                    task.cancel()
+                            break
                 finally:
                     if cancel_task and not cancel_task.done():
                         cancel_task.cancel()
