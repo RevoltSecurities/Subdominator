@@ -54,6 +54,13 @@ class EnumerationService:
 
                         done, pending = await asyncio.wait(wait_list, return_when=asyncio.FIRST_COMPLETED)
 
+                        if cancel_task and cancel_task in done:
+                            self.logger.warn("Scan interrupted by user! Gracefully finalizing partial results...")
+                            for task in tasks:
+                                if not task.done():
+                                    task.cancel()
+                            break
+
                         done_tasks = [t for t in done if t != cancel_task]
                         for task in done_tasks:
                             tasks.remove(task)
@@ -98,13 +105,6 @@ class EnumerationService:
                                             queue.append((subdomain, depth + 1))
                                         else:
                                             self.logger.debug(f"Recursion skipped for {subdomain}: already targeted at this or higher depth")
-
-                        if cancel_task and cancel_task in done:
-                            self.logger.warn("Scan interrupted by user! Gracefully finalizing partial results...")
-                            for task in tasks:
-                                if not task.done():
-                                    task.cancel()
-                            break
                 finally:
                     if cancel_task and not cancel_task.done():
                         cancel_task.cancel()
