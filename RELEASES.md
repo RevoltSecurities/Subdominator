@@ -2,6 +2,33 @@
 
 ---
 
+## v3.0.3 — Patch Release
+
+> **Release date:** 2026-10-07
+
+This release folds in seven community bug-fix PRs from @dajiaohuang (#51, #53, #55, #60, #61, #62, #63), closes the gaps found while reviewing them, retires the Cyfare provider, and adds a regression test for every fixed issue.
+
+### Bug Fixes
+
+- **`-o` overwritten with `-dL` (Issue #50, PR #51)** — With a single `-o` path and multiple domains, only the last domain's findings survived. Domains after the first are now appended to the file, so it matches the terminal output. An explicit `--report-json` path gets a per-domain suffix (`report.example.com.json`) during multi-domain runs. Domains with no findings no longer add blank lines to the output file, and the "JSON summary report saved to" message now shows the path that was actually written.
+- **Environment overrides ignored (Issue #52, PR #53)** — `SUBDOMINATOR_TIMEOUT`, `SUBDOMINATOR_RETRIES`, `SUBDOMINATOR_RETRY_BACKOFF`, `SUBDOMINATOR_CONCURRENCY` and `SUBDOMINATOR_RECURSIVE_DEPTH` now set the CLI defaults. Explicit flags still take precedence.
+- **GitHub provider hang (Issue #54, PR #55)** — `TokenManager.get()` could loop forever once every token was rate-limited. It now checks each token at most once and stops cleanly.
+- **Domain casing (Issue #56, PR #60)** — Input domains from `-d`, `-dL` and stdin are lowercased, so case-sensitive provider filters no longer drop results and saved history isn't split across `EXAMPLE.COM` and `example.com`. The interactive shell's `domain`, `findings`, `delete` and `export` commands also lowercase their domain argument.
+- **`--concurrency 0` hangs forever (Issue #57, PR #61)** — Values below 1 are rejected with a clear error, whether they come from the flag or from `SUBDOMINATOR_CONCURRENCY`.
+- **Empty DB rows couldn't be deleted (Issue #58, PR #62)** — Scans with no findings no longer create an empty DB row. Empty rows left by earlier versions can now be removed with the shell's `delete` command.
+- **Results lost on Ctrl+C (Issue #59, PR #63)** — Providers that had already finished when the interrupt arrived are now included in the partial results. A `-dL` run also stops after the interrupted domain instead of moving on to the rest of the list.
+- **JSONL stdout escaping** — `-j` stdout lines are now built with `json.dumps` instead of string formatting, so every line is valid JSON.
+
+### Provider Changes
+
+- **Removed `cyfare`** — The Cyfare service has been decommissioned. Its provider, catalog entry and documentation have been removed. Subdominator now ships **72** passive sources. Existing `-ir`/`-er` lists that still name `cyfare` keep working; the name is simply ignored.
+
+### Packaging
+
+- `pyyaml` is now declared as a direct dependency. It was already imported by the provider config loader but was only installed because another package pulled it in.
+
+---
+
 ## v3.0.2 — Patch Release
 
 > **Release date:** 2026-06-21
