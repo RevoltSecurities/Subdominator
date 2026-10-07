@@ -19,14 +19,12 @@ class TokenManager:
         if not self.pool:
             return None
 
-        start_idx = self.current
-        while True:
+        for _ in range(len(self.pool)):
             idx = self.current % len(self.pool)
             self.current += 1
             if self.pool[idx]["retry_after"] == 0:
                 return self.pool[idx]
-            if self.current % len(self.pool) == start_idx:
-                return None  # All tokens are currently rate-limited
+        return None  # All tokens are currently rate-limited
 
     def set_exceeded(self, token_hash: str, retry_after: float) -> None:
         for t in self.pool:
