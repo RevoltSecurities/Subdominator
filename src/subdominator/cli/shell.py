@@ -68,6 +68,9 @@ class SubdominatorShell:
                 continue
             if command is None:
                 continue
+            # Stored domains are lowercase (the CLI normalizes input), so match that here.
+            if command.name in {"domain", "show", "findings", "delete", "export"} and command.args:
+                command.args[0] = command.args[0].strip().lower()
             if command.name in {"exit", "quit"}:
                 return 0
             if command.name == "help":

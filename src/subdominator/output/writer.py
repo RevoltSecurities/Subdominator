@@ -48,9 +48,10 @@ class OutputWriter:
             else:
                 lines.append(finding.subdomain)
 
+        # One newline per line so appending an empty domain never leaves a blank line behind.
         mode = "a" if append else "w"
         async with aiofiles.open(output, mode, encoding="utf-8") as fh:
-            await fh.write("\n".join(lines) + "\n")
+            await fh.write("".join(f"{line}\n" for line in lines))
 
     async def write(
         self,
