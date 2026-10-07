@@ -14,6 +14,8 @@ from subdominator.resources.base import BaseResource
 
 class EnumerationService:
     def __init__(self, logger: Logger, concurrency: int = 8, cancel_event: asyncio.Event | None = None) -> None:
+        if concurrency < 1:
+            raise ValueError("concurrency must be at least 1")
         self.logger = logger
         self.semaphore = asyncio.Semaphore(concurrency)
         self.cancel_event = cancel_event
