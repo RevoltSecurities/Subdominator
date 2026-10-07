@@ -31,7 +31,8 @@ from subdominator.storage.repository import EnumerationRepository
 
 
 
-def build_parser() -> RichParser:
+def build_parser(defaults: RuntimeSettings | None = None) -> RichParser:
+    defaults = defaults or RuntimeSettings.defaults()
     parser = RichParser(description=f"Subdominator: High-performance passive subdomain enumeration engine for effortless asset discovery and rapid reconnaissance")
     parser.add_argument("input", "-d", "--domain", type=str, help="Target domain")
     parser.add_argument("input", "-dL", "--domain-list", type=str, help="File containing domains")
@@ -53,15 +54,15 @@ def build_parser() -> RichParser:
     parser.add_argument("resource","-ls", "--list-resources", action="store_true", help="List resources")
     parser.add_argument("resource", "-sh", "--shell", action="store_true", help="Launch interactive shell")
     parser.add_argument("resource", "-dk", "--dork", type=str, help="Custom search dork for supported resources")
-    parser.add_argument("runtime", "-t", "--timeout", type=float, default=20.0, help="Request timeout")
-    parser.add_argument("runtime", "-rt", "--retries", type=int, default=3, help="Retry count")
-    parser.add_argument("runtime", "-rb", "--retry-backoff", type=float, default=1.0, help="Retry backoff")
+    parser.add_argument("runtime", "-t", "--timeout", type=float, default=defaults.timeout, help="Request timeout")
+    parser.add_argument("runtime", "-rt", "--retries", type=int, default=defaults.retries, help="Retry count")
+    parser.add_argument("runtime", "-rb", "--retry-backoff", type=float, default=defaults.retry_backoff, help="Retry backoff")
     parser.add_argument(
         "runtime",
         "-c",
         "--concurrency",
         type=_positive_concurrency,
-        default=8,
+        default=defaults.concurrency,
         help="Concurrent resource execution (must be at least 1)",
     )
     parser.add_argument(
@@ -69,7 +70,7 @@ def build_parser() -> RichParser:
         "-rd",
         "--recursive-depth",
         type=int,
-        default=0,
+        default=defaults.recursive_depth,
         help="Recursively enumerate newly discovered subdomains",
     )
     parser.add_argument("output", "-o", "--output", type=str, help="Output file path")
@@ -157,14 +158,14 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
     gitmanager = GitUpdater("RevoltSecurities/Subdominator", VERSION, "subdominator")
     banner = Banner("Subdominator", "RevoltSecurities")
     banner.render()
-    parser = build_parser()
+    defaults = RuntimeSettings.defaults()
+    parser = build_parser(defaults)
     args = parser.parse_args()
     await gitmanager.versionlog()
     level = LogLevel.DEBUG if args.verbose else LogLevel.INFO
     logger = Logger(level=level, colored=not args.no_color)
     console = Console()
 
-    defaults = RuntimeSettings.defaults()
     settings = RuntimeSettings(
         timeout=args.timeout,
         retries=args.retries,
