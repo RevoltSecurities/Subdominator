@@ -19,6 +19,7 @@ class OutputWriter:
         output: Path | None = None,
         output_dir: Path | None = None,
         json_output: bool = False,
+        append: bool = False,
         root_domain: str,
     ) -> None:
         if output_dir is not None:
@@ -47,8 +48,10 @@ class OutputWriter:
             else:
                 lines.append(finding.subdomain)
 
-        async with aiofiles.open(output, "w", encoding="utf-8") as fh:
-            await fh.write("\n".join(lines) + "\n")
+        # One newline per line so appending an empty domain never leaves a blank line behind.
+        mode = "a" if append else "w"
+        async with aiofiles.open(output, mode, encoding="utf-8") as fh:
+            await fh.write("".join(f"{line}\n" for line in lines))
 
     async def write(
         self,
@@ -57,6 +60,7 @@ class OutputWriter:
         output: Path | None = None,
         output_dir: Path | None = None,
         json_output: bool = False,
+        append: bool = False,
         report_json: Path | None = None,
     ) -> None:
         await self.write_findings(
@@ -64,6 +68,7 @@ class OutputWriter:
             output=output,
             output_dir=output_dir,
             json_output=json_output,
+            append=append,
             root_domain=summary.root_domain,
         )
 

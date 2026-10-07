@@ -1208,7 +1208,7 @@ wheels = [
 
 [[package]]
 name = "subdominator"
-version = "3.0.0"
+version = "3.0.3"
 source = { editable = "." }
 dependencies = [
     { name = "aiofiles" },
@@ -1219,6 +1219,7 @@ dependencies = [
     { name = "gitupdater" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "pyyaml" },
     { name = "revoltlogger" },
     { name = "revoltutils" },
     { name = "rich" },
@@ -1250,6 +1251,7 @@ requires-dist = [
     { name = "jinja2", marker = "extra == 'reports'", specifier = ">=3.1.5" },
     { name = "pydantic", specifier = ">=2.11.3" },
     { name = "pydantic-settings", specifier = ">=2.9.1" },
+    { name = "pyyaml", specifier = ">=6.0.1" },
     { name = "revoltlogger", specifier = ">=1.0.1" },
     { name = "revoltutils", specifier = ">=1.0.2" },
     { name = "rich", specifier = ">=14.0.0" },

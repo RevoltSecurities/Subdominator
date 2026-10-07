@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import argparse
 import asyncio
+import json
 import signal
 import sys
 from pathlib import Path
@@ -30,7 +32,8 @@ from subdominator.storage.repository import EnumerationRepository
 
 
 
-def build_parser() -> RichParser:
+def build_parser(defaults: RuntimeSettings | None = None) -> RichParser:
+    defaults = defaults or RuntimeSettings.defaults()
     parser = RichParser(description=f"Subdominator: High-performance passive subdomain enumeration engine for effortless asset discovery and rapid reconnaissance")
     parser.add_argument("input", "-d", "--domain", type=str, help="Target domain")
     parser.add_argument("input", "-dL", "--domain-list", type=str, help="File containing domains")
@@ -52,16 +55,23 @@ def build_parser() -> RichParser:
     parser.add_argument("resource","-ls", "--list-resources", action="store_true", help="List resources")
     parser.add_argument("resource", "-sh", "--shell", action="store_true", help="Launch interactive shell")
     parser.add_argument("resource", "-dk", "--dork", type=str, help="Custom search dork for supported resources")
-    parser.add_argument("runtime", "-t", "--timeout", type=float, default=20.0, help="Request timeout")
-    parser.add_argument("runtime", "-rt", "--retries", type=int, default=3, help="Retry count")
-    parser.add_argument("runtime", "-rb", "--retry-backoff", type=float, default=1.0, help="Retry backoff")
-    parser.add_argument("runtime", "-c", "--concurrency", type=int, default=8, help="Concurrent resource execution")
+    parser.add_argument("runtime", "-t", "--timeout", type=float, default=defaults.timeout, help="Request timeout")
+    parser.add_argument("runtime", "-rt", "--retries", type=int, default=defaults.retries, help="Retry count")
+    parser.add_argument("runtime", "-rb", "--retry-backoff", type=float, default=defaults.retry_backoff, help="Retry backoff")
+    parser.add_argument(
+        "runtime",
+        "-c",
+        "--concurrency",
+        type=_positive_concurrency,
+        default=defaults.concurrency,
+        help="Concurrent resource execution (must be at least 1)",
+    )
     parser.add_argument(
         "runtime",
         "-rd",
         "--recursive-depth",
         type=int,
-        default=0,
+        default=defaults.recursive_depth,
         help="Recursively enumerate newly discovered subdomains",
     )
     parser.add_argument("output", "-o", "--output", type=str, help="Output file path")
@@ -104,13 +114,24 @@ def _split_csv(value: str | None) -> list[str]:
     return [item.strip().lower() for item in value.split(",") if item.strip()]
 
 
+def _positive_concurrency(value: str) -> int:
+    concurrency = int(value)
+    if concurrency < 1:
+        raise argparse.ArgumentTypeError("must be at least 1")
+    return concurrency
+
+
 async def _load_domains(args) -> list[str]:
     if args.domain:
-        return [args.domain.strip()]
+        return [args.domain.strip().lower()]
     if args.domain_list:
-        return [line.strip() async for line in FileUtils.stream(args.domain_list) if line.strip()]
+        return [
+            line.strip().lower()
+            async for line in FileUtils.stream(args.domain_list)
+            if line.strip()
+        ]
     if FileUtils.is_stdin():
-        return [line.strip() for line in sys.stdin if line.strip()]
+        return [line.strip().lower() for line in sys.stdin if line.strip()]
     return []
 
 
@@ -138,14 +159,19 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
     gitmanager = GitUpdater("RevoltSecurities/Subdominator", VERSION, "subdominator")
     banner = Banner("Subdominator", "RevoltSecurities")
     banner.render()
-    parser = build_parser()
+    defaults = RuntimeSettings.defaults()
+    parser = build_parser(defaults)
     args = parser.parse_args()
     await gitmanager.versionlog()
     level = LogLevel.DEBUG if args.verbose else LogLevel.INFO
     logger = Logger(level=level, colored=not args.no_color)
     console = Console()
 
-    defaults = RuntimeSettings.defaults()
+    # argparse only runs ``type`` on string defaults, so env-derived values need their own check.
+    if args.concurrency < 1:
+        logger.error("Concurrency must be at least 1 (check SUBDOMINATOR_CONCURRENCY).")
+        return 1
+
     settings = RuntimeSettings(
         timeout=args.timeout,
         retries=args.retries,
@@ -274,7 +300,7 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
             repository = EnumerationRepository(database)
 
         multi_domain = len(domains) > 1
-        for domain in domains:
+        for domain_index, domain in enumerate(domains):
             historical_findings = repository.get_saved_findings(domain) if repository is not None else []
             summary = await service.enumerate(
                 domain=domain,
@@ -286,7 +312,17 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
             if settings.json_output:
                 try:
                     for finding in summary.findings:
-                        sys.stdout.write(f'{{"domain":"{finding.domain}","subdomain":"{finding.subdomain}","resource":"{finding.resource}"}}\n')
+                        sys.stdout.write(
+                            json.dumps(
+                                {
+                                    "domain": finding.domain,
+                                    "subdomain": finding.subdomain,
+                                    "resource": finding.resource,
+                                },
+                                separators=(",", ":"),
+                            )
+                            + "\n"
+                        )
                     sys.stdout.flush()
                 except BrokenPipeError:
                     sys.stdout = None  # type: ignore[assignment]
@@ -319,20 +355,25 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
                     console.print(findings_table)
                 else:
                     logger.warn(f"No subdomains discovered for {domain}")
+            report_json_path = (
+                OutputWriter.resolve_report_path(Path(args.report_json), domain, ".json", multi_domain)
+                if args.report_json
+                else None
+            )
             await writer.write(
                 summary,
                 output=settings.output,
                 output_dir=settings.output_dir,
                 json_output=settings.json_output,
-                report_json=Path(args.report_json) if args.report_json else None,
+                append=settings.output is not None and domain_index > 0,
+                report_json=report_json_path,
             )
             if settings.output or settings.output_dir:
                 output_path = settings.output if settings.output else settings.output_dir / f"{domain}.{'jsonl' if settings.json_output else 'txt'}"
                 logger.success(f"Findings saved to {output_path}")
             
-            if args.report_json:
-                rj_path = Path(args.report_json) if not settings.output_dir else settings.output_dir / f"{domain}.summary.json"
-                logger.success(f"JSON summary report saved to {rj_path}")
+            if report_json_path is not None:
+                logger.success(f"JSON summary report saved to {report_json_path}")
             if args.show_summary or args.show_resource_stats or args.verbose:
                 _print_summary(console, summary, show_resource_stats=args.show_resource_stats or args.verbose)
             if settings.save_db and repository is not None:
@@ -349,6 +390,12 @@ async def run(cancel_event: asyncio.Event | None = None) -> int:
                 await writer.write_html(summary, html_path)
                 logger.success(f"HTML report saved to {html_path}")
 
+            # Partial results for the interrupted domain are saved above; skip the remaining domains.
+            if cancel_event is not None and cancel_event.is_set():
+                remaining = len(domains) - domain_index - 1
+                if remaining:
+                    logger.warn(f"Skipping {remaining} remaining domain(s) after interrupt")
+                break
 
         if database is not None:
             database.engine.dispose()

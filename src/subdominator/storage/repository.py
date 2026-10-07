@@ -74,7 +74,7 @@ class EnumerationRepository:
                     text("UPDATE subdomains SET subdomains = :subdomains WHERE domain = :domain"),
                     {"domain": root_domain, "subdomains": ",".join(merged)},
                 )
-            else:
+            elif merged:
                 session.execute(
                     text("INSERT INTO subdomains(domain, subdomains) VALUES (:domain, :subdomains)"),
                     {"domain": root_domain, "subdomains": ",".join(merged)},
@@ -119,11 +119,21 @@ class EnumerationRepository:
     def get_findings(self, root_domain: str) -> list[Finding]:
         return self.get_saved_findings(root_domain)
 
-    def delete_domain(self, root_domain: str) -> int:
-        findings_count = len(self.get_saved_findings(root_domain))
-        if findings_count == 0:
-            return 0
+    def delete_domain(self, root_domain: str) -> int | None:
         with self.database.session_factory() as session:
+            row = session.execute(
+                text("SELECT subdomains FROM subdomains WHERE domain = :domain"),
+                {"domain": root_domain},
+            ).first()
+            if row is None:
+                return None
+            findings_count = len(
+                {
+                    item.strip().lower()
+                    for item in ((row[0] if row else "") or "").split(",")
+                    if item.strip()
+                }
+            )
             session.execute(
                 text("DELETE FROM subdomains WHERE domain = :domain"),
                 {"domain": root_domain},

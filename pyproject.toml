@@ -1,6 +1,6 @@
 [project]
 name = "subdominator"
-version = "3.0.2"
+version = "3.0.3"
 description = "High-performance passive subdomain enumeration engine for effortless asset discovery and rapid reconnaissance."
 readme = "README.md"
 requires-python = ">=3.13"
@@ -14,6 +14,7 @@ dependencies = [
   "aiohttp>=3.11.18",
   "aiosqlite>=0.21.0",
   "appdirs>=1.4.4",
+  "pyyaml>=6.0.1",
   "pydantic>=2.11.3",
   "pydantic-settings>=2.9.1",
   "rich>=14.0.0",

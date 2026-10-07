@@ -68,6 +68,9 @@ class SubdominatorShell:
                 continue
             if command is None:
                 continue
+            # Stored domains are lowercase (the CLI normalizes input), so match that here.
+            if command.name in {"domain", "show", "findings", "delete", "export"} and command.args:
+                command.args[0] = command.args[0].strip().lower()
             if command.name in {"exit", "quit"}:
                 return 0
             if command.name == "help":
@@ -261,8 +264,13 @@ class SubdominatorShell:
             self.console.print("[bold yellow]Usage:[/bold yellow] delete <root-domain>")
             return
         deleted = self.repository.delete_domain(args[0])
-        if deleted == 0:
+        if deleted is None:
             self.console.print(f"[bold yellow]No stored data for {args[0]}.[/bold yellow]")
+            return
+        if deleted == 0:
+            self.console.print(
+                f"[bold green]Deleted[/bold green] empty domain record for [bold white]{args[0]}[/bold white]."
+            )
             return
         self.console.print(
             f"[bold green]Deleted[/bold green] {deleted} stored finding(s) for [bold white]{args[0]}[/bold white]."

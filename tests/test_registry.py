@@ -31,7 +31,6 @@ class RegistryTests(unittest.TestCase):
 
             self.assertFalse(metadata["crtsh"])
             self.assertFalse(metadata["abuseipdb"])
-            self.assertFalse(metadata["cyfare"])
             self.assertFalse(metadata["hudsonrock"])
             self.assertFalse(metadata["sitedossier"])
             self.assertFalse(metadata["myssl"])

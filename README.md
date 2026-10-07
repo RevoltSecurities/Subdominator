@@ -34,7 +34,7 @@
 
 ---
 
-Subdominator is a high-performance passive subdomain enumeration engine. It leverages **73 OSINT sources** — certificate transparency logs, search engines, threat intelligence feeds, DNS datasets, and more — to map your target's full attack surface in seconds.
+Subdominator is a high-performance passive subdomain enumeration engine. It leverages **72 OSINT sources** — certificate transparency logs, search engines, threat intelligence feeds, DNS datasets, and more — to map your target's full attack surface in seconds.
 
 Built on Python's async/await stack (`asyncio` + `aiohttp`), it handles 100K+ subdomains per run without memory spikes thanks to its disk-backed findings cache.
 
@@ -47,7 +47,7 @@ Built on Python's async/await stack (`asyncio` + `aiohttp`), it handles 100K+ su
         <br>
       </h1>
 
-- **73 passive OSINT sources** — CT logs, search engines, threat intel, DNS archives, and more
+- **72 passive OSINT sources** — CT logs, search engines, threat intel, DNS archives, and more
 - **Recursive enumeration** — automatically scan discovered subdomains to any depth
 - **Disk-backed cache** — 100K+ subdomains per run with stable memory usage
 - **Concurrent execution** — configurable parallelism with async-first architecture
@@ -175,7 +175,7 @@ subdominator [flags]
 
 | Flag | Short | Description |
 |---|---|---|
-| `--all` | | Use all 73 resources (includes disabled-by-default ones) |
+| `--all` | | Use all 72 resources (includes disabled-by-default ones) |
 | `--include-resources` | `-ir` | Comma-separated list of resources to use |
 | `--exclude-resources` | `-er` | Comma-separated list of resources to skip |
 | `--list-resources` | `-ls` | Print resource catalog with auth requirements |
@@ -382,7 +382,7 @@ Findings are automatically saved to SQLite at `~/.local/share/subdominator/subdo
 
 ## Providers
 
-73 sources total. Auth column: **`key`** = API key required, **`optional`** = works without a key (more results with one), **`free`** = no auth needed.
+72 sources total. Auth column: **`key`** = API key required, **`optional`** = works without a key (more results with one), **`free`** = no auth needed.
 
 > Sources marked † are **disabled by default** (slow or heavily rate-limited). Include them with `--all` or `-ir <name>`.
 
@@ -394,7 +394,6 @@ Findings are automatically saved to SQLite at `~/.local/share/subdominator/subdo
 | `anubis` | https://jldc.me/anubis | |
 | `commoncrawl` † | https://index.commoncrawl.org/ | Slow, large dataset |
 | `crtsh` | https://crt.sh | Certificate Transparency |
-| `cyfare` | https://cyfare.net/ | |
 | `digitorus` | https://www.digitorus.com/ | |
 | `hackertarget` | https://hackertarget.com/ | |
 | `hudsonrock` | https://cavalier.hudsonrock.com/ | |
@@ -531,9 +530,9 @@ src/subdominator/
 ├── output/       # reports.py (HTML), writers
 ├── resources/
 │   ├── base.py       # BaseResource
-│   ├── catalog.py    # RESOURCE_CATALOG (73 entries)
+│   ├── catalog.py    # RESOURCE_CATALOG (72 entries)
 │   ├── registry.py   # ResourceRegistry + DEFAULT_DISABLED_RESOURCES
-│   └── providers/    # 73 individual provider modules
+│   └── providers/    # 72 individual provider modules
 ├── services/     # enumerator.py (async orchestration)
 └── storage/      # database.py, repository.py (SQLite)
 ```
