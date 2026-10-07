@@ -19,7 +19,6 @@ RESOURCE_CATALOG: dict[str, dict[str, str]] = {
     "coderog": {"label": "coderog", "url": "https://rapidapi.com/coderog-coderog-default/api/subdomain-finder5/pricing"},
     "commoncrawl": {"label": "commoncrawl", "url": "https://index.commoncrawl.org/"},
     "crtsh": {"label": "crtsh", "url": "https://crt.sh"},
-    "cyfare": {"label": "cyfare", "url": "https://cyfare.net/"},
     "digitalyama": {"label": "digitalyama", "url": "https://digitalyama.com/"},
     "digitorus": {"label": "digitorus", "url": "https://www.digitorus.com/"},
     "dnsdb": {"label": "DNSDB", "url": "https://api.dnsdb.info"},

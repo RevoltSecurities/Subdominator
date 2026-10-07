@@ -23,7 +23,6 @@ from subdominator.resources.providers.chinaz import ChinazResource
 from subdominator.resources.providers.coderog import CodeRogResource
 from subdominator.resources.providers.commoncrawl import CommonCrawlResource
 from subdominator.resources.providers.crtsh import CrtShResource
-from subdominator.resources.providers.cyfare import CyfareResource
 from subdominator.resources.providers.digitalyama import DigitalYamaResource
 from subdominator.resources.providers.digitorus import DigitorusResource
 from subdominator.resources.providers.domscan import DomScanResource
@@ -99,7 +98,6 @@ RESOURCE_TYPES = [
     CodeRogResource,
     CommonCrawlResource,
     CrtShResource,
-    CyfareResource,
     DigitalYamaResource,
     DigitorusResource,
     DomScanResource,
