@@ -106,11 +106,15 @@ def _split_csv(value: str | None) -> list[str]:
 
 async def _load_domains(args) -> list[str]:
     if args.domain:
-        return [args.domain.strip()]
+        return [args.domain.strip().lower()]
     if args.domain_list:
-        return [line.strip() async for line in FileUtils.stream(args.domain_list) if line.strip()]
+        return [
+            line.strip().lower()
+            async for line in FileUtils.stream(args.domain_list)
+            if line.strip()
+        ]
     if FileUtils.is_stdin():
-        return [line.strip() for line in sys.stdin if line.strip()]
+        return [line.strip().lower() for line in sys.stdin if line.strip()]
     return []
 
 
